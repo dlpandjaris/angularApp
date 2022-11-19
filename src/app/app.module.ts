@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './projects/giftRegistry/components/login/login.component';
 import { SignupComponent } from './projects/giftRegistry/components/signup/signup.component';
 import { GiftRegistryComponent } from './projects/giftRegistry/components/gift-registry/gift-registry.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { GiftRegistryComponent } from './projects/giftRegistry/components/gift-r
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

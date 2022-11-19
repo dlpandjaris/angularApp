@@ -1,3 +1,31 @@
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">Profile update</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body" style="background-color:cornflowerblue;">
+    <form>
+      <div class="mb-3">
+        <label for="dateOfBirth">Date of birth</label>
+        <div class="input-group">
+          <input
+            id="dateOfBirth"
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            name="dp"
+            ngbDatepicker
+            #dp="ngbDatepicker"
+          />
+          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()" type="button"></button>
+        </div>
+      </div>
+    </form>
+    <div class="text-end">
+      <button type="button" class="btn btn-outline-dark" (click)="offcanvas.close('Save click')">Save</button>
+    </div>
+  </div>
+</ng-template>
+
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
   <img
@@ -19,5 +47,5 @@
         <path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/>
       </svg>
     </a>
-    <img class="icon" src="/assets/user-interface.png" width="24" height="24"/> <!--(click)="this.myfunction('dfdfdf')"-->
+    <img class="icon" (click)="open(content)" src="/assets/user-interface.png" width="24" height="24"/> <!--(click)="this.myfunction('dfdfdf')"-->
 </div>
