@@ -36,4 +36,8 @@ export class GiftRegistryComponent implements OnInit {
 		}
 	}
 
+  hideShowPass() {
+    
+  }
+
 }

@@ -1,29 +1,42 @@
+<ng-template #signup let-offcanvas>
+  Sign Up
+</ng-template>
+
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">
     <h4 class="offcanvas-title" id="offcanvas-basic-title">Login</h4>
-    <h6 class="offcanvas-title" id=""
+    <h6 class="offcanvas-title"></h6>
     <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
   <div class="offcanvas-body" style="background-color:cornflowerblue;">
     <form>
-      <div class="mb-3">
-        <label for="email">Email</label>
-        <div class="input-group">
-          <input
-            id="email"
-            class="form-control"
-            placeholder="example@gmail.com"
-          />
-          <!-- <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()" type="button"></button> -->
+      <div class="form-group pt-3">
+        <div class="input-field">
+          <span class="fa fa-user p-2" style="color:white"></span>
+          <input type="text" id="email" placeholder="example@gmail.com"/> 
         </div>
-        <label for="email">Password</label>
-        <div class="input-group">
-          <input
-            id="password"
-            class="form-control"
-            placeholder="********"
-          />
+      </div>
+      <div class="form-group pt-3">
+        <div class="input-field">
+          <span class="fa fa-lock p-2" style="color:white"></span>
+          <input type="text" id="password" placeholder="********">
+          <span class="fa fa-eye-slash"></span>
         </div>
+      </div>
+      <div class="form-inline fr mt-4">
+        <a id="forget" class="font-weight-bold">Forget Password?</a>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Login</button>
+      <div class="text-center pt-4 text-muted">Don't have an account? <a id="forget" class="font-weight-bold" (click)="open(signup)">Sign Up</a></div>
+
+
+
+      <div class="form-group pt-3">
+        <input
+          id="password"
+          class="form-control"
+          placeholder="********"
+        />
       </div>
     </form>
     <div class="text-end">
@@ -53,5 +66,5 @@
       <path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/>
     </svg>
   </a>
-  <img class="icon" (click)="open(content)" src="/assets/user-interface.png" width="24" height="24"/> <!--(click)="this.myfunction('dfdfdf')"-->
+  <i class="fa fa-user p-3 fa-2x" (click)="open(content)"></i> <!--(click)="this.myfunction('dfdfdf')"-->
 </div>
