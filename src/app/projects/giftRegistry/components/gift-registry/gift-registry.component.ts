@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 
 import { NgbOffcanvas, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { OffcanvasService } from '../../services/offcanvas.service';
 
 @Component({
   selector: 'app-gift-registry',
@@ -8,9 +9,17 @@ import { NgbOffcanvas, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./gift-registry.component.scss']
 })
 export class GiftRegistryComponent implements OnInit {
-  closeResult = '';
 
-  constructor(private offcanvasService: NgbOffcanvas) { }
+  closeResult = '';
+  public displayForm: string = "Login";
+
+  constructor(
+    private offcanvasService: NgbOffcanvas,
+    public offcanvasNavService: OffcanvasService
+  ) { 
+    this.displayForm = 'Login';
+    this.offcanvasNavService.data = this.displayForm;
+  }
 
   ngOnInit(): void {
   }
@@ -35,9 +44,10 @@ export class GiftRegistryComponent implements OnInit {
 			return `with: ${reason}`;
 		}
 	}
-
-  hideShowPass() {
-    
+  
+  setDisplayForm(form: string) {
+    this.offcanvasNavService.displayForm = form;
+    this.displayForm = form;
   }
 
 }
