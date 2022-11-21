@@ -11,14 +11,12 @@ import { OffcanvasService } from '../../services/offcanvas.service';
 export class GiftRegistryComponent implements OnInit {
 
   closeResult = '';
-  public displayForm: string = "Login";
 
   constructor(
     private offcanvasService: NgbOffcanvas,
     public offcanvasNavService: OffcanvasService
   ) { 
-    this.displayForm = 'Login';
-    this.offcanvasNavService.data = this.displayForm;
+    this.offcanvasNavService.displayForm = 'Login';
   }
 
   ngOnInit(): void {
@@ -47,7 +45,6 @@ export class GiftRegistryComponent implements OnInit {
   
   setDisplayForm(form: string) {
     this.offcanvasNavService.displayForm = form;
-    this.displayForm = form;
   }
 
 }

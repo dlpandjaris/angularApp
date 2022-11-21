@@ -1,12 +1,33 @@
-<form>
-  <div class="mb-3">
-    <label for="dateOfBirth">Date of birth</label>
-    <div class="input-group">
-      <input
-        id="dateOfBirth"
-        class="form-control"
-        placeholder="yyyy-mm-dd"
-      />
+<form [formGroup]="signupForm">
+  <div class="form-group pt-3">
+    <div class="input-field" [class.error]="signupForm.controls['firstName'].dirty && signupForm.hasError('required', 'firstName')">
+      <span class="fa fa-user p-2"></span>
+      <input formControlName="firstName" type="text" placeholder="First Name"/> 
     </div>
   </div>
+  <small *ngIf="signupForm.controls['firstName'].dirty && signupForm.hasError('required', 'firstName')" class="text-danger">*First name is required</small>
+  <div class="form-group pt-3">
+    <div class="input-field" [class.error]="signupForm.controls['lastName'].dirty && signupForm.hasError('required', 'lastName')">
+      <span class="fa fa-user p-2"></span>
+      <input formControlName="lastName" type="text" placeholder="Last Name"/> 
+    </div>
+  </div>
+  <small *ngIf="signupForm.controls['lastName'].dirty && signupForm.hasError('required', 'lastName')" class="text-danger">*Last name is required</small>
+  <div class="form-group pt-3">
+    <div class="input-field" [class.error]="signupForm.controls['email'].dirty && signupForm.hasError('required', 'email')">
+      <span class="fa fa-user p-2"></span>
+      <input formControlName="email" type="text" placeholder="example@gmail.com"/> 
+    </div>
+  </div>
+  <small *ngIf="signupForm.controls['email'].dirty && signupForm.hasError('required', 'email')" class="text-danger">*Email is required</small>
+  <div class="form-group pt-3">
+    <div class="input-field" [class.error]="signupForm.controls['password'].dirty && signupForm.hasError('required', 'password')">
+      <span class="fa fa-lock p-2"></span>
+      <input formControlName="password" [type]="type" placeholder="********"/>
+      <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+    </div>
+  </div>
+  <small *ngIf="signupForm.controls['password'].dirty && signupForm.hasError('required', 'password')" class="text-danger">*Password is required</small>
+  <button (click)="onSubmit()" type="submit" class="btn btn-primary btn-block mt-4 w-100">Sign Up</button>
+  <div class="text-center pt-4 text-muted">Already have an account? <a id="forget" class="font-weight-bold" (click)="setDisplayForm('Login')">Login</a></div>
 </form>

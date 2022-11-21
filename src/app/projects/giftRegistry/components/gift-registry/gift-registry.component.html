@@ -1,18 +1,12 @@
 <ng-template #content let-offcanvas>
   <div class="offcanvas-header">
-    <h4 class="offcanvas-title" id="offcanvas-basic-title">{{displayForm}}</h4>
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">{{this.offcanvasNavService.displayForm}}</h4>
     <h6 class="offcanvas-title"></h6>
     <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
   <div class="offcanvas-body" style="background-color:white;">
-
-    <div *ngIf="displayForm=='Login'">
-      <app-login></app-login>
-    </div>
-
-    <div *ngIf="displayForm=='Sign Up'">
-      Sign Up
-    </div>
+    <app-login *ngIf="this.offcanvasNavService.displayForm=='Login'"></app-login>
+    <app-signup *ngIf="this.offcanvasNavService.displayForm=='Sign Up'"></app-signup>
   </div>
 </ng-template>
 

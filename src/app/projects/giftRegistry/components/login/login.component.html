@@ -1,20 +1,23 @@
-<form>
+<form [formGroup]="loginForm">
   <div class="form-group pt-3">
-    <div class="input-field">
+    <div class="input-field" [class.error]="loginForm.controls['password'].dirty && loginForm.hasError('required', 'email')">
       <span class="fa fa-user p-2"></span>
-      <input type="text" id="email" placeholder="example@gmail.com"/> 
+      <input formControlName="email" type="text" placeholder="example@gmail.com"/> 
     </div>
   </div>
+  <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required', 'email')" class="text-danger">*Email is required</small>
   <div class="form-group pt-3">
-    <div class="input-field">
+    <div class="input-field" [class.error]="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')">
       <span class="fa fa-lock p-2"></span>
-      <input type="password" id="password" placeholder="********"/>
+      <input formControlName="password" [type]="type" placeholder="********"/>
+      <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
     </div>
   </div>
+  <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required', 'password')" class="text-danger">*Password is required</small>
   <div class="form-inline fr mt-4">
     <a id="forget" class="font-weight-bold">Forget Password?</a>
   </div>
-  <button type="submit" class="btn btn-primary btn-block mt-4 w-100">Login</button>
+  <button (click)="onSubmit()" type="submit" class="btn btn-primary btn-block mt-4 w-100">Login</button>
   <div class="text-center pt-4 text-muted">Don't have an account? <a id="forget" class="font-weight-bold" (click)="setDisplayForm('Sign Up')">Sign Up</a></div>
 </form>
 <div class="mx-3 my-2 py-2 mt-4 bordert">
