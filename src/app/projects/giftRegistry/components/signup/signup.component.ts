@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { Router } from '@angular/router';
 
 import { OffcanvasService } from '../../services/offcanvas.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,13 +20,15 @@ export class SignupComponent implements OnInit {
 
   constructor(
     public offcanvasNavService: OffcanvasService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.signupForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required]
     })
@@ -44,6 +48,17 @@ export class SignupComponent implements OnInit {
     if(this.signupForm.valid) {
       console.log(this.signupForm.value);
       // send to backend
+      this.userService.create(this.signupForm.value)
+      .subscribe({
+        next:(res)=>{
+          alert(res.message);
+          this.signupForm.reset();
+          this.setDisplayForm('Login');
+        },
+        error:(err)=>{
+          alert(err?.error.message);
+        }
+      });
     }else{
       console.log("Form is invalid");
       this.validateAllFormFields(this.signupForm);

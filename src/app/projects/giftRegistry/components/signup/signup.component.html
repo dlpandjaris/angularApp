@@ -1,18 +1,18 @@
 <form [formGroup]="signupForm">
   <div class="form-group pt-3">
-    <div class="input-field" [class.error]="signupForm.controls['firstName'].dirty && signupForm.hasError('required', 'firstName')">
+    <div class="input-field" [class.error]="signupForm.controls['first_name'].dirty && signupForm.hasError('required', 'first_name')">
       <span class="fa fa-user p-2"></span>
-      <input formControlName="firstName" type="text" placeholder="First Name"/> 
+      <input formControlName="first_name" type="text" placeholder="First Name"/> 
     </div>
   </div>
-  <small *ngIf="signupForm.controls['firstName'].dirty && signupForm.hasError('required', 'firstName')" class="text-danger">*First name is required</small>
+  <small *ngIf="signupForm.controls['first_name'].dirty && signupForm.hasError('required', 'first_name')" class="text-danger">*First name is required</small>
   <div class="form-group pt-3">
-    <div class="input-field" [class.error]="signupForm.controls['lastName'].dirty && signupForm.hasError('required', 'lastName')">
+    <div class="input-field" [class.error]="signupForm.controls['last_name'].dirty && signupForm.hasError('required', 'last_name')">
       <span class="fa fa-user p-2"></span>
-      <input formControlName="lastName" type="text" placeholder="Last Name"/> 
+      <input formControlName="last_name" type="text" placeholder="Last Name"/> 
     </div>
   </div>
-  <small *ngIf="signupForm.controls['lastName'].dirty && signupForm.hasError('required', 'lastName')" class="text-danger">*Last name is required</small>
+  <small *ngIf="signupForm.controls['last_name'].dirty && signupForm.hasError('required', 'last_name')" class="text-danger">*Last name is required</small>
   <div class="form-group pt-3">
     <div class="input-field" [class.error]="signupForm.controls['email'].dirty && signupForm.hasError('required', 'email')">
       <span class="fa fa-user p-2"></span>
