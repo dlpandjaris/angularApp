@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/services/toast.service';
 
 import { OffcanvasService } from '../../services/offcanvas.service';
 import { UserService } from '../../services/user.service';
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit {
     public offcanvasNavService: OffcanvasService,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    public toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -49,12 +51,12 @@ export class LoginComponent implements OnInit {
       this.userService.authenticate(this.loginForm.value)
       .subscribe({
         next:(res)=>{
-          alert(res.message);
+          this.toastService.show('Success', res.message);
           this.loginForm.reset();
           this.router.navigate(['projects/gift-registry/group-dashboard']);
         },
         error:(err)=>{
-          alert(err?.error.message);
+          this.toastService.show('Failure', err?.error.message);
         }
       });
     }else{

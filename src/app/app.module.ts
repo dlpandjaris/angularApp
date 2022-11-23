@@ -10,6 +10,7 @@ import { SignupComponent } from './projects/giftRegistry/components/signup/signu
 import { GiftRegistryComponent } from './projects/giftRegistry/components/gift-registry/gift-registry.component';
 import { HttpClientModule } from '@angular/common/http';
 import { GroupDashboardComponent } from './projects/giftRegistry/components/group-dashboard/group-dashboard.component';
+import { ToastsComponent } from './components/toasts/toasts.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { GroupDashboardComponent } from './projects/giftRegistry/components/grou
     LoginComponent,
     SignupComponent,
     GiftRegistryComponent,
-    GroupDashboardComponent
+    GroupDashboardComponent,
+    ToastsComponent
   ],
   imports: [
     BrowserModule,
