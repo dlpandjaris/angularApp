@@ -1,5 +1,41 @@
 <app-gift-registry></app-gift-registry>
 <p>admin-dashboard works!</p>
-<ul *ngFor="let user of users">
-  <li>{{user.id}} - {{user.first_name}}</li>
-</ul>
+
+<span style="display: flex;">
+  <div class="card" style="width: 25%;">
+    <ngb-accordion [closeOthers]="true" activeIds="{{users[0].id}}">
+      <ng-container *ngFor="let user of users">
+        <ngb-panel id="{{user.id}}" title="{{user.first_name}} {{this.user.last_name}}">
+          <ng-template ngbPanelContent>
+            <span style="display: flex;">
+              <h6>ID:</h6>
+              <p style="margin-left:2rem;">{{user.id}}</p>
+            </span>
+            <span style="display: flex;">
+              <h6>Role:</h6>
+              <p style="margin-left:2rem;">{{user.role}}</p>
+            </span>
+            <span style="display: flex;">
+              <h6>Email:</h6>
+              <p style="margin-left:2rem;">{{user.email}}</p>
+            </span>
+          </ng-template>
+        </ngb-panel>
+      </ng-container>
+    </ngb-accordion>
+  </div>
+  <div class="card" style="width: 25%;">
+    <ngb-accordion [closeOthers]="true" activeIds="{{groups[0].id}}">
+      <ng-container *ngFor="let group of groups">
+        <ngb-panel id="{{group.id}}" title="{{group.name}}">
+          <ng-template ngbPanelContent>
+            <span style="display: flex;">
+              <h6>ID:</h6>
+              <p style="margin-left:2rem;">{{group.id}}</p>
+            </span>
+          </ng-template>
+        </ngb-panel>
+      </ng-container>
+    </ngb-accordion>
+  </div>
+</span>

@@ -4,7 +4,7 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
   </div>
   <div class="offcanvas-body" style="background-color:white;">
-    <app-login *ngIf="this.offcanvasNavService.displayForm=='Login'"></app-login>
+    <app-login *ngIf="this.offcanvasNavService.displayForm=='Login' || this.offcanvasNavService.displayForm==''"></app-login>
     <app-signup *ngIf="this.offcanvasNavService.displayForm=='Sign Up'"></app-signup>
     <app-account-info *ngIf="this.offcanvasNavService.displayForm=='Account Info'"></app-account-info>
   </div>

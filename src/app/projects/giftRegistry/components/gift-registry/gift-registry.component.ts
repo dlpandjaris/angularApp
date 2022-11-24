@@ -16,7 +16,7 @@ export class GiftRegistryComponent implements OnInit {
     private offcanvasService: NgbOffcanvas,
     public offcanvasNavService: OffcanvasService
   ) { 
-    this.offcanvasNavService.displayForm = 'Login';
+    // this.offcanvasNavService.displayForm = 'Login';
   }
 
   ngOnInit(): void {

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class OffcanvasService {
 
-  displayForm: string = "Login";
+  displayForm: string = '';
 
   constructor() { }
 

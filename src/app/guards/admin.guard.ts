@@ -16,13 +16,19 @@ export class AdminGuard implements CanActivate {
   }
 
   canActivate():boolean {
-    if(this.userService.getDecodedToken(this.userService.getToken()).role == 'admin') {
-      return true;
+    const token = this.userService.getToken()
+    if(token) {
+      if(this.userService.getDecodedToken(token).role == 'admin') {
+        return true;
+      } else {
+        this.router.navigate(['projects/gift-registry']);
+        this.toastService.show('Failure', 'Whatcha doin there?');
+        return false;
+      }
     } else {
       this.router.navigate(['projects/gift-registry']);
       this.toastService.show('Failure', 'Whatcha doin there?');
       return false;
     }
   }
-  
 }
