@@ -1,4 +1,5 @@
 <app-gift-registry></app-gift-registry>
-<div>
-  <p>group-dashboard works!</p>
-</div>
+<p>group-dashboard works!</p>
+<ul *ngFor="let group of groups">
+  <li>{{group.id}} - {{group.name}}</li>
+</ul>

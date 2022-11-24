@@ -8,9 +8,12 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './projects/giftRegistry/components/login/login.component';
 import { SignupComponent } from './projects/giftRegistry/components/signup/signup.component';
 import { GiftRegistryComponent } from './projects/giftRegistry/components/gift-registry/gift-registry.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { GroupDashboardComponent } from './projects/giftRegistry/components/group-dashboard/group-dashboard.component';
 import { ToastsComponent } from './components/toasts/toasts.component';
+import { AdminDashboardComponent } from './projects/giftRegistry/components/admin-dashboard/admin-dashboard.component';
+import { AccountInfoComponent } from './projects/giftRegistry/components/account-info/account-info.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,9 @@ import { ToastsComponent } from './components/toasts/toasts.component';
     SignupComponent,
     GiftRegistryComponent,
     GroupDashboardComponent,
-    ToastsComponent
+    ToastsComponent,
+    AdminDashboardComponent,
+    AccountInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +33,11 @@ import { ToastsComponent } from './components/toasts/toasts.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:TokenInterceptor,
+    multi:true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
