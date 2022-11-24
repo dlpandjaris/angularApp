@@ -34,6 +34,9 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.required],
       password: ['', Validators.required]
     })
+    if(this.userService.isLoggedIn()) {
+      this.offcanvasNavService.displayForm = 'Account Info';
+    }
   }
 
   hideShowPass() {
