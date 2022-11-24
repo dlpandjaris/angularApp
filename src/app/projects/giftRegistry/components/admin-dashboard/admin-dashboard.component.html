@@ -1,2 +1,5 @@
 <app-gift-registry></app-gift-registry>
 <p>admin-dashboard works!</p>
+<ul *ngFor="let user of users">
+  <li>{{user.id}} - {{user.first_name}}</li>
+</ul>

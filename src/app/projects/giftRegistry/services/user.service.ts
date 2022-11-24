@@ -44,6 +44,10 @@ export class UserService {
     }
   }
 
+  getAllUsers() {
+    return this.http.get<any>(this.baseUrl);
+  }
+
   // getUserInfo(id: string): User {
   //   return this.http.get<User>(`${this.baseUrl}/user/${id}`);
   // }
