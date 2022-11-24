@@ -48,7 +48,8 @@ export class UserService {
     return this.http.get<any>(this.baseUrl);
   }
 
-  // getUserInfo(id: string): User {
-  //   return this.http.get<User>(`${this.baseUrl}/user/${id}`);
+  // getUserInfo() {
+  //   const userId = this.getDecodedToken(this.getToken()).id.split(' ')[0];
+  //   return this.http.get<any>(`${this.baseUrl}/${userId}`);
   // }
 }

@@ -17,15 +17,14 @@ export class AccountInfoComponent implements OnInit {
     private offCanvasNavService: OffcanvasService) { }
 
   ngOnInit(): void {
+    // this.userService.getUserInfo()
+    // .subscribe(res=>{
+    //   this.user = res;
+    // });
   }
 
   logOut() {
     this.userService.clearToken();
     this.offCanvasNavService.displayForm = 'Login';
   }
-
-  // getUserInfo(): void {
-  //   this.user = this.userService.getUserInfo(this.userService.getDecodedToken(this.userService.getToken).id);
-  // }
-
 }
