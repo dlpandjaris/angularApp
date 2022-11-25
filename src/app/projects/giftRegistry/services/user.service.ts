@@ -49,7 +49,7 @@ export class UserService {
   }
 
   // getUserInfo() {
-  //   const userId = this.getDecodedToken(this.getToken()).id.split(' ')[0];
+  //   const userId = this.getDecodedToken(this.getToken()).id;
   //   return this.http.get<any>(`${this.baseUrl}/${userId}`);
   // }
 }

@@ -18,4 +18,8 @@ export class GroupDashboardComponent implements OnInit {
     })
   }
 
+  getFirstId() {
+    return this.groups[0];
+  }
+
 }

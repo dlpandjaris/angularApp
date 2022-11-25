@@ -1,7 +1,7 @@
 <app-gift-registry></app-gift-registry>
 <p>group-dashboard works!</p>
 <div class="card" style="width: 25%;">
-  <ngb-accordion [closeOthers]="true" activeIds="{{groups[0].id}}">
+  <ngb-accordion [closeOthers]="true" activeIds="{{getFirstId()}}">
     <ng-container *ngFor="let group of groups">
       <ngb-panel id="{{group.id}}" title="{{group.name}}">
         <ng-template ngbPanelContent>
