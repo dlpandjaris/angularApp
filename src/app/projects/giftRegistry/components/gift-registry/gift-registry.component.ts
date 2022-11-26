@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 
 import { NgbActiveOffcanvas, NgbOffcanvas, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { OffcanvasService } from '../../services/offcanvas.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-gift-registry',
@@ -14,12 +15,16 @@ export class GiftRegistryComponent implements OnInit {
 
   constructor(
     private offcanvasService: NgbOffcanvas,
-    public offcanvasNavService: OffcanvasService
+    public offcanvasNavService: OffcanvasService,
+    public userService: UserService
   ) { 
     this.offcanvasNavService.displayForm = 'Login';
   }
 
   ngOnInit(): void {
+    if(this.userService.isLoggedIn()) {
+      this.offcanvasNavService.displayForm = 'Account Info';
+    }
   }
 
   open(content: TemplateRef<any>) {

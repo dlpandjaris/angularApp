@@ -22,6 +22,12 @@ export class AdminDashboardComponent implements OnInit {
       this.users = res;
     })
 
+    this.groupService.refreshRequired.subscribe(res=>{
+      this.getGroups()
+    });
+  }
+
+  getGroups() {
     this.groupService.getAllGroups()
     .subscribe(res=>{
       this.groups = res;
