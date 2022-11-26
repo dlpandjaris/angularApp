@@ -2,8 +2,8 @@
 <p>admin-dashboard works!</p>
 
 <span style="display: flex;">
-  <div class="card" style="width: 25%;">
-    <ngb-accordion [closeOthers]="true" activeIds="{{users[0].id}}">
+  <div class="card" style="width: 40%;">
+    <ngb-accordion [closeOthers]="true" activeIds="{{getFirstUser()}}">
       <ng-container *ngFor="let user of users">
         <ngb-panel id="{{user.id}}" title="{{user.first_name}} {{this.user.last_name}}">
           <ng-template ngbPanelContent>
@@ -24,8 +24,8 @@
       </ng-container>
     </ngb-accordion>
   </div>
-  <div class="card" style="width: 25%;">
-    <ngb-accordion [closeOthers]="true" activeIds="{{groups[0].id}}">
+  <div class="card" style="width: 40%;">
+    <ngb-accordion [closeOthers]="true" activeIds="{{getFirstGroup()}}">
       <ng-container *ngFor="let group of groups">
         <ngb-panel id="{{group.id}}" title="{{group.name}}">
           <ng-template ngbPanelContent>

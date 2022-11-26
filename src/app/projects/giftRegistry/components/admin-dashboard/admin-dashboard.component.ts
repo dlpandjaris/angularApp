@@ -22,9 +22,10 @@ export class AdminDashboardComponent implements OnInit {
       this.users = res;
     })
 
-    this.groupService.refreshRequired.subscribe(res=>{
-      this.getGroups()
-    });
+    this.groupService.getAllGroups()
+    .subscribe(res=>{
+      this.groups = res;
+    })
   }
 
   getGroups() {
@@ -32,6 +33,14 @@ export class AdminDashboardComponent implements OnInit {
     .subscribe(res=>{
       this.groups = res;
     })
+  }
+
+  getFirstUser() {
+    return this.users[0];
+  }
+
+  getFirstGroup() {
+    return this.groups[0];
   }
 
 }
