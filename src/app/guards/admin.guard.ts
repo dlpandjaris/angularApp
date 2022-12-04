@@ -18,7 +18,7 @@ export class AdminGuard implements CanActivate {
   canActivate():boolean {
     const token = this.userService.getToken()
     if(token) {
-      if(this.userService.getDecodedToken(token).role == 'admin') {
+      if(this.userService.getDecodedToken().role == 'admin') {
         return true;
       } else {
         this.router.navigate(['projects/gift-registry']);

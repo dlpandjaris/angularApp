@@ -5,6 +5,7 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from 'src/app/services/toast.service';
 
 import { OffcanvasService } from '../../services/offcanvas.service';
+import { UserStoreService } from '../../services/user-store.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     public toastService: ToastService,
-    public ngbOffCanvas: NgbOffcanvas
+    public ngbOffCanvas: NgbOffcanvas,
+    private userStoreService: UserStoreService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +59,11 @@ export class LoginComponent implements OnInit {
           this.loginForm.reset();
           this.offcanvasNavService.displayForm = 'Account Info';
           this.userService.storeToken(res.token);
+
+          const tokenPayload = this.userService.getDecodedToken();
+          this.userStoreService.setFullNameForStore(tokenPayload.name);
+          this.userStoreService.setRoleForStore(tokenPayload.role)
+
           this.ngbOffCanvas.dismiss('Submitted form');
           this.router.navigate(['projects/gift-registry/group-dashboard']);
         },

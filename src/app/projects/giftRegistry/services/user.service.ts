@@ -9,8 +9,11 @@ import { User } from '../models/user';
 export class UserService {
 
   private baseUrl: string = "http://localhost:5000/user";
+  private userPayload: any;
   constructor(
-    private http: HttpClient) { }
+    private http: HttpClient) { 
+      this.userPayload = this.getDecodedToken();
+    }
 
   create(userObj:any) {
     return this.http.post<any>(`${this.baseUrl}/create`, userObj);
@@ -36,10 +39,12 @@ export class UserService {
     return !!localStorage.getItem('token');
   }
 
-  getDecodedToken(token: any): any {
+  getDecodedToken(): any {
+    const token = this.getToken()!;
     try {
+      console.log(jwt_decode(token));
       return jwt_decode(token);
-    } catch(Error) {
+    } catch(error) {
       return null;
     }
   }
@@ -48,8 +53,15 @@ export class UserService {
     return this.http.get<any>(this.baseUrl);
   }
 
-  // getUserInfo() {
-  //   const userId = this.getDecodedToken(this.getToken()).id;
-  //   return this.http.get<any>(`${this.baseUrl}/${userId}`);
-  // }
+  getFullNameFromToken() {
+    if(this.userPayload) {
+      return this.userPayload.name;
+    }
+  }
+
+  getRoleFromToken() {
+    if(this.userPayload) {
+      return this.userPayload.role;
+    }
+  }
 }

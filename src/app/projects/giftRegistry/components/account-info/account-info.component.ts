@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import { OffcanvasService } from '../../services/offcanvas.service';
+import { UserStoreService } from '../../services/user-store.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -10,17 +11,18 @@ import { UserService } from '../../services/user.service';
 })
 export class AccountInfoComponent implements OnInit {
 
-  user!: User;
-
+  fullName: string = "";
   constructor(
     private userService: UserService,
-    private offCanvasNavService: OffcanvasService) { }
+    private offCanvasNavService: OffcanvasService,
+    private userStoreService: UserStoreService) { }
 
   ngOnInit(): void {
-    // this.userService.getUserInfo()
-    // .subscribe(res=>{
-    //   this.user = res;
-    // });
+    this.userStoreService.getFullNameFromStore()
+    .subscribe(res=>{
+      let fullNameFromToken = this.userService.getFullNameFromToken();
+      this.fullName = res || fullNameFromToken;
+    })
   }
 
   logOut() {

@@ -1,7 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { NgbActiveOffcanvas, NgbOffcanvas, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { OffcanvasService } from '../../services/offcanvas.service';
+import { UserStoreService } from '../../services/user-store.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -13,10 +15,14 @@ export class GiftRegistryComponent implements OnInit {
 
   closeResult = '';
 
+  public fullName: string = "";
+  public role!: string;
   constructor(
     private offcanvasService: NgbOffcanvas,
     public offcanvasNavService: OffcanvasService,
-    public userService: UserService
+    private userService: UserService,
+    private userStoreService: UserStoreService,
+    private router: Router
   ) { 
     this.offcanvasNavService.displayForm = 'Login';
   }
@@ -25,6 +31,18 @@ export class GiftRegistryComponent implements OnInit {
     if(this.userService.isLoggedIn()) {
       this.offcanvasNavService.displayForm = 'Account Info';
     }
+
+    this.userStoreService.getFullNameFromStore()
+    .subscribe(res=>{
+      let fullNameFromToken = this.userService.getFullNameFromToken();
+      this.fullName = res || fullNameFromToken;
+    })
+
+    this.userStoreService.getRoleFromStore()
+    .subscribe(res=>{
+      let roleFromToken = this.userService.getRoleFromToken();
+      this.role = res || roleFromToken;
+    })
   }
 
   open(content: TemplateRef<any>) {
@@ -50,6 +68,14 @@ export class GiftRegistryComponent implements OnInit {
   
   setDisplayForm(form: string) {
     this.offcanvasNavService.displayForm = form;
+  }
+
+  navigateToGroupDashboard() {
+    this.router.navigate(['projects/gift-registry/group-dashboard']);
+  }
+
+  navigateToAdminDashboard() {
+    this.router.navigate(['projects/gift-registry/admin-dashboard']);
   }
 
 }
