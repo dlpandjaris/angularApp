@@ -14,6 +14,7 @@ import { ToastsComponent } from './components/toasts/toasts.component';
 import { AdminDashboardComponent } from './projects/giftRegistry/components/admin-dashboard/admin-dashboard.component';
 import { AccountInfoComponent } from './projects/giftRegistry/components/account-info/account-info.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     GroupDashboardComponent,
     ToastsComponent,
     AdminDashboardComponent,
-    AccountInfoComponent
+    AccountInfoComponent,
+    SpotifyComponent
   ],
   imports: [
     BrowserModule,
