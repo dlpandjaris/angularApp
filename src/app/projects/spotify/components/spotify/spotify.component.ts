@@ -12,6 +12,8 @@ export class SpotifyComponent implements OnInit {
   clientId: string = "0ed7ab195c894741a89cdbd2f8a7f573";
   params = new URLSearchParams(window.location.search);
   code = this.params.get("code");
+  accessToken!: string;
+
   user_profile!: UserProfile;
   top_artists: any;
 
@@ -19,16 +21,15 @@ export class SpotifyComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.checkForAuth()
-    this.fetchTopArtists()
+    this.fetchTopArtists(this.accessToken)
   }
 
   public async checkForAuth(): Promise<void> {
     if (!this.code) {
       this.redirectToAuthCodeFlow(this.clientId);
     } else {
-      const accessToken = await this.getAccessToken(this.clientId, this.code);
-      const profile = await this.fetchProfile(accessToken);
-      this.user_profile = profile;
+      this.accessToken = await this.getAccessToken(this.clientId, this.code);
+      this.user_profile = await this.fetchProfile(this.accessToken);;
     }
   }
 
@@ -98,8 +99,8 @@ export class SpotifyComponent implements OnInit {
     return await result.json();
   }
 
-  async fetchTopArtists() {
-    this.top_artists = await this.usersService.getTopItems('artists', 'medium_term');
+  async fetchTopArtists(token: string) {
+    this.top_artists = await this.usersService.getTopItems(token, 'artists', 'medium_term');
     console.log(this.top_artists);
     
   }
