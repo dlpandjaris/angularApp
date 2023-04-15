@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfile } from '../../models/user-profile';
 import { UsersService } from '../../services/users.service';
+import { Track } from '../../models/track';
+import { Artist } from '../../models/artist';
+import { TopTrackList } from '../../models/top-track-list';
+import { TopArtistList } from '../../models/top-artist-list';
 
 @Component({
   selector: 'app-spotify',
@@ -13,18 +17,22 @@ export class SpotifyComponent implements OnInit {
   params = new URLSearchParams(window.location.search);
   code = this.params.get("code");
   accessToken!: string;
+
   page: string = "user";
   term: string = "medium_term";
   top_type: string = "tracks";
 
   user_profile!: UserProfile;
+  top_tracks: Track[] = [];
+  top_artists: Artist[] = [];
   top_items: any = [];
 
   constructor(private usersService: UsersService) { }
 
   async ngOnInit(): Promise<void> {
     await this.checkForAuth()
-    await this.fetchTopItems()
+    await this.fetchTopTracks()
+    await this.fetchTopArtists()
   }
 
   public async checkForAuth(): Promise<void> {
@@ -51,8 +59,6 @@ export class SpotifyComponent implements OnInit {
       const data = new TextEncoder().encode(codeVerifier);
       const digest = await window.crypto.subtle.digest('SHA-256', data);
       return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
-      
-      // return Buffer.from(String.fromCharCode.apply(null, [...new Uint8Array(digest)]), 'utf8').toString('base64')
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=+$/, '');
@@ -103,10 +109,30 @@ export class SpotifyComponent implements OnInit {
   }
 
   async fetchTopItems() {
-    this.top_items = [];
-    this.usersService.getTopItems(this.accessToken, this.top_type, this.term)
-      .subscribe(result => this.top_items = result.items);
-    console.log('fetched top items');
+    if(this.top_type == 'tracks') {
+      this.fetchTopTracks();
+    } else {
+      this.fetchTopArtists();
+    }
+    console.log(`fetched top ${this.top_type}`)
+    // this.top_items = [];
+    // this.usersService.getTopItems(this.accessToken, this.top_type, this.term)
+    //   .subscribe(result => this.top_items = result.items);
+    // console.log('fetched top items');
+  }
+
+  async fetchTopTracks() {
+    this.usersService.getTopTracks(this.accessToken, this.term)
+      .subscribe((result: TopTrackList) => {
+        this.top_tracks = result.items;
+    })
+  }
+
+  async fetchTopArtists() {
+    this.usersService.getTopArtists(this.accessToken, this.term)
+      .subscribe((result: TopArtistList) => {
+        this.top_artists = result.items;
+    })
   }
 
   setPage(page: string) {

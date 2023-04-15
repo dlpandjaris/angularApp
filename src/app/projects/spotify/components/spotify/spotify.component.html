@@ -85,34 +85,34 @@
               <div class="card-body">
                 <div *ngIf="this.top_type == 'tracks'">
                   <table>
-                    <tr *ngFor="let item of this.top_items; let i = index">
+                    <tr *ngFor="let track of this.top_tracks; let i = index">
                       <td>{{i+1}}</td>
                       <td>
-                        <img src="{{item.album.images[2].url}}" alt="avatar"
+                        <img src="{{track.album.images[2].url}}" alt="avatar"
                           class="d-inline" style="width: 30px; height: 30px;"/>
                       </td>
                       <td>
-                        <p class="mb-1" style="font-size: .77rem;">{{item.name}}</p>
+                        <p class="mb-1" style="font-size: .77rem;">{{track.name}}</p>
                       </td>
                       <td>
-                        <p class="mb-1" style="font-size: .77rem;">{{item.album.name}}</p>
+                        <p class="mb-1" style="font-size: .77rem;">{{track.album.name}}</p>
                       </td>
                     </tr>
                   </table>
                 </div>
                 <div *ngIf="this.top_type == 'artists'">
                   <table>
-                    <tr *ngFor="let item of this.top_items; let i = index">
+                    <tr *ngFor="let artist of this.top_artists; let i = index">
                       <td>{{i+1}}</td>
                       <td>
-                        <img src="{{item.images[2].url}}" alt="avatar"
+                        <img src="{{artist.images[2].url}}" alt="avatar"
                           class="d-inline" style="width: 30px; height: 30px;"/>
                       </td>
                       <td>
-                        <p class="mb-1" style="font-size: .77rem;">{{item.name}}</p>
+                        <p class="mb-1" style="font-size: .77rem;">{{artist.name}}</p>
                       </td>
                       <td>
-                        <p class="mb-1" style="font-size: .77rem;">{{item.genres}}</p>
+                        <p class="mb-1" style="font-size: .77rem;">{{artist.genres}}</p>
                       </td>
                     </tr>
                   </table>
