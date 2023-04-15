@@ -5,9 +5,11 @@ import { AdminDashboardComponent } from './projects/giftRegistry/components/admi
 import { GiftRegistryComponent } from './projects/giftRegistry/components/gift-registry/gift-registry.component';
 import { GroupDashboardComponent } from './projects/giftRegistry/components/group-dashboard/group-dashboard.component';
 import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
+import { PortfolioComponent } from './components/portfolio/portfolio.component';
 
 const routes: Routes = [
-  {path:'', redirectTo:'projects/gift-registry', pathMatch:'full'},
+  {path:'', redirectTo:'portfolio', pathMatch:'full'},
+  {path:'portfolio', component:PortfolioComponent},
   {path:'projects/gift-registry', component:GiftRegistryComponent},
   {path:'projects/gift-registry/group-dashboard', component:GroupDashboardComponent},
   {path:'projects/gift-registry/admin-dashboard', component:AdminDashboardComponent, canActivate:[AdminGuard]},
