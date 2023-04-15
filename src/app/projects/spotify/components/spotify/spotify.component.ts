@@ -13,15 +13,18 @@ export class SpotifyComponent implements OnInit {
   params = new URLSearchParams(window.location.search);
   code = this.params.get("code");
   accessToken!: string;
+  page: string = "user";
+  term: string = "medium_term";
+  top_type: string = "tracks";
 
   user_profile!: UserProfile;
-  top_artists: any;
+  top_items: any = [];
 
   constructor(private usersService: UsersService) { }
 
   async ngOnInit(): Promise<void> {
-    this.checkForAuth()
-    this.fetchTopArtists(this.accessToken)
+    await this.checkForAuth()
+    await this.fetchTopItems()
   }
 
   public async checkForAuth(): Promise<void> {
@@ -29,7 +32,7 @@ export class SpotifyComponent implements OnInit {
       this.redirectToAuthCodeFlow(this.clientId);
     } else {
       this.accessToken = await this.getAccessToken(this.clientId, this.code);
-      this.user_profile = await this.fetchProfile(this.accessToken);;
+      this.user_profile = await this.fetchProfile();
     }
   }
 
@@ -64,7 +67,7 @@ export class SpotifyComponent implements OnInit {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:4200/projects/spotify");
-    params.append("scope", "user-read-private user-read-email");
+    params.append("scope", "user-read-private user-read-email user-top-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
@@ -91,17 +94,36 @@ export class SpotifyComponent implements OnInit {
     return access_token;
   }
 
-  async fetchProfile(token: string): Promise<UserProfile> {
+  async fetchProfile(): Promise<UserProfile> {
     const result = await fetch("https://api.spotify.com/v1/me", {
-      method: "GET", headers: { Authorization: `Bearer ${token}` }
+      method: "GET", headers: { Authorization: `Bearer ${this.accessToken}` }
     });
 
     return await result.json();
   }
 
-  async fetchTopArtists(token: string) {
-    this.top_artists = await this.usersService.getTopItems(token, 'artists', 'medium_term');
-    console.log(this.top_artists);
-    
+  async fetchTopItems() {
+    this.top_items = [];
+    this.usersService.getTopItems(this.accessToken, this.top_type, this.term)
+      .subscribe(result => this.top_items = result.items);
+    console.log('fetched top items');
+  }
+
+  setPage(page: string) {
+    this.page = page;
+    console.log(`navigating to ${this.page}`)
+  }
+
+  setTopType(top_type: string) {
+    this.top_type = top_type;
+    this.fetchTopItems();
+    console.log(`switched top_type to ${this.top_type}`)
+  }
+
+
+  setTerm(term: string) {
+    this.term = term;
+    this.fetchTopItems()
+    console.log(`switched term to ${this.term}`)
   }
 }

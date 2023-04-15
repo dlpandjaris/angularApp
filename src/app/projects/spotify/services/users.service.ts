@@ -10,11 +10,9 @@ export class UsersService {
   constructor(private http: HttpClient) { }
 
   getTopItems(token: string, type: string, time_range: string) {
-    return this.http.get<any>(`${this.baseUrl}top/${type}`, {
-      params: {
-        time_range: time_range
-      },
-      headers: { Authorization: `Bearer ${token}`}
-    }).subscribe(response => console.log(response.text()));
+    return this.http.get<any>(`${this.baseUrl}/top/${type}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { time_range: time_range, limit: 50 }
+    });
   }
 }
