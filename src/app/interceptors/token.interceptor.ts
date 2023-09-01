@@ -32,7 +32,7 @@ export class TokenInterceptor implements HttpInterceptor {
         if(err instanceof HttpErrorResponse) {
           if(err.status === 401) {
             this.toastService.show('Failure', 'Token expired, please login again');
-            this.router.navigateByUrl('projects/gift-registry');
+            this.router.navigateByUrl('portfolio');
           }
         }
         return throwError(()=> new Error('Some other error occured'))

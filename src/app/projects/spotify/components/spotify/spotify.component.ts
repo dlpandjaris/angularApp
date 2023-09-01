@@ -6,6 +6,8 @@ import { Artist } from '../../models/artist';
 import { TopTrackList } from '../../models/top-track-list';
 import { TopArtistList } from '../../models/top-artist-list';
 
+declare var $: any;
+
 @Component({
   selector: 'app-spotify',
   templateUrl: './spotify.component.html',
@@ -19,6 +21,7 @@ export class SpotifyComponent implements OnInit {
   accessToken!: string;
 
   page: string = "user";
+  navbar_collapsed: boolean = true;
   term: string = "medium_term";
   top_type: string = "tracks";
 
@@ -30,6 +33,7 @@ export class SpotifyComponent implements OnInit {
   constructor(private usersService: UsersService) { }
 
   async ngOnInit(): Promise<void> {
+
     await this.checkForAuth()
     await this.fetchTopTracks()
     await this.fetchTopArtists()
@@ -115,10 +119,6 @@ export class SpotifyComponent implements OnInit {
       this.fetchTopArtists();
     }
     console.log(`fetched top ${this.top_type}`)
-    // this.top_items = [];
-    // this.usersService.getTopItems(this.accessToken, this.top_type, this.term)
-    //   .subscribe(result => this.top_items = result.items);
-    // console.log('fetched top items');
   }
 
   async fetchTopTracks() {

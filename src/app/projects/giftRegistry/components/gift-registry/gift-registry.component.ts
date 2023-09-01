@@ -22,7 +22,7 @@ export class GiftRegistryComponent implements OnInit {
     public offcanvasNavService: OffcanvasService,
     private userService: UserService,
     private userStoreService: UserStoreService,
-    private router: Router
+    public router: Router
   ) { 
     this.offcanvasNavService.displayForm = 'Login';
   }

@@ -1,8 +1,49 @@
-<html lang="en">
-    <head></head>
-    <body class="text-center">
-        <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-            <p>portfolio</p>
+<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+  <div class="container-fluid">
+    <!-- <a class="navbar-brand" href="#">Dylan Pandjaris</a> -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <img class="images" src="assets/database.png" href="#" width="25px" height="25px"/>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">        
+        <a class="nav-link" (click)="this.setPage('Home')">Home</a>
+        <a class="nav-link" (click)="this.setPage('Projects')">Projects</a>
+        <a class="nav-link" (click)="this.setPage('Contact Me')">Contact Me</a>
+      </div>
+    </div>
+  </div>
+</nav>
+<body>
+  <div *ngIf="this.page == 'Home'">
+    <!-- <div class="position-relative overflow-hidden p-3 p-md-5 m-md-5"> -->
+      <!-- <div class="col-md-12 p-lg-5 mx-auto my-5"> -->
+      <div class="terminal">
+        <div style="display:flex;font-family: monospace;">
+          <div id="typewriter">{{typewriter.text}}</div>
+          <span
+            id="typewriter-cursor"
+            [class.blinking]="typewriter.cursors[0].isBlinking"
+          ></span>
         </div>
-    </body>
-</html>
+      </div>
+    <!-- </div> -->
+  </div>
+  <div *ngIf="this.page == 'Projects'">
+    <li><a routerLink="/projects/spotify" routerLinkActive="active">Spotify Sandbox</a></li>
+    <li><a routerLink="/projects/gift-registry" routerLinkActive="active">Gift Registry</a></li>
+  </div>
+  <div *ngIf="this.page == 'Contact Me'">
+
+    <div class="card" style="width: 18rem;">
+      <!-- <img src="..." class="card-img-top" alt="..."> -->
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+
+  </div>
+</body>
