@@ -46,12 +46,8 @@ a.nav-link:hover {
 
 a {
   font-family: monospace; //monaco
-  font-size: large;
+  font-size: x-large;
   color: #fff;
-}
-
-body {
-  background-color: #1b1e21;
 }
 
 nav {
@@ -91,9 +87,11 @@ nav {
   height: 80vh;
   width: 66vh;
   // position: relative;
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding-top: 5vh;
   padding-bottom: 5vh;
+  background-color: #000000;
   // p-3 
   // p-md-5 
   // m-md-5
@@ -101,4 +99,11 @@ nav {
   // p-lg-5 
   // mx-auto 
   // my-5
+}
+
+#history {
+  font-family: monospace;
+  font-size: 26px;
+  display: inline-block;
+  margin-bottom: 0px;
 }

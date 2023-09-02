@@ -9,14 +9,14 @@ import { Typewriter, TypewriterAction } from '@uiloos/core';
 export class PortfolioComponent implements OnInit {
 
   page: string = 'Home';
-  command: string = 'python -c "print("hello world!")"'
-  commandArray: Array<TypewriterAction> = []
+  command: string = 'cat welcome.txt';
+  history: Array<string> = [];
 
   constructor(private ref: ChangeDetectorRef) { }
 
   public typewriter = new Typewriter(
     {
-      repeat: true,
+      repeat: false,
       repeatDelay: 1000,
       autoPlay: true,
       text: '>>> ',
@@ -26,29 +26,17 @@ export class PortfolioComponent implements OnInit {
           name: "Cursor #1"
         }
       }],
-      actions: //this.commandArray
-        [{ type: "keyboard", cursor: 0, text: "H", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "e", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "l", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "l", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "o", delay: 100 },
-        { type: "keyboard", cursor: 0, text: " ", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "W", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "o", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "r", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "l", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "d", delay: 100 },
-        { type: "keyboard", cursor: 0, text: "!", delay: 100 }]
+      actions:
+        [{ type: "keyboard", cursor: 0, text: "", delay: 100 }]
+    },
+    () => {
+      this.ref.markForCheck();
     }
-    // ,
-    // () => {
-    //   this.ref.markForCheck();
-    // }
   )
 
   ngOnInit(): void {
     this.constructActions(this.command);
-    console.log(this.commandArray)
+    console.log(this.typewriter.actions)
   }
 
   setPage(page: string) {
@@ -57,7 +45,7 @@ export class PortfolioComponent implements OnInit {
 
   constructActions(command: string) {
     command.split('').forEach(char => {
-      this.commandArray.push(
+      this.typewriter.actions.push(
         { type: "keyboard", cursor: 0, text: char, delay: 100 }
       )
     });
