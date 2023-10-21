@@ -59,14 +59,14 @@ nav {
 #typewriter {
   font-family: monospace;
   font-size: 26px;
-  display: inline-block;
-  margin-bottom: 0px;
+  display: inline;
 }
 
 #typewriter-cursor {
   border-right-width: 4px;
   border-right-style: solid;
   border-color: #a6c4dd;
+  display:flex;
 }
 
 #typewriter-cursor.blinking {
@@ -85,25 +85,33 @@ nav {
 
 .terminal {
   height: 80vh;
-  width: 66vh;
-  // position: relative;
+  width: 66vw;
   overflow-y: scroll;
   overflow-x: hidden;
   padding-top: 5vh;
   padding-bottom: 5vh;
   background-color: #000000;
-  // p-3 
-  // p-md-5 
-  // m-md-5
-  // col-md-12 
-  // p-lg-5 
-  // mx-auto 
-  // my-5
+  font-family: monospace;
+}
+
+.terminal.hover {
+  cursor: auto;
 }
 
 #history {
   font-family: monospace;
   font-size: 26px;
-  display: inline-block;
+  display: block;
   margin-bottom: 0px;
+}
+
+.formField {
+  background-color: #000000;
+  color: white;
+  border: 0;
+}
+
+.commandDirectory {
+  color: #8ca5ba;
+  display: inline;
 }

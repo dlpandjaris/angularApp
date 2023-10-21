@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +16,8 @@ import { AccountInfoComponent } from './projects/giftRegistry/components/account
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
+import { TerminalButtonComponent } from './components/terminal-button/terminal-button.component';
 
 @NgModule({
   declarations: [
@@ -28,14 +30,17 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
     AdminDashboardComponent,
     AccountInfoComponent,
     SpotifyComponent,
-    PortfolioComponent
+    PortfolioComponent,
+    WelcomeComponent,
+    TerminalButtonComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,
