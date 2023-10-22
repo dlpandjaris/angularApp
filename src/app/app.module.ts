@@ -18,6 +18,7 @@ import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { TerminalButtonComponent } from './components/terminal-button/terminal-button.component';
+import { TerminalContentComponent } from './components/terminal-content/terminal-content.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { TerminalButtonComponent } from './components/terminal-button/terminal-b
     SpotifyComponent,
     PortfolioComponent,
     WelcomeComponent,
-    TerminalButtonComponent
+    TerminalButtonComponent,
+    TerminalContentComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-terminal-button',
@@ -9,14 +9,19 @@ export class TerminalButtonComponent implements OnInit {
 
   @Input() command!: string;
   @Input() btnClass!: string;
-  @Output() onClick = new EventEmitter<string>();
-  constructor() { }
+  
+  constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {
   }
 
   emitEvent() {
-    this.onClick.emit(this.command);
+    const event: CustomEvent = new CustomEvent('TerminalButtonClickedEvent', {
+      bubbles: true,
+      detail: this.command
+    });
+
+    this.elementRef.nativeElement.dispatchEvent(event);
   }
 
 }

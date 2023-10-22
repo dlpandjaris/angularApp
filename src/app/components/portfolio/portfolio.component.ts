@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, DoCheck, KeyValueDiffers } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Typewriter } from '@uiloos/core';
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { commandContent } from 'src/app/models/commandContent';
@@ -18,7 +18,7 @@ export class PortfolioComponent implements OnInit {
 
   commandMap: Map<string, commandContent> = new Map([
     ['cat welcome.txt', {
-      stringContent: 'Welcome to my website! Use the command "help()"for more info<br>',
+      stringContent: 'Welcome to my website! Use the command "help()" for more info<br>',
       commandContent: new WelcomeComponent()
     }],
     ['cat experience.txt', {
@@ -89,9 +89,12 @@ export class PortfolioComponent implements OnInit {
     this.edit = true;
   }
 
-  clickedTerminalButton(command: string) {
-    this.typewriter.text = command;
-    this.runCommand();
+
+
+  @HostListener('TerminalButtonClickedEvent', ['$event'])
+  onTerminalButtonClicked(event: any) {
+    this.typewriter.text = event.detail;
+    this.runCommand()
   }
 
   runCommand() {

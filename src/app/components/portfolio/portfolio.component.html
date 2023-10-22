@@ -1,6 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
   <div class="container-fluid">
-    <!-- <a class="navbar-brand" href="#">Dylan Pandjaris</a> -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <img class="images" src="assets/database.png" href="#" width="25px" height="25px"/>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +23,7 @@
           <p class="commandDirectory">dylan.pandjaris@toaster $</p>{{entry[0]}}<br>
           <div [innerHTML]="entry[1].stringContent"></div><br>
           <div>{{entry[1].componentContent}}</div>
-          <app-terminal-button [command] = "'cat experience.txt'" (onClick)="clickedTerminalButton($event)" [btnClass]="'btn-primary'"></app-terminal-button>
+          <app-terminal-content [command] = "entry[0]"></app-terminal-content>
         </li>
         <div id="typewriter">
           <p class="commandDirectory">dylan.pandjaris@toaster $</p>
@@ -57,7 +56,3 @@
     </div>
   </div>
 </body>
-
-<ng-template #help>
-  
-</ng-template>
