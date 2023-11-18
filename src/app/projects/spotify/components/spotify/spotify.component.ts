@@ -5,6 +5,7 @@ import { Track } from '../../models/track';
 import { Artist } from '../../models/artist';
 import { TopTrackList } from '../../models/top-track-list';
 import { TopArtistList } from '../../models/top-artist-list';
+import { environment } from 'src/environments/environment';
 
 declare var $: any;
 
@@ -76,7 +77,8 @@ export class SpotifyComponent implements OnInit {
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("response_type", "code");
-    params.append("redirect_uri", "http://localhost:4200/projects/spotify");
+    // params.append("redirect_uri", "http://localhost:4200/projects/spotify");
+    params.append("redirect_uri", `${environment.domain}/projects/spotify`);
     params.append("scope", "user-read-private user-read-email user-top-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
@@ -91,7 +93,8 @@ export class SpotifyComponent implements OnInit {
     params.append("client_id", clientId);
     params.append("grant_type", "authorization_code");
     params.append("code", code);
-    params.append("redirect_uri", "http://localhost:4200/projects/spotify");
+    // params.append("redirect_uri", "http://localhost:4200/projects/spotify");
+    params.append("redirect_uri", `${environment.domain}/projects/spotify`);
     params.append("code_verifier", verifier!);
 
     const result = await fetch("https://accounts.spotify.com/api/token", {

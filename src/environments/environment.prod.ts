@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  domain: "https://regal-muse-263204.web.app"
 };
