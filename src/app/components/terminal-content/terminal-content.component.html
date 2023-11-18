@@ -1,3 +1,7 @@
-<div *ngIf="this.command == 'help()'">
+<div *ngIf="this.command == 'help'">
     <app-terminal-button [command] = "'cat experience.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
+    <app-terminal-button [command] = "'cat education.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
+</div>
+<div *ngIf="this.command == 'cat welcome.txt'">
+    <app-terminal-button [command] = "'help'" [btnClass]="'btn-primary'"></app-terminal-button>
 </div>

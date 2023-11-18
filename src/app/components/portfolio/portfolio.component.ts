@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Typewriter } from '@uiloos/core';
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { commandContent } from 'src/app/models/commandContent';
 import { WelcomeComponent } from '../welcome/welcome.component';
 
 @Component({
@@ -13,21 +12,17 @@ export class PortfolioComponent implements OnInit {
 
   page: string = 'Home';
   command: string = 'cat welcome.txt';
-  history: Array<[string, commandContent]> = new Array();
+  history: Array<[string, string]> = new Array();
   edit: boolean = false;
 
-  commandMap: Map<string, commandContent> = new Map([
-    ['cat welcome.txt', {
-      stringContent: 'Welcome to my website! Use the command "help()" for more info<br>',
-      commandContent: new WelcomeComponent()
-    }],
-    ['cat experience.txt', {
-      stringContent: 'JB Hunt...<br>Textron Aviantion...',
-
-    }],
-    ['help()', {
-      stringContent: 'Type or click the following commands:'
-    }]
+  commandMap: Map<string, string> = new Map([
+    ['cat welcome.txt', 'Welcome to my website! Use the command "help" for more info<br>'],
+    ['cat experience.txt', 'JB Hunt...<br>Textron Aviantion...'],
+    ['help', 'Type or click the following commands:'],
+    ['cat education.txt', 'Kansas State University<br/>'
+                         +'Major: Industrial Manufacturing & Systems Engineering<br/>'
+                         +'Minors: Statistics, Business Administration<br/>'
+                         +'Duration: Aug 2017 - May 2021']
   ])
 
   commandForm!: FormGroup;
@@ -103,9 +98,7 @@ export class PortfolioComponent implements OnInit {
       if (this.commandMap.has(command)) {
         this.history.push([command, this.commandMap.get(command)!]);
       } else {
-        this.history.push([command, {
-          stringContent: 'command not recognized'
-        }])
+        this.history.push([command, 'command not recognized'])
       }
       this.typewriter.text = '';
     }

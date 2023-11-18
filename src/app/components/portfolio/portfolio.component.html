@@ -21,9 +21,8 @@
       <div style="font-family: monospace;">
         <li id="history" *ngFor="let entry of this.history;">
           <p class="commandDirectory">dylan.pandjaris@toaster $</p>{{entry[0]}}<br>
-          <div [innerHTML]="entry[1].stringContent"></div><br>
-          <div>{{entry[1].componentContent}}</div>
-          <app-terminal-content [command] = "entry[0]"></app-terminal-content>
+          <div [innerHTML]="entry[1]"></div>
+          <app-terminal-content [command] = "entry[0]"></app-terminal-content><br>
         </li>
         <div id="typewriter">
           <p class="commandDirectory">dylan.pandjaris@toaster $</p>
