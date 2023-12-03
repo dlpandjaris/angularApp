@@ -7,16 +7,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">        
-        <a class="nav-link" (click)="this.setPage('Home')">Home</a>
-        <a class="nav-link" (click)="this.setPage('Projects')">Projects</a>
-        <a class="nav-link" (click)="this.setPage('Contact Me')">Contact Me</a>
+        <a class="nav-link" (click)="this.setPage('home')">Home</a>
+        <a class="nav-link" (click)="this.setPage('projects')">Projects</a>
+        <a class="nav-link" (click)="this.setPage('resume')">Resume</a>
+        <a class="nav-link" (click)="this.setPage('contact me')">Contact Me</a>
       </div>
     </div>
   </div>
 </nav>
 
 <body>
-  <div *ngIf="this.page == 'Home'">
+  <div *ngIf="this.page == 'home'">
     <div class="terminal" (click)="this.clickedTerminal()">
       <div style="font-family: monospace;">
         <li id="history" *ngFor="let entry of this.history;">
@@ -40,12 +41,15 @@
     </div>
   </div>
 
-  <div *ngIf="this.page == 'Projects'">
+  <div *ngIf="this.page == 'projects'">
     <li><a routerLink="/projects/spotify" routerLinkActive="active">Spotify Sandbox</a></li>
     <li><a routerLink="/projects/gift-registry" routerLinkActive="active">Gift Registry</a></li>
   </div>
+  <div *ngIf="this.page == 'resume'">
+    <img src="assets/Resume.png" style='height:96vh;'>
+  </div>
 
-  <div *ngIf="this.page == 'Contact Me'">
+  <div *ngIf="this.page == 'contact Me'">
     <div class="card" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">Card title</h5>

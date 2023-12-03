@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Typewriter } from '@uiloos/core';
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { WelcomeComponent } from '../welcome/welcome.component';
 
 @Component({
   selector: 'app-portfolio',
@@ -10,19 +9,35 @@ import { WelcomeComponent } from '../welcome/welcome.component';
 })
 export class PortfolioComponent implements OnInit {
 
-  page: string = 'Home';
+  page: string = 'home';
   command: string = 'cat welcome.txt';
   history: Array<[string, string]> = new Array();
   edit: boolean = false;
 
   commandMap: Map<string, string> = new Map([
-    ['cat welcome.txt', 'Welcome to my website! Use the command "help" for more info<br>'],
-    ['cat experience.txt', 'JB Hunt...<br>Textron Aviantion...'],
     ['help', 'Type or click the following commands:'],
+    ['cat welcome.txt', 'Welcome to my website! As you can see, I\'m no front end engineer,<br>'
+                       +'but needed a place to host things I enjoy working on.<br>'
+                       +'Use the "<b>help</b>" command for more info:<br>'],
+    ['cat experience.txt', 'J.B. Hunt Transportation.......................................Lowell, AR<br>'
+                          +'&emsp;Data Scientist I......................................Jan 2022 - Present<br>'
+                          +'&emsp;Logistics Engineer I................................June 2021 - Dec 2022<br>'
+                          +'<br>'
+                          +'Textron Aviantion.............................................Wichita, KS<br>'
+                          +'&emsp;IT Developer Intern...................................June - August 2020<br>'
+                          +'<br>'
+                          +'Kansas State University.....................................Manhattan, KS<br>'
+                          +'&emsp;Research Associate..................................Sept 2019 - May 2021<br>'],
     ['cat education.txt', 'Kansas State University<br/>'
                          +'Major: Industrial Manufacturing & Systems Engineering<br/>'
                          +'Minors: Statistics, Business Administration<br/>'
-                         +'Duration: Aug 2017 - May 2021']
+                         +'Duration: Aug 2017 - May 2021'],
+    ['ls', ''],
+    ['cd projects', ''],
+    ['cd resume', ''],
+    ['cd \'contact me\'', ''],
+    ['cd contact me', ''],
+    ['', '']
   ])
 
   commandForm!: FormGroup;
@@ -94,7 +109,17 @@ export class PortfolioComponent implements OnInit {
 
   runCommand() {
     if (this.typewriter.text != '') {
-      let command = this.typewriter.text;
+      let command = this.typewriter.text.toLowerCase();
+      if (command.slice(0, 2) == 'cd') {
+        let destination = command.slice(3);
+        if (destination == '\'contact me\'') {
+          this.setPage('contact me')
+        } else {
+          if (this.commandMap.has(command)) {
+            this.setPage(destination);
+          }
+        }
+      }
       if (this.commandMap.has(command)) {
         this.history.push([command, this.commandMap.get(command)!]);
       } else {

@@ -1,7 +1,15 @@
 <div *ngIf="this.command == 'help'">
     <app-terminal-button [command] = "'cat experience.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
     <app-terminal-button [command] = "'cat education.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
+    <app-terminal-button [command] = "'cd Projects'" [btnClass]="'btn-success'"></app-terminal-button>
+    <app-terminal-button [command] = "'cd Resume'" [btnClass]="'btn-success'"></app-terminal-button>
+    <app-terminal-button [command] = "'cd \'Contact Me\''" [btnClass]="'btn-success'"></app-terminal-button>
 </div>
 <div *ngIf="this.command == 'cat welcome.txt'">
+    <app-terminal-button [command] = "'help'" [btnClass]="'btn-primary'"></app-terminal-button>
+</div>
+<div *ngIf="this.command == 'ls'">
+    <app-terminal-button [command] = "'cat experience.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
+    <app-terminal-button [command] = "'cat education.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
     <app-terminal-button [command] = "'help'" [btnClass]="'btn-primary'"></app-terminal-button>
 </div>
