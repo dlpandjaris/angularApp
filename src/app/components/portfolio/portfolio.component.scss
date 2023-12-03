@@ -22,7 +22,7 @@ a:hover {
  * Base structure
  */
 
-html,
+html, 
 body {
   height: 100%;
   background-color: #1b1e21;
@@ -46,7 +46,7 @@ a.nav-link:hover {
 
 a {
   font-family: monospace; //monaco
-  font-size: x-large;
+  font-size: 2.5rem;
   color: #fff;
 }
 
@@ -58,7 +58,7 @@ nav {
 
 #typewriter {
   font-family: monospace;
-  font-size: 26px;
+  font-size: 2.5rem;
   display: inline;
 }
 
@@ -100,7 +100,7 @@ nav {
 
 #history {
   font-family: monospace;
-  font-size: 26px;
+  font-size: 2.5rem;
   display: block;
   margin-bottom: 0px;
 }

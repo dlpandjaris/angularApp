@@ -13,3 +13,6 @@
     <app-terminal-button [command] = "'cat education.txt'" [btnClass]="'btn-primary'"></app-terminal-button>
     <app-terminal-button [command] = "'help'" [btnClass]="'btn-primary'"></app-terminal-button>
 </div>
+<div *ngIf="this.command == 'cat experience.txt'">
+    <app-terminal-button [command] = "'cd Resume'" [btnClass]="'btn-success'"></app-terminal-button>
+</div>
