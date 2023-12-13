@@ -1,4 +1,4 @@
-<section style="background-color: #000000;">
+<section style="background-color: #000000; height: 100vh;">
   <div class="container py-1">
 
     <nav class="navbar navbar-expand-md navbar-dark sticky-top">
@@ -34,9 +34,9 @@
               <div class="card-body text-center">
                 <img src="{{this.user_profile.images[0].url}}" alt="avatar"
                   class="rounded-circle img-fluid" style="width: 150px;">
-                <h5 class="my-3">{{this.user_profile.display_name}}</h5>
-                <p class="text-muted mb-1">{{this.user_profile.email}}</p>
-                <p class="text-muted mb-4">{{this.user_profile.followers.total}} followers</p>
+                <h5 class="my-5">{{this.user_profile.display_name}}</h5>
+                <p class="text-muted mb-3">{{this.user_profile.email}}</p>
+                <p class="text-muted mb-6">{{this.user_profile.followers.total}} followers</p>
               </div>
             </div>
           </div>

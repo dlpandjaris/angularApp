@@ -6,12 +6,13 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 6vh;
   display: flex;
   align-items: center;
   background-color: #1976d2;
   color: white;
   font-weight: 600;
+  font-size: 1.75rem;
 }
 .toolbar img {
   margin: 0 16px;
@@ -36,4 +37,8 @@
 
 .i:hover {
   opacity: 50%;
+}
+
+button {
+  font-size: 1.75rem;
 }

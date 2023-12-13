@@ -68,10 +68,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['projects/gift-registry/group-dashboard']);
         },
         error:(err)=>{
-          this.toastService.show('Failure', err?.error.message);
+          this.toastService.show('Failure', 'Email/Password incorrect');
         }
       });
-    }else{
+    } else {
       console.log("Form is invalid");
       this.validateAllFormFields(this.loginForm);
       //throw error
