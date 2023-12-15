@@ -1,63 +1,60 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-  <div class="container-fluid">
+<div class="background">
+  <nav>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <img class="images" src="assets/database.png" href="#" width="40px" height="40px"/>
+    <!-- <img class="images" style="float: left;" src="assets/database.png" href="#" width="40px" height="40px"/> -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">        
-        <a class="nav-link" (click)="this.setPage('home')">Home</a>
-        <a class="nav-link" (click)="this.setPage('projects')">Projects</a>
-        <a class="nav-link" (click)="this.setPage('resume')">Resume</a>
-        <a class="nav-link" (click)="this.setPage('contact me')">Contact Me</a>
-      </div>
-    </div>
-  </div>
-</nav>
+    <a class="nav-link" (click)="this.setPage('home')">Home</a>
+    <a class="nav-link" (click)="this.setPage('projects')">Projects</a>
+    <a class="nav-link" (click)="this.setPage('resume')">Resume</a>
+    <a class="nav-link" (click)="this.setPage('contact me')">Contact Me</a>
+  </nav>
 
-<body>
-  <div *ngIf="this.page == 'home'">
-    <div class="terminal" (click)="this.clickedTerminal()">
-      <div style="font-family: monospace;">
-        <li id="history" *ngFor="let entry of this.history;">
-          <p class="commandDirectory">dylan.pandjaris@toaster $</p>{{entry[0]}}<br>
-          <div [innerHTML]="entry[1]"></div>
-          <app-terminal-content [command] = "entry[0]"></app-terminal-content><br>
-        </li>
-        <div id="typewriter">
-          <p class="commandDirectory">dylan.pandjaris@toaster $</p>
-          <form [formGroup]="commandForm" *ngIf="this.edit" (ngSubmit)="this.runCommand()" style="display:inline-block;">
-            <div class="input-field" type="text">
-              <input class="formField" formControlName="command" type="text" [(ngModel)]="this.typewriter.text"/> 
-            </div>            
-          </form>
-          <span *ngIf="!this.edit">{{typewriter.text}}</span>
-          <span id="typewriter-cursor" *ngIf="!this.edit"
-            [class.blinking]="typewriter.cursors[0].isBlinking"
-          ></span>
+  <body>
+    <div *ngIf="this.page == 'home'">
+      <div class="terminal" (click)="this.clickedTerminal()">
+        <div style="padding: 1rem">
+          <li id="history" *ngFor="let entry of this.history;">
+            <p class="commandDirectory">&#x279C;  &#x223C;</p>{{entry[0]}}<br>
+            <div [innerHTML]="entry[1]"></div>
+            <app-terminal-content [command] = "entry[0]"></app-terminal-content><br>
+          </li>
+          <div id="typewriter">
+            <p class="commandDirectory">&#x279C;  &#x223C;</p>
+            <form [formGroup]="commandForm" *ngIf="this.edit" (ngSubmit)="this.runCommand()" style="display:inline-block;">
+              <div class="input-field" type="text">
+                <input class="formField" formControlName="command" type="text" [(ngModel)]="this.typewriter.text"/> 
+              </div>            
+            </form>
+            <span *ngIf="!this.edit">{{typewriter.text}}</span>
+            <span id="typewriter-cursor" *ngIf="!this.edit"
+              [class.blinking]="typewriter.cursors[0].isBlinking"
+            ></span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div *ngIf="this.page == 'projects'">
-    <li><a routerLink="/projects/spotify" routerLinkActive="active">Spotify Sandbox</a></li>
-    <li><a routerLink="/projects/gift-registry" routerLinkActive="active">Gift Registry</a></li>
-  </div>
-  <div *ngIf="this.page == 'resume'">
-    <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; left: 0; border: none; padding: 0;margin: 0;"
-      src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFGB5whQIQ&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
-    </iframe>
-  </div>
+    <div *ngIf="this.page == 'projects'">
+      <li><a routerLink="/projects/spotify" routerLinkActive="active">Spotify Sandbox</a></li>
+      <li><a routerLink="/projects/gift-registry" routerLinkActive="active">Gift Registry</a></li>
+    </div>
+    <div *ngIf="this.page == 'resume'">
+      <iframe loading="lazy"
+        src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFGB5whQIQ&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+      </iframe>
+    </div>
 
-  <div *ngIf="this.page == 'contact Me'">
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div *ngIf="this.page == 'contact Me'">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
       </div>
     </div>
-  </div>
-</body>
+    
+  </body>
+</div>

@@ -1,6 +1,4 @@
-/*
- * Globals
- */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:500');
 
 /* Links */
 a,
@@ -9,35 +7,13 @@ a:hover {
   color: #a6c4dd;
 }
 
-/* Custom default button */
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
-  text-shadow: none; /* Prevent inheritance from `body` */
-}
-
-
-/*
- * Base structure
- */
-
-html, 
 body {
-  height: 100%;
-  background-color: #1b1e21;
-}
-
-body {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: flex;
-  -ms-flex-pack: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  color: #fff;
-  // text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  // box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  margin-left: auto;
+  margin-right: auto;
+  height: 94vh;
+  // background-color: #1b1e21;
+  background: none;
+  color: white;
 }
 
 a.nav-link:hover {
@@ -45,15 +21,21 @@ a.nav-link:hover {
 }
 
 a {
-  font-family: monospace; //monaco
-  font-size: 2.5rem;
-  color: #fff;
-  margin-left: 1.5rem;
+  font-family: "Montserrat", monospace;
+  font-size: 2.3rem;
+  color: black;
+  margin-left: 4rem;
+  float: left;
+  padding-top: 2rem;
 }
 
 nav {
-  background-color: #2f363c;
-  font-family: monaco;
+  // background-color: #2f363c;
+  font-family: sans-serif, monaco;
+  border-width: 5px;
+  // line-height: 6vh;
+  height: 6vh;
+  width: 100vw;
 }
 
 
@@ -85,14 +67,18 @@ nav {
 }
 
 .terminal {
-  height: 100vh;
+  height: 70vh;
   width: 66vw;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding-top: 5vh;
-  padding-bottom: 5vh;
   background-color: #000000;
   font-family: monospace;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10rem;
+  margin-bottom: 10rem;
+  border-radius: 10px;
+  opacity: 0.7;
 }
 
 .terminal.hover {
@@ -100,7 +86,7 @@ nav {
 }
 
 #history {
-  font-family: monospace;
+  font-family: monospace, sans-serif;
   font-size: 2.5rem;
   display: block;
   margin-bottom: 0px;
@@ -115,4 +101,44 @@ nav {
 .commandDirectory {
   color: #8ca5ba;
   display: inline;
+}
+
+.background {
+  height: 100vh;
+  background-color: #1b1e21;
+  background-image: url('../../../assets/Hexagon Background.jpg');
+  background-size: cover;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 1.5rem;
+}
+
+// ::-webkit-scrollbar-track {
+//   background: hsl(0, 0%, 35%);
+//   border-radius: 100vw;
+// }
+
+::-webkit-scrollbar-thumb {
+  // background: hsl(51, 31%, 42% / 1);
+  background: hsl(0, 0%, 30%);
+  border: .25rem solid hsl(0, 0%, 0%);
+  border-radius: 100vw;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 30% / .5);
+}
+
+iframe {
+  position: absolute;
+  width: 1020px;
+  aspect-ratio: 8.5/11;
+  margin-top: 1.9vh;
+  border-radius: 10px;
+  display: block;
+  margin-left: calc(50vw - 510px)
 }

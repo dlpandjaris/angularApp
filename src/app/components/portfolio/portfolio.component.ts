@@ -18,7 +18,7 @@ export class PortfolioComponent implements OnInit {
     ['help', 'Type or click the following commands:'],
     ['cat welcome.txt', 'Welcome to my website! As you can see, I\'m no front end engineer,<br>'
                        +'but needed a place to host things I enjoy working on.<br>'
-                       +'Use the <code>help</code> command for more info:<br>'],
+                       +'Use the <b><code>help</code></b> command for more info:<br>'],
     ['cat experience.txt', 'J.B. Hunt Transportation.......................................Lowell, AR<br>'
                           +'&emsp;Data Scientist I......................................Jan 2022 - Present<br>'
                           +'&emsp;Logistics Engineer I................................June 2021 - Dec 2022<br>'
@@ -38,7 +38,8 @@ export class PortfolioComponent implements OnInit {
     ['cd \'contact me\'', ''],
     ['cd contact me', ''],
     ['', ''],
-    ['cat boobs', '80085']
+    ['cat boobs', '80085'],
+    ['clear', '']
   ])
 
   commandForm!: FormGroup;
@@ -123,8 +124,11 @@ export class PortfolioComponent implements OnInit {
       }
       if (this.commandMap.has(command)) {
         this.history.push([command, this.commandMap.get(command)!]);
+        if (command == 'clear') {
+          this.history = new Array();
+        }
       } else {
-        this.history.push([command, 'command not recognized'])
+        this.history.push([command, 'command not recognized']);
       }
       this.typewriter.text = '';
     }
