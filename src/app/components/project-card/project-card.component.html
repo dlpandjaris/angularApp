@@ -1,0 +1,16 @@
+<!-- <li><a routerLink={{this.project.url}} routerLinkActive="active">{{this.project.title}}</a></li> -->
+
+<div class="container">
+  <div class="wrapper">
+    <div class="banner-image" [ngStyle]="{'background-color': this.project.color}">
+      <div class="logo" [ngStyle]="{'background-image': 'url(' + this.project.image + ')'}"></div>
+    </div>
+    <h1>{{this.project.title}}</h1>
+    <p>Lorem ipsum dolor sit amet, <br/>
+      consectetur adipiscing elit.</p>
+   </div>
+   <div class="button-wrapper"> 
+   <button class="btn outline">DETAILS</button>
+     <button class="btn fill">BUY NOW</button>
+  </div>
+</div> 

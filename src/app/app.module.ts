@@ -19,6 +19,7 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { TerminalButtonComponent } from './components/terminal-button/terminal-button.component';
 import { TerminalContentComponent } from './components/terminal-content/terminal-content.component';
+import { ProjectCardComponent } from './components/project-card/project-card.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TerminalContentComponent } from './components/terminal-content/terminal
     PortfolioComponent,
     WelcomeComponent,
     TerminalButtonComponent,
-    TerminalContentComponent
+    TerminalContentComponent,
+    ProjectCardComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Typewriter } from '@uiloos/core';
 import { FormBuilder, FormGroup } from '@angular/forms'
+import { Project } from 'src/app/models/project';
 
 @Component({
   selector: 'app-portfolio',
@@ -11,8 +12,9 @@ export class PortfolioComponent implements OnInit {
 
   page: string = 'home';
   command: string = 'cat welcome.txt';
-  history: Array<[string, string]> = new Array();
+  history: Array<[string, string]> = [];
   edit: boolean = false;
+  commandForm!: FormGroup;
 
   commandMap: Map<string, string> = new Map([
     ['help', 'Type or click the following commands:'],
@@ -40,9 +42,23 @@ export class PortfolioComponent implements OnInit {
     ['', ''],
     ['cat boobs', '80085'],
     ['clear', '']
-  ])
+  ]);
 
-  commandForm!: FormGroup;
+  projects: Project[] = [
+    {
+      title: 'Spotify Analysis',
+      url: "/projects/spotify",
+      image: '../../../assets/Spotify_logo_without_text.svg.png',
+      color: 'black'
+    },
+    {
+      title: 'Gift Registry',
+      url: "/projects/gift-registry",
+      image: '../../../assets/gift-512.png',
+      color: 'red'
+    }
+  ];
+
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -125,7 +141,7 @@ export class PortfolioComponent implements OnInit {
       if (this.commandMap.has(command)) {
         this.history.push([command, this.commandMap.get(command)!]);
         if (command == 'clear') {
-          this.history = new Array();
+          this.history = [];
         }
       } else {
         this.history.push([command, 'command not recognized']);

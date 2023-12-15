@@ -36,13 +36,18 @@
       </div>
     </div>
 
-    <div *ngIf="this.page == 'projects'">
-      <li><a routerLink="/projects/spotify" routerLinkActive="active">Spotify Sandbox</a></li>
-      <li><a routerLink="/projects/gift-registry" routerLinkActive="active">Gift Registry</a></li>
+    <div class="projects" *ngIf="this.page == 'projects'">
+      <app-project-card
+        *ngFor="let project of projects"
+        [project] = "project">
+      </app-project-card>
     </div>
+
     <div *ngIf="this.page == 'resume'">
       <iframe loading="lazy"
-        src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFGB5whQIQ&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+        src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFGB5whQIQ&#x2F;view?embed" 
+        allowfullscreen="allowfullscreen" 
+        allow="fullscreen">
       </iframe>
     </div>
 
