@@ -6,11 +6,12 @@
       <div class="logo" [ngStyle]="{'background-image': 'url(' + this.project.image + ')'}"></div>
     </div>
     <h1>{{this.project.title}}</h1>
-    <p>Lorem ipsum dolor sit amet, <br/>
-      consectetur adipiscing elit.</p>
-   </div>
-   <div class="button-wrapper"> 
-   <button class="btn outline">DETAILS</button>
-     <button class="btn fill">BUY NOW</button>
+    <p [innerHTML]="this.project.description"></p>
+  </div>
+  <div class="button-wrapper"> 
+    <a href="{{this.project.github}}" target="_blank" class="px-2">
+      <img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="">
+    </a>
+    <button class="btn outline" (click)="navigate(this.project.url)">TRY IT OUT</button>
   </div>
 </div> 

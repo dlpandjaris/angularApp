@@ -20,6 +20,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { TerminalButtonComponent } from './components/terminal-button/terminal-button.component';
 import { TerminalContentComponent } from './components/terminal-content/terminal-content.component';
 import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { ProjectCardComponent } from './components/project-card/project-card.com
     NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,
