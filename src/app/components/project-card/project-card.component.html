@@ -1,5 +1,3 @@
-<!-- <li><a routerLink={{this.project.url}} routerLinkActive="active">{{this.project.title}}</a></li> -->
-
 <div class="container">
   <div class="wrapper">
     <div class="banner-image" [ngStyle]="{'background-color': this.project.color}">
@@ -12,6 +10,8 @@
     <a href="{{this.project.github}}" target="_blank" class="px-2">
       <img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="">
     </a>
-    <button class="btn outline" (click)="navigate(this.project.url)">TRY IT OUT</button>
+    <button class="btn outline">
+      <a href="{{this.project.url}}">TRY IT OUT</a>
+    </button>
   </div>
 </div> 

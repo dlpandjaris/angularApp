@@ -6,6 +6,7 @@ import { GiftRegistryComponent } from './projects/giftRegistry/components/gift-r
 import { GroupDashboardComponent } from './projects/giftRegistry/components/group-dashboard/group-dashboard.component';
 import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { TopComponent } from './projects/spotify/components/top/top.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'portfolio', pathMatch:'full'},
@@ -13,7 +14,8 @@ const routes: Routes = [
   {path:'projects/gift-registry', component:GiftRegistryComponent},
   {path:'projects/gift-registry/group-dashboard', component:GroupDashboardComponent},
   {path:'projects/gift-registry/admin-dashboard', component:AdminDashboardComponent, canActivate:[AdminGuard]},
-  {path:'projects/spotify', component:SpotifyComponent}
+  {path:'projects/spotify/profile', component:SpotifyComponent},
+  {path:'projects/spotify/top', component:TopComponent}
 ];
 
 @NgModule({
