@@ -1,0 +1,74 @@
+.row {
+  color: white;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+section {
+  background-color: #000000;
+  min-height: 90vh;
+}
+
+div.card-body {
+  background-color: rgb(18, 18, 18);
+}
+
+div.card {
+  margin: 8px;
+}
+
+.btn-selected {
+  background-color: #1ED760;
+}
+
+.btn-unselected {
+  background-color: transparent;
+}
+
+button {
+  font-size: 2rem;
+}
+
+p {
+  font-size: 1.5rem;
+  margin: auto;
+}
+
+td {
+  // border: 2px solid yellow;
+  margin: 5px;
+  padding: 5px;
+}
+
+img {
+  width: 40px; 
+  height: 40px;
+  margin: 0 10px 0;
+}
+
+div.col.col-auto {
+  padding: 0;
+}
+
+.tr {
+  border-radius: 10px;
+}
+
+tr:hover {
+  background-color: rgb(62, 62, 62);
+}
+
+.card {
+  border:0px solid transparent;
+  background-color: #000000;
+}
+
+.card-body {
+  border-radius: 8px;
+}
+
+i {
+  color: #ffffff; 
+  font-size: 15px;
+}

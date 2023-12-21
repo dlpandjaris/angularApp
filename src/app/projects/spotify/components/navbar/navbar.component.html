@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-md navbar-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" style="color:white;" href="/projects/spotify">
+      <img src="../../../../../assets/Spotify_logo_without_text.svg.png" width="30" height="30" class="d-inline align-center" alt="">
+      moosic thing
+    </a>
+    <!-- <button class="navbar-toggler" type="button" (click)="this.navbar_collapsed = !this.navbar_collapsed">
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
+    <div [ngbCollapse]="this.navbar_collapsed" class="navbar-collapse">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/projects/spotify/profile">Profile<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/projects/spotify/top">Top Tracks/Artists</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
