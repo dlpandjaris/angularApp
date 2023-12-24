@@ -37,21 +37,17 @@ export class TopComponent implements OnInit {
   }
 
   async fetchTopTracks() {
-    if (this.accessToken) {
-        this.usersService.getTopTracks(this.accessToken, this.term)
-        .subscribe((result: TopTrackList) => {
-          this.top_tracks = result.items;
-      })
-    }
+    this.usersService.getTopTracks(this.term)
+      .subscribe((result: TopTrackList) => {
+        this.top_tracks = result.items;
+    })
   }
 
   async fetchTopArtists() {
-    if (this.accessToken) {
-        this.usersService.getTopArtists(this.accessToken, this.term)
-        .subscribe((result: TopArtistList) => {
-          this.top_artists = result.items;
-      })
-    }
+    this.usersService.getTopArtists(this.term)
+      .subscribe((result: TopArtistList) => {
+        this.top_artists = result.items;
+    })
   }
 
   setTopType(top_type: string) {

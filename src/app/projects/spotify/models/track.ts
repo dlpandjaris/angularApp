@@ -1,4 +1,3 @@
-import { Image } from "./image";
 import { Album } from "./album";
 import { Artist } from "./artist";
 

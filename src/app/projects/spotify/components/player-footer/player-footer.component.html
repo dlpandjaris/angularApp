@@ -1,8 +1,31 @@
 <footer class="sticky-bottom">
-  <div class="center-piece">
-    <div class="play-button">
-      <i class="fa-solid fa-play" style="color: #000000;"></i>
+  <div class="container">
+    <div class="song" *ngIf="this.playbackState.item">
+      <div class="song-picture">
+        <img src="{{this.playbackState.item.album.images[2].url}}"/>
+      </div>
     </div>
-    <!-- <i class="fa-solid fa-play"></i> -->
+
+    <div class="center-piece">
+      <button (click)="shuffle()">
+        <i class="fa-solid fa-shuffle" [style.color]="this.shuffleIconColor"></i>
+      </button>
+      <button (click)="skip_to_previous()">
+        <i class="fa-solid fa-backward-step"></i>
+      </button>
+      <button class="play-button" (click)="play_clicked()">
+        <i class="fa-solid {{playIcon}}" style="color: #000000; font-size: 16px;"></i>
+      </button>
+      <button (click)="skip_to_next()">
+        <i class="fa-solid fa-forward-step"></i>
+      </button>
+      <button (click)="repeat()">
+        <i class="fa-solid fa-repeat" [style.color]="this.repeatIconColor"></i>
+      </button>
+    </div>
+    
+    <div class="right-controls">
+      asdf
+    </div>
   </div>
 </footer>
