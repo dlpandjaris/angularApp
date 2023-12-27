@@ -1,25 +1,38 @@
 <footer class="sticky-bottom">
   <div class="container">
-    <div class="song" *ngIf="this.playbackState.item">
-      <div class="song-picture">
-        <img src="{{this.playbackState.item.album.images[2].url}}"/>
+    <div>
+      <div class="song" *ngIf="this.playbackState != null">
+        <div class="song-picture">
+          <img src="{{this.playbackState.item.album.images[2].url}}"/>
+        </div>
+        <div class="song-info">
+          <div class="song-name">
+            <p>{{this.playbackState.item.name}}</p>
+          </div>
+          <div class="album-name">
+            <p>{{this.playbackState.item.album.name}}</p>
+          </div>
+        </div>
+        <button (click)="toggle_favorite()" *ngIf="this.playbackState.currently_playing_type == 'track'">
+          <i class="{{favoriteIcon}} fa-heart" style="font-size: 16px;" [style.color]="this.favoriteIconColor"></i>
+        </button>
       </div>
     </div>
 
     <div class="center-piece">
-      <button (click)="shuffle()">
+      <button (click)="toggle_shuffle()">
         <i class="fa-solid fa-shuffle" [style.color]="this.shuffleIconColor"></i>
       </button>
       <button (click)="skip_to_previous()">
         <i class="fa-solid fa-backward-step"></i>
       </button>
-      <button class="play-button" (click)="play_clicked()">
+      <button class="play-button" (click)="toggle_play()">
         <i class="fa-solid {{playIcon}}" style="color: #000000; font-size: 16px;"></i>
       </button>
       <button (click)="skip_to_next()">
         <i class="fa-solid fa-forward-step"></i>
       </button>
-      <button (click)="repeat()">
+      <button (click)="toggle_repeat()">
         <i class="fa-solid fa-repeat" [style.color]="this.repeatIconColor"></i>
       </button>
     </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PlaybackState } from '../models/playback-state';
+import { Device } from '../models/device';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,18 @@ export class PlayerService {
     });
   }
 
+  get_currently_playing_track(): Observable<PlaybackState> {
+    return this.http.get<PlaybackState>(`${this.baseUrl}/player/currently-playing`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` }
+    });
+  }
+
+  get_available_devices(): Observable<Device[]> {
+    return this.http.get<Device[]>(`${this.baseUrl}/player/devices`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` }
+    });
+  }
+
   skip_to_next(): void {
     this.http.post(`${this.baseUrl}/player/next`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
@@ -55,5 +68,12 @@ export class PlayerService {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { state: state, }
     }).subscribe();
+  }
+
+  transfer_playback(device_ids: string[], play: boolean = false): void {
+    this.http.put(`${this.baseUrl}/player/repeat`, 
+      { "device_ids": device_ids, "play": play }, 
+      { headers: { Authorization: `Bearer ${this.accessToken}` } }
+    ).subscribe();
   }
 }

@@ -1,10 +1,13 @@
 footer {
   // height: 72px;
   background-color: #000000;
+  padding: 8px;
 }
 
 .container {
   height: 72px;
+  margin: 0;
+  width: 100%;
 
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -42,6 +45,8 @@ footer {
   transition: -webkit-transform .25s cubic-bezier(.3,0,0,1);
   transition: transform .25s cubic-bezier(.3,0,0,1);
   transition: transform .25s cubic-bezier(.3,0,0,1),-webkit-transform .25s cubic-bezier(.3,0,0,1);
+  min-width: 180px;
+  padding-inline-start: 8px;
 }
 
 .song-picture {
@@ -50,6 +55,24 @@ footer {
   flex-shrink: 0;
   isolation: isolate;
   margin-inline-end: 8px;
+  position: relative;
+}
+
+.song-info {
+  // color: #fff;
+  // grid-area: title;
+  // justify-self: start;
+  // width: 100%;
+
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  // -webkit-column-gap: 8px;
+  // -moz-column-gap: 8px;
+  // column-gap: 8px;
+  display: grid;
+  grid-template: "title title" "badges subtitle"/auto 1fr;
+  margin: 0 8px;
   position: relative;
 }
 
@@ -90,5 +113,56 @@ button {
 }
 
 img {
-  
+  -o-object-fit: cover;
+  object-fit: cover;
+  -o-object-position: center center;
+  object-position: center center;
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
 }
+
+.song-name,
+.album-name {
+  font-weight: 400;
+  font-family: var(--font-family,CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif));
+  // position: absolute;
+  // left: 0;
+  overflow: hidden;  
+  margin: -2px -6px -2px;
+  // margin-left: -6px;
+  // margin-right: -6px;
+  display: flex;
+  padding-inline: 6px 12px;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.song-name {
+  font-size: 1rem;
+  color: #fff;
+  grid-area: title;
+  justify-self: start;
+  // bottom: 0;
+  // height: 50%;
+}
+
+.album-name {
+  font-size: 0.8rem;
+  color: #6a6a6a;
+  // width: fit-content;
+  
+  grid-area: subtitle;
+    // grid-column-start: subtitle;
+  grid-column-start: badges;
+  min-width: 0;
+}
+
+.right-controls {
+  min-width: 180px;
+}
+
+p {
+  margin: 0;
+}
+
