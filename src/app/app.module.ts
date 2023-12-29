@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -49,7 +49,7 @@ import { PlayerFooterComponent } from './projects/spotify/components/player-foot
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule,
+    // NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
