@@ -13,7 +13,7 @@ import { AudioFeatures } from '../models/audio-features';
 })
 export class TrackService {
 
-  private baseUrl: string = "https://api.spotify.com/v1/";
+  private baseUrl: string = "https://api.spotify.com/v1";
   accessToken = localStorage.getItem("accessToken");
 
   constructor(private http: HttpClient) { }
@@ -43,7 +43,7 @@ export class TrackService {
       ids: ids
     }, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
-    })
+    }).subscribe();
   }
   
   remove_users_saved_tracks(ids: string[]): void {
@@ -53,29 +53,30 @@ export class TrackService {
     }).subscribe();
   }
 
-  check_users_saved_tracks(ids: string[]): Observable<Track[]> {
-    return this.http.get<Track[]>(`${this.baseUrl}/me/tracks/contains`, {
-      headers: { Authorization: `Bearer ${this.baseUrl}` },
+  check_users_saved_tracks(ids: string[]): Observable<boolean[]> {
+    return this.http.get<boolean[]>(`${this.baseUrl}/me/tracks/contains`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { ids: ids }
     })
   }
 
   get_tracks_audio_features(ids: string[]): Observable<AudioFeatures[]> {
     return this.http.get<AudioFeatures[]>(`/audio-features`, {
-      headers: { Authorization: `Bearer ${this.baseUrl}` },
+      headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { ids: ids }
     })
   }
 
   get_track_audio_features(id: string): Observable<AudioFeatures> {
     return this.http.get<AudioFeatures>(`/audio-features/${id}`, {
-      headers: { Authorization: `Bearer ${this.baseUrl}` }
+      headers: { Authorization: `Bearer ${this.accessToken}` }
     })
   }
 
+  // TODO: finish this with object
   get_track_audio_analysis(id: string): Observable<AudioFeatures> {
     return this.http.get<AudioFeatures>(`/audio-analysis/${id}`, {
-      headers: { Authorization: `Bearer ${this.baseUrl}` }
+      headers: { Authorization: `Bearer ${this.accessToken}` }
     })
   }
 

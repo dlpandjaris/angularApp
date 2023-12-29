@@ -1,6 +1,6 @@
 <footer class="sticky-bottom">
-  <div class="container">
-    <div>
+  <div class="__container">
+    <div class="left-controls">
       <div class="song" *ngIf="this.playbackState != null">
         <div class="song-picture">
           <img src="{{this.playbackState.item.album.images[2].url}}"/>
@@ -38,7 +38,16 @@
     </div>
     
     <div class="right-controls">
-      asdf
+
+      <div class="sound-bar">
+        <i class="fa-solid fa-volume"></i>
+        <div class="audio-progress" id="audio-progress">
+          <div id="draggable-point" style="position:absolute;" class="draggable ui-widget-content" cdkDrag>
+            <div id="audio-progress-handle"></div>
+          </div>
+          <div id="audio-progress-bar" class="bar" style="width:75%"></div>
+        </div>
+      </div>
     </div>
   </div>
 </footer>

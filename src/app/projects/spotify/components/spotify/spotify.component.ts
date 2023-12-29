@@ -76,7 +76,11 @@ export class SpotifyComponent implements OnInit {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", `${environment.domain}/projects/spotify/profile`);
-    params.append("scope", "user-read-private user-read-email user-top-read user-read-playback-state user-modify-playback-state, playlist-read-private, playlist-modify-public, playlist-modify-private, playlist-read-collaborative, user-library-read, user-library-modify");
+    params.append("scope", "user-read-private user-read-email user-top-read" 
+                         +" user-read-playback-state user-modify-playback-state"
+                         +" playlist-read-private playlist-modify-public"
+                         +" playlist-modify-private playlist-read-collaborative"
+                         +" user-library-read user-library-modify");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 

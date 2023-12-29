@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+
 import { PlayerService } from '../../services/player.service';
 import { PlaylistService } from '../../services/playlist.service';
+import { TrackService } from '../../services/track.service';
+
 import { PlaybackState } from '../../models/playback-state';
 import { Device } from '../../models/device';
 
@@ -15,6 +18,7 @@ export class PlayerFooterComponent implements OnInit {
 
   playIcon: string = 'fa-play';
   favoriteIcon: string = 'fa-regular';
+  is_favorite: boolean = false;
 
   favoriteIconColor: string = 'rgb(178, 178, 178)';
   shuffleIconColor: string = 'rgb(178, 178, 178)';
@@ -25,13 +29,16 @@ export class PlayerFooterComponent implements OnInit {
 
   constructor(
     private playerService: PlayerService,
-    private playlistService: PlaylistService) { }
+    private playlistService: PlaylistService,
+    private trackService: TrackService) { }
 
   async ngOnInit(): Promise<void> {
     await this.get_playback_state();
+    await this.check_favorite();
+
     // console.log(this.playbackState);
 
-    if (this.playbackState == null) {
+    if (!this.playbackState) {
       console.log('playbackState == null');
       await this.get_available_devices();
 
@@ -47,6 +54,14 @@ export class PlayerFooterComponent implements OnInit {
       .subscribe((result: Device[])=>{
         this.devices = result;
         // console.log(result);
+      })
+  }
+
+  async check_favorite() {
+    this.trackService.check_users_saved_tracks([this.playbackState.item.id])
+      .subscribe((result: boolean[])=>{
+        this.is_favorite = result[0];
+        console.log(`Favorited?: ${result}`);
       })
   }
 
@@ -84,6 +99,7 @@ export class PlayerFooterComponent implements OnInit {
     this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
 
     console.log(this.playbackState.item);
+    this.check_favorite();
   }
 
   toggle_repeat(): void {
@@ -94,9 +110,10 @@ export class PlayerFooterComponent implements OnInit {
   }
 
   toggle_favorite(): void {
-    console.log(`favorite clicked: ${this.playbackState.repeat_state}`);
-    this.playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
-    this.playbackState.shuffle_state ? this.shuffleIconColor = 'rgb(178, 178, 178)': this.shuffleIconColor = 'rgb(29, 185, 84)';
-    this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
+    console.log(`favorite clicked: ${this.is_favorite}`);
+    this.is_favorite ? this.trackService.remove_users_saved_tracks([this.playbackState.item.id]): this.trackService.save_tracks_for_current_user([this.playbackState.item.id]);
+    this.is_favorite ? this.favoriteIconColor = 'rgb(178, 178, 178)': this.favoriteIconColor = 'rgb(29, 185, 84)';
+    this.is_favorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
+    this.is_favorite = !this.is_favorite;
   }
 }
