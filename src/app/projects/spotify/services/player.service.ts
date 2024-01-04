@@ -11,9 +11,34 @@ export class PlayerService {
 
   private baseUrl: string = "https://api.spotify.com/v1/me";
   accessToken = localStorage.getItem("accessToken");
-
+  
   constructor(private http: HttpClient) { }
-
+  
+  get_playback_state(): Observable<PlaybackState> {
+    return this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` }
+    });
+  }
+  
+  transfer_playback(device_ids: string[], play: boolean = false): void {
+    this.http.put(`${this.baseUrl}/player/repeat`, 
+    { "device_ids": device_ids, "play": play }, 
+    { headers: { Authorization: `Bearer ${this.accessToken}` } }
+    ).subscribe();
+  }
+  
+  get_available_devices(): Observable<Device[]> {
+    return this.http.get<Device[]>(`${this.baseUrl}/player/devices`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` }
+    });
+  }
+  
+  get_currently_playing_track(): Observable<PlaybackState> {
+    return this.http.get<PlaybackState>(`${this.baseUrl}/player/currently-playing`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` }
+    });
+  }
+  
   play(device_id?: string): void {
     this.http.put(`${this.baseUrl}/player/play`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
@@ -25,25 +50,7 @@ export class PlayerService {
       headers: { Authorization: `Bearer ${this.accessToken}` }
     }).subscribe();
   }
-
-  get_playback_state(): Observable<PlaybackState> {
-    return this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
-      headers: { Authorization: `Bearer ${this.accessToken}` }
-    });
-  }
-
-  get_currently_playing_track(): Observable<PlaybackState> {
-    return this.http.get<PlaybackState>(`${this.baseUrl}/player/currently-playing`, {
-      headers: { Authorization: `Bearer ${this.accessToken}` }
-    });
-  }
-
-  get_available_devices(): Observable<Device[]> {
-    return this.http.get<Device[]>(`${this.baseUrl}/player/devices`, {
-      headers: { Authorization: `Bearer ${this.accessToken}` }
-    });
-  }
-
+  
   skip_to_next(): void {
     this.http.post(`${this.baseUrl}/player/next`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
@@ -56,10 +63,10 @@ export class PlayerService {
     }).subscribe();
   }
 
-  shuffle(state: boolean, device_id?: string): void {
-    this.http.put(`${this.baseUrl}/player/shuffle`, {}, {
+  seek_to_position(position_ms: number): void {
+    this.http.put(`${this.baseUrl}/player/seek`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
-      params: { state: state, }
+      params: { position_ms: position_ms }
     }).subscribe();
   }
 
@@ -70,10 +77,19 @@ export class PlayerService {
     }).subscribe();
   }
 
-  transfer_playback(device_ids: string[], play: boolean = false): void {
-    this.http.put(`${this.baseUrl}/player/repeat`, 
-      { "device_ids": device_ids, "play": play }, 
-      { headers: { Authorization: `Bearer ${this.accessToken}` } }
-    ).subscribe();
+  set_playback_volume(volume_percent: number): void {
+    this.http.put(`${this.baseUrl}/player/volume`, {}, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { volume_percent: volume_percent }
+    }).subscribe();
   }
+
+  shuffle(state: boolean, device_id?: string): void {
+    this.http.put(`${this.baseUrl}/player/shuffle`, {}, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { state: state, }
+    }).subscribe();
+  }
+
+
 }

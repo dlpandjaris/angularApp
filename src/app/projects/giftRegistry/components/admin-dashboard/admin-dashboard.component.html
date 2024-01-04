@@ -3,7 +3,7 @@
 
 <span style="display: flex;">
   <div class="card" style="width: 40%;">
-    <ngb-accordion [closeOthers]="true" activeIds="{{getFirstUser()}}">
+    <!-- <ngb-accordion [closeOthers]="true" activeIds="{{getFirstUser()}}">
       <ng-container *ngFor="let user of users">
         <ngb-panel id="{{user.id}}" title="{{user.first_name}} {{this.user.last_name}}">
           <ng-template ngbPanelContent>
@@ -22,10 +22,10 @@
           </ng-template>
         </ngb-panel>
       </ng-container>
-    </ngb-accordion>
+    </ngb-accordion> -->
   </div>
   <div class="card" style="width: 40%;">
-    <ngb-accordion [closeOthers]="true" activeIds="{{getFirstGroup()}}">
+    <!-- <ngb-accordion [closeOthers]="true" activeIds="{{getFirstGroup()}}">
       <ng-container *ngFor="let group of groups">
         <ngb-panel id="{{group.id}}" title="{{group.name}}">
           <ng-template ngbPanelContent>
@@ -36,6 +36,6 @@
           </ng-template>
         </ngb-panel>
       </ng-container>
-    </ngb-accordion>
+    </ngb-accordion> -->
   </div>
 </span>

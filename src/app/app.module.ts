@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,6 +24,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NavbarComponent } from './projects/spotify/components/navbar/navbar.component';
 import { TopComponent } from './projects/spotify/components/top/top.component';
 import { PlayerFooterComponent } from './projects/spotify/components/player-footer/player-footer.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -49,11 +50,12 @@ import { PlayerFooterComponent } from './projects/spotify/components/player-foot
   imports: [
     BrowserModule,
     AppRoutingModule,
-    // NgbModule,
+    NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    DragDropModule
   ],
   providers: [{
     provide:HTTP_INTERCEPTORS,

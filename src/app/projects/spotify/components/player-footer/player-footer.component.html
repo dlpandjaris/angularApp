@@ -14,39 +14,73 @@
           </div>
         </div>
         <button (click)="toggle_favorite()" *ngIf="this.playbackState.currently_playing_type == 'track'">
-          <i class="{{favoriteIcon}} fa-heart" style="font-size: 16px;" [style.color]="this.favoriteIconColor"></i>
+          <svg [style.fill]="favoriteIconColor">
+            <path [attr.d]="favoriteIcon"></path>
+          </svg>
         </button>
       </div>
     </div>
 
     <div class="center-piece">
       <button (click)="toggle_shuffle()">
-        <i class="fa-solid fa-shuffle" [style.color]="this.shuffleIconColor"></i>
+        <svg [style.fill]="shuffleIconColor">
+          <path [attr.d]="iconProvider.shuffleStart"></path>
+          <path [attr.d]="iconProvider.shuffleEnd"></path>
+        </svg>
       </button>
       <button (click)="skip_to_previous()">
-        <i class="fa-solid fa-backward-step"></i>
+        <svg>
+          <path [attr.d]="iconProvider.previous"></path>
+        </svg>
       </button>
       <button class="play-button" (click)="toggle_play()">
-        <i class="fa-solid {{playIcon}}" style="color: #000000; font-size: 16px;"></i>
+        <svg style="fill: black; width: 16px;">
+          <path [attr.d]="playIcon"></path>
+        </svg>
       </button>
       <button (click)="skip_to_next()">
-        <i class="fa-solid fa-forward-step"></i>
+        <svg>
+          <path [attr.d]="iconProvider.next"></path>
+        </svg>
       </button>
       <button (click)="toggle_repeat()">
-        <i class="fa-solid fa-repeat" [style.color]="this.repeatIconColor"></i>
+        <svg [style.fill]="repeatIconColor">
+          <path [attr.d]="iconProvider.repeat"></path>
+        </svg>
       </button>
     </div>
     
     <div class="right-controls">
 
-      <div class="sound-bar">
-        <i class="fa-solid fa-volume"></i>
-        <div class="audio-progress" id="audio-progress">
-          <div id="draggable-point" style="position:absolute;" class="draggable ui-widget-content" cdkDrag>
+      <div class="sound-bar" *ngIf="activeDevice">
+        <button (click)="toggle_mute()">
+          <svg *ngIf="activeDevice.volume_percent <= 0">
+            <path [attr.d]="iconProvider.volumeMuteStart"></path>
+            <path [attr.d]="iconProvider.volumeMuteEnd"></path>
+          </svg>
+          <svg *ngIf="activeDevice.volume_percent > 0 && activeDevice.volume_percent < 33">
+            <path [attr.d]="iconProvider.volumeLow"></path>
+          </svg>
+          <svg *ngIf="activeDevice.volume_percent > 33 && activeDevice.volume_percent < 66">
+            <path [attr.d]="iconProvider.volumeMedium"></path>
+          </svg>
+          <svg *ngIf="activeDevice.volume_percent > 66">
+            <path [attr.d]="iconProvider.volumeLow"></path>
+            <path [attr.d]="iconProvider.volumeHigh"></path>
+          </svg>
+        </button>
+        <div class="sound-slider" (click)="volume_clicked($event)">
+          <div class="audio-progress" id="audio-progress">
+            <div id="audio-progress-bar" class="bar" [style.width.%]="activeDevice.volume_percent"></div>
+            <div 
+              cdkDrag 
+              cdkDragBoundary=".audio-progress"
+              (cdkDragMoved)="volume_drag_move($event)"
+              (cdkDragEnded)="volume_drag_end($event)">
             <div id="audio-progress-handle"></div>
           </div>
-          <div id="audio-progress-bar" class="bar" style="width:75%"></div>
         </div>
+      </div>
       </div>
     </div>
   </div>
