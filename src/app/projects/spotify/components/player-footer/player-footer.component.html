@@ -9,8 +9,8 @@
           <div class="song-name">
             <p>{{this.playbackState.item.name}}</p>
           </div>
-          <div class="album-name">
-            <p>{{this.playbackState.item.album.name}}</p>
+          <div class="artist-name">
+            <p>{{get_artist_list()}}</p>
           </div>
         </div>
         <button (click)="toggle_favorite()" *ngIf="this.playbackState.currently_playing_type == 'track'">
@@ -22,32 +22,62 @@
     </div>
 
     <div class="center-piece">
-      <button (click)="toggle_shuffle()">
-        <svg [style.fill]="shuffleIconColor">
-          <path [attr.d]="iconProvider.shuffleStart"></path>
-          <path [attr.d]="iconProvider.shuffleEnd"></path>
-        </svg>
-      </button>
-      <button (click)="skip_to_previous()">
-        <svg>
-          <path [attr.d]="iconProvider.previous"></path>
-        </svg>
-      </button>
-      <button class="play-button" (click)="toggle_play()">
-        <svg style="fill: black; width: 16px;">
-          <path [attr.d]="playIcon"></path>
-        </svg>
-      </button>
-      <button (click)="skip_to_next()">
-        <svg>
-          <path [attr.d]="iconProvider.next"></path>
-        </svg>
-      </button>
-      <button (click)="toggle_repeat()">
-        <svg [style.fill]="repeatIconColor">
-          <path [attr.d]="iconProvider.repeat"></path>
-        </svg>
-      </button>
+      <div class="player-controls">
+        <button (click)="toggle_shuffle()">
+          <svg [style.fill]="shuffleIconColor">
+            <path [attr.d]="iconProvider.shuffleStart"></path>
+            <path [attr.d]="iconProvider.shuffleEnd"></path>
+          </svg>
+        </button>
+        <button (click)="skip_to_previous()">
+          <svg>
+            <path [attr.d]="iconProvider.previous"></path>
+          </svg>
+        </button>
+        <button class="play-button" (click)="toggle_play()">
+          <svg style="fill: black; width: 16px;">
+            <path [attr.d]="playIcon"></path>
+          </svg>
+        </button>
+        <button (click)="skip_to_next()">
+          <svg>
+            <path [attr.d]="iconProvider.next"></path>
+          </svg>
+        </button>
+        <button (click)="toggle_repeat()">
+          <svg [style.fill]="repeatIconColor">
+            <path [attr.d]="iconProvider.repeat"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="playback-bar" *ngIf="this.playbackState">
+        <div class="playback-time" style="text-align: right;">{{ms_to_min_sec(playbackState.progress_ms)}}</div>
+          <div class="playback-slider" id="playback-slider" (click)="playback_clicked($event)">
+            <div class="playback-progress" id="playback-progress">
+              <div class="bar" [style.width.px]="playbackTimerWidthPx"></div>
+              <div 
+                cdkDrag 
+                cdkDragBoundary=".playback-progress">
+              </div>
+              <div id="playback-progress-handle"></div>
+            </div>
+          </div>
+        <div class="playback-time" style="text-align: left;">{{ms_to_min_sec(this.playbackState.item.duration_ms)}}</div>
+      </div>
+      <div class="playback-bar" *ngIf="!this.playbackState">
+        <div class="playback-time" style="text-align: right;">-:--</div>
+          <div class="playback-slider" id="playback-slider">
+            <div class="playback-progress" id="playback-progress">
+              <div class="bar" [style.width.px]="0"></div>
+              <div 
+                cdkDrag 
+                cdkDragBoundary=".playback-progress">
+              </div>
+              <div id="playback-progress-handle"></div>
+            </div>
+          </div>
+        <div class="playback-time" style="text-align: left;">-:--</div>
+      </div>
     </div>
     
     <div class="right-controls">
@@ -69,18 +99,18 @@
             <path [attr.d]="iconProvider.volumeHigh"></path>
           </svg>
         </button>
-        <div class="sound-slider" (click)="volume_clicked($event)">
+        <div class="sound-slider" id="sound-slider" (click)="volume_clicked($event)">
           <div class="audio-progress" id="audio-progress">
-            <div id="audio-progress-bar" class="bar" [style.width.%]="activeDevice.volume_percent"></div>
+            <div class="bar" [style.width.%]="activeDevice.volume_percent"></div>
             <div 
               cdkDrag 
-              cdkDragBoundary=".audio-progress"
-              (cdkDragMoved)="volume_drag_move($event)"
-              (cdkDragEnded)="volume_drag_end($event)">
+              cdkDragBoundary=".audio-progress">
+              <!-- (cdkDragMoved)="volume_drag_move($event)"
+              (cdkDragEnded)="volume_drag_end($event)" -->
+            </div>
             <div id="audio-progress-handle"></div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>

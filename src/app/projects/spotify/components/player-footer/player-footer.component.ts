@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
+import { Observable, Subscription, timer } from 'rxjs';
 
 import { PlayerService } from '../../services/player.service';
 import { TrackService } from '../../services/track.service';
@@ -33,6 +34,10 @@ export class PlayerFooterComponent implements OnInit {
   playbackState!: PlaybackState;
   devices: Device[] = [];
   activeDevice!: Device;
+
+  timer: Observable<number> = timer(500, 1000);
+  timerSubscription!: Subscription; 
+  playbackTimerWidthPx: number = 0;
 
   lastVolumePercent: number = 0;
 
@@ -78,17 +83,20 @@ export class PlayerFooterComponent implements OnInit {
     .subscribe((result: PlaybackState)=>{
       this.playbackState = result;
       this.playbackState.is_playing ? this.playIcon = IconProvider.pause: this.playIcon = IconProvider.play;
+      this.playbackState.is_playing ? this.start_timer(): 0;
       this.playbackState.shuffle_state ? this.shuffleIconColor = this.green: this.shuffleIconColor = this.gray;
       this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.green: this.repeatIconColor = this.gray;
       this.check_favorite();
+      this.set_playback_width();
     });
   }
   
   async toggle_play(): Promise<void> {
-    console.log(`play clicked: ${this.playbackState.is_playing}`);
     this.playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
+    this.playbackState.is_playing ? this.stop_timer() : this.start_timer();
     this.playbackState.is_playing ? this.playIcon = IconProvider.play: this.playIcon = IconProvider.pause;
     this.playbackState.is_playing = !this.playbackState.is_playing;
+    console.log(`play clicked: ${this.playbackState.is_playing}`);
   }
 
   skip_to_next(): void {
@@ -102,32 +110,30 @@ export class PlayerFooterComponent implements OnInit {
   }
 
   toggle_shuffle(): void {
-    console.log(`shuffle clicked: ${this.playbackState.shuffle_state}`);
     this.playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
     this.playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
     this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
+    console.log(`shuffle clicked: ${this.playbackState.shuffle_state}`);
 
-    console.log(this.devices);
-    console.log(this.activeDevice.volume_percent);
+    console.log(this.playbackState.item);
   }
 
   toggle_repeat(): void {
-    console.log(`repeat clicked: ${this.playbackState.repeat_state}`);
     this.playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
     this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.gray: this.repeatIconColor = this.green;
     this.playbackState.repeat_state == 'context' ? this.playbackState.repeat_state = 'off': this.playbackState.repeat_state = 'context';
+    console.log(`repeat clicked: ${this.playbackState.repeat_state}`);
   }
 
   toggle_favorite(): void {
-    console.log(`favorite clicked: ${this.isFavorite}`);
     this.isFavorite ? this.trackService.remove_users_saved_tracks([this.playbackState.item.id]): this.trackService.save_tracks_for_current_user([this.playbackState.item.id]);
     this.isFavorite ? this.favoriteIconColor = this.gray: this.favoriteIconColor = this.green;
     this.isFavorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
     this.isFavorite = !this.isFavorite;
+    console.log(`favorite clicked: ${this.isFavorite}`);
   }
 
   toggle_mute(): void {
-    console.log(`mute clicked: ${this.activeDevice.volume_percent}`);
     if (this.activeDevice.volume_percent > 0) {
       this.lastVolumePercent = this.activeDevice.volume_percent;
       this.activeDevice.volume_percent = 0;
@@ -135,28 +141,67 @@ export class PlayerFooterComponent implements OnInit {
       this.activeDevice.volume_percent = this.lastVolumePercent;
     }
     this.playerService.set_playback_volume(this.activeDevice.volume_percent);
+    console.log(`mute clicked: ${this.activeDevice.volume_percent}`);
   }
 
-  volume_drag_move(event: CdkDragMove): void {
-  }
-
-  volume_drag_end(event: CdkDragEnd): void {
-    const element = document.getElementById('audio-progress')
+  playback_clicked(event: MouseEvent): void {
+    const element = document.getElementById('playback-slider');
     if (element) {
-      let width = element.getBoundingClientRect().width;
-      this.activeDevice.volume_percent = this.activeDevice.volume_percent + Math.round(event.distance.x * 100 / width);
-      console.log(this.activeDevice.volume_percent);
-      this.playerService.set_playback_volume(this.activeDevice.volume_percent);
+      const width = element.getBoundingClientRect().width;
+      const new_position_ms = Math.round(this.playbackState.item.duration_ms * (event.offsetX / width));
+      this.playbackTimerWidthPx = event.offsetX;
+      this.playbackState.progress_ms = new_position_ms;
+      this.playerService.seek_to_position(new_position_ms);
+      console.log(`playback clicked: ${new_position_ms}`);
+    }
+  }
+
+  set_playback_width(): void {
+    const element = document.getElementById('playback-slider');
+    if (element) {
+      const width = element.getBoundingClientRect().width;
+      const pixel_width = width * (this.playbackState.progress_ms / this.playbackState.item.duration_ms);
+      this.playbackTimerWidthPx = pixel_width;
     }
   }
 
   volume_clicked(event: MouseEvent): void {
-    // console.log(event.x);
-    // console.log(event.)
-    // console.log(event.offsetX);
-    // this.activeDevice.volume_percent = event.offsetX;
-    // this.playerService.set_playback_volume(this.activeDevice.volume_percent);
-    // this.set_volume_icon();
+    const element = document.getElementById('sound-slider');
+    if (element) {
+      let width = element.getBoundingClientRect().width;
+      this.activeDevice.volume_percent = Math.round(event.offsetX * 100 / width);
+      this.playerService.set_playback_volume(this.activeDevice.volume_percent);
+      console.log(`volume clicked: ${this.activeDevice.volume_percent}`);
+    }
+  }
+
+  ms_to_min_sec(ms: number): string {
+    const minutes = Math.floor(ms / (1000 * 60));
+    const seconds = (`0${(Math.floor(ms / 1000) - (minutes * 60)).toString()}`).slice(-2);
+    return `${minutes}:${seconds}`;
+  }
+
+  start_timer(): void {
+    this.timerSubscription = this.timer.subscribe(() => {
+      if (this.playbackState.progress_ms >= this.playbackState.item.duration_ms - 1000) {
+        this.stop_timer();
+        this.get_playback_state();
+      }
+      this.playbackState.progress_ms = this.playbackState.progress_ms + 1000;
+      this.set_playback_width();
+    })
+  }
+
+  stop_timer(): void {
+    this.timerSubscription.unsubscribe();
+  }
+
+  get_artist_list(): string {
+    let artists = '';
+    for (let artist of this.playbackState.item.artists) {
+      artists = artists + artist.name + ', ';
+    }
+    return artists.slice(0, artists.length - 2);
   }
 }
 

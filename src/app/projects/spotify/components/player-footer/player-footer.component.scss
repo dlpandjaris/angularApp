@@ -77,11 +77,15 @@ footer {
 }
 
 .center-piece {
+  width: 40%;
+  max-width: 722px;
+}
+
+.player-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  margin: 0 30px 8px;
+  margin-bottom: 8px;
 }
 
 .play-button {
@@ -95,6 +99,24 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.playback-bar {
+  height: 15px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playback-time {
+  min-width: 40px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  font-family: var(--font-family,CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif));
+  color: #a7a7a7;
+  margin: 0 8px;
 }
 
 svg {
@@ -113,7 +135,7 @@ button {
   background-color: transparent;
   width: 32px;
   height: 32px;
-  margin: 8px;
+  margin: 0 8px;
 
   display: flex;
   align-items: center;
@@ -131,15 +153,11 @@ img {
 }
 
 .song-name,
-.album-name {
+.artist-name {
   font-weight: 400;
   font-family: var(--font-family,CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif));
-  // position: absolute;
-  // left: 0;
   overflow: hidden;  
   margin: 0 -6px 0;
-  // margin-left: -6px;
-  // margin-right: -6px;
   display: flex;
   padding-inline: 6px 12px;
   white-space: nowrap;
@@ -151,17 +169,13 @@ img {
   color: #fff;
   grid-area: title;
   justify-self: start;
-  // bottom: 0;
-  // height: 50%;
 }
 
-.album-name {
+.artist-name {
   font-size: 0.8rem;
-  color: #6a6a6a;
-  // width: fit-content;
+  color: #b3b3b3;
   
   grid-area: subtitle;
-    // grid-column-start: subtitle;
   grid-column-start: badges;
   min-width: 0;
 }
@@ -182,6 +196,45 @@ p {
 
 
 
+
+.playback-slider {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.playback-progress {
+  max-width: 100%;
+  margin: 5.5px 0 5.5px;
+  height: 4px;
+  background-color: hsla(0,0%,100%,.3);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+#playback-progress-handle {
+  margin-top: -4px;
+  margin-left: -6px;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  border-radius: 100%;
+  background-color: transparent;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+  cursor:pointer;
+}
+
+.playback-slider:hover .bar {
+  background-color: rgb(29, 185, 84);
+}
+
+.playback-slider:hover #playback-progress-handle {
+  background-color: #fff;
+}
+
+
 .sound-bar {
   margin-right: 8px;
   display: flex;
@@ -191,13 +244,20 @@ p {
 .sound-slider {
   height: 12px;
   position: relative;
-  width: 100%;
+  width: 93px;
+}
+
+.sound-slider:hover .bar {
+  background-color: rgb(29, 185, 84);
+}
+
+.sound-slider:hover #audio-progress-handle {
+  background-color: #fff;
 }
 
 .audio-progress {
   margin: 4px 0 4px;
   height: 4px;
-  width: 93px;
   background-color: hsla(0,0%,100%,.3);
   border-radius: 2px;
   display: flex;
@@ -205,46 +265,7 @@ p {
   position: relative;
 }
 
-// .sound-slider {
-//   height: 12px;
-//   position: relative;
-//   width: 100%;
-// }
-
-// .audio-progress {
-//   --bg-color: hsla(0,0%,100%,.3);
-//   --fg-color: #fff;
-//   --is-active-fg-color: #1db954;
-//   --progress-bar-transform: 0%;
-//   --progress-bar-height: 4px;
-//   --progress-bar-radius: calc(var(--progress-bar-height)/2);
-//   height: 100%;
-//   overflow: hidden;
-//   -ms-touch-action: none;
-//   touch-action: none;
-//   width: 93px;
-// }
-
-.audio-progress .bar {
-  height: 100%;
-  background-color: white;
-  border-radius: 2px;
-}
-
-.audio-progress-bar {
-  position: fixed;
-}
-
-
-.bar:active {
-  cursor: pointer;
-  background-color: rgb(29, 185, 84);
-}
-
 #audio-progress-handle {
-  // display: block;
-  position:absolute;
-  // z-index: 1;
   margin-top: -4px;
   margin-left: -6px;
   width: 12px;
@@ -252,17 +273,12 @@ p {
   transform: rotate(45deg);
   border-radius: 100%;
   background-color: transparent;
-  background-color: #fff;
   box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
   cursor:pointer;
-  float: left;
 }
 
-#audio-progress-handle:hover {
-  background-color: #fff;
+.bar {
+  cursor: pointer;
+  background-color: #ffffff;
+  border-radius: 2px;
 }
-
-.draggable {
-  float: left; margin: 0 10px 10px 0;
-}
-
