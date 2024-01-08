@@ -21,9 +21,9 @@ export class PlayerService {
   }
   
   transfer_playback(device_ids: string[], play: boolean = false): void {
-    this.http.put(`${this.baseUrl}/player/repeat`, 
-    { "device_ids": device_ids, "play": play }, 
-    { headers: { Authorization: `Bearer ${this.accessToken}` } }
+    this.http.put(`${this.baseUrl}/player`, 
+      { "device_ids": device_ids, "play": play }, 
+      { headers: { Authorization: `Bearer ${this.accessToken}` } }
     ).subscribe();
   }
   

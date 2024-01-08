@@ -114,7 +114,6 @@ export class PlayerFooterComponent implements OnInit {
 
   }
   
-
   skip_to_next(): void {
     this.playerService.skip_to_next();
     this.get_playback_state();
@@ -147,6 +146,11 @@ export class PlayerFooterComponent implements OnInit {
     this.isFavorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
     this.isFavorite = !this.isFavorite;
     // console.log(`favorite clicked: ${this.isFavorite}`);
+  }
+
+  set_playback_device(device: Device): void {
+    this.activeDevice = device;
+    this.playerService.transfer_playback([device.id], this.playbackState.is_playing);
   }
 
   toggle_mute(): void {

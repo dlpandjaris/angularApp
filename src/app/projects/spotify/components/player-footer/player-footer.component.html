@@ -119,16 +119,18 @@
               </div>
               <ul class="device-list">
                 <li *ngFor="let device of devices">
-                  <button>
-                    <div *ngFor="let d of get_device_icons(device.type)">
-                      <svg class="device-picker-svg">
-                        <path [attr.d]="d"></path>
-                      </svg>
-                    </div>
-                    <div class="device-text">
-                      <p>{{device.name}}</p>
-                    </div>
-                  </button>
+                  <div *ngIf="device.id != activeDevice.id">
+                    <button (click)="set_playback_device(device)">
+                      <div *ngFor="let d of get_device_icons(device.type)">
+                        <svg class="device-picker-svg">
+                          <path [attr.d]="d"></path>
+                        </svg>
+                      </div>
+                      <div class="device-text">
+                        <p>{{device.name}}</p>
+                      </div>
+                    </button>
+                  </div>
                 </li>
               </ul>
             </div>
