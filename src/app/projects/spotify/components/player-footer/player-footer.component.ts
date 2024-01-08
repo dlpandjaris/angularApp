@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
+import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+// import { CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Observable, Subscription, timer } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 import { PlayerService } from '../../services/player.service';
 import { TrackService } from '../../services/track.service';
@@ -13,7 +14,8 @@ import { IconProvider } from '../../models/icon-provider';
 @Component({
   selector: 'app-player-footer',
   templateUrl: './player-footer.component.html',
-  styleUrls: ['./player-footer.component.scss']
+  styleUrls: ['./player-footer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PlayerFooterComponent implements OnInit {
   accessToken = localStorage.getItem("accessToken");
@@ -43,29 +45,32 @@ export class PlayerFooterComponent implements OnInit {
 
   constructor(
     private playerService: PlayerService,
-    private trackService: TrackService) { }
+    private trackService: TrackService,
+    // @Inject(DOCUMENT) private _document
+    ) { }
 
   async ngOnInit(): Promise<void> {
     await this.get_playback_state();
     await this.get_available_devices();
+    this.connect_to_player();
   }
   
   async get_available_devices() {
     this.playerService.get_available_devices()
     .subscribe((result: Device[])=>{
-      this.devices = result;
-      this.get_active_device();
-    })
-  }
-  
-  get_active_device() {
-    let devices = Object.entries(this.devices)[0][1]
-    for (let i = 0; i < Object.entries(devices).length; i++) {
-      let device = devices[`${i}` as keyof Device] as unknown as Device;
-      if (device.is_active) {
-        this.activeDevice = device;
+      let device_list: Device[] = [];
+      let devices = Object.entries(result)[0][1];
+      for (let i = 0; i < Object.entries(devices).length; i++) {
+        let device = devices[`${i}` as keyof Device] as unknown as Device;
+        device_list.push(device);
+        if (device.is_active) {
+          this.activeDevice = device;
+        }
       }
-    }
+      this.devices = device_list;
+      console.log(this.devices);
+      console.log(this.activeDevice);
+    })
   }
   
   check_favorite() {
@@ -96,8 +101,19 @@ export class PlayerFooterComponent implements OnInit {
     this.playbackState.is_playing ? this.stop_timer() : this.start_timer();
     this.playbackState.is_playing ? this.playIcon = IconProvider.play: this.playIcon = IconProvider.pause;
     this.playbackState.is_playing = !this.playbackState.is_playing;
-    console.log(`play clicked: ${this.playbackState.is_playing}`);
+    // console.log(`play clicked: ${this.playbackState.is_playing}`);
   }
+
+  connect_to_player(): void {
+    // this._document.onSpotifyWebPlaybackSDKReady = () => {
+    //   const player = new Spotify.Player({
+    //     name: 'Web Playback SDK Quick Start Player',
+    //     getOAuthToken: cb => { cb(this.accessToken); },
+    //     volume: 0.5
+    //   });
+
+  }
+  
 
   skip_to_next(): void {
     this.playerService.skip_to_next();
@@ -113,16 +129,16 @@ export class PlayerFooterComponent implements OnInit {
     this.playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
     this.playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
     this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
-    console.log(`shuffle clicked: ${this.playbackState.shuffle_state}`);
+    // console.log(`shuffle clicked: ${this.playbackState.shuffle_state}`);
 
-    console.log(this.playbackState.item);
+    // console.log(Window);
   }
 
   toggle_repeat(): void {
     this.playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
     this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.gray: this.repeatIconColor = this.green;
     this.playbackState.repeat_state == 'context' ? this.playbackState.repeat_state = 'off': this.playbackState.repeat_state = 'context';
-    console.log(`repeat clicked: ${this.playbackState.repeat_state}`);
+    // console.log(`repeat clicked: ${this.playbackState.repeat_state}`);
   }
 
   toggle_favorite(): void {
@@ -130,7 +146,7 @@ export class PlayerFooterComponent implements OnInit {
     this.isFavorite ? this.favoriteIconColor = this.gray: this.favoriteIconColor = this.green;
     this.isFavorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
     this.isFavorite = !this.isFavorite;
-    console.log(`favorite clicked: ${this.isFavorite}`);
+    // console.log(`favorite clicked: ${this.isFavorite}`);
   }
 
   toggle_mute(): void {
@@ -141,7 +157,7 @@ export class PlayerFooterComponent implements OnInit {
       this.activeDevice.volume_percent = this.lastVolumePercent;
     }
     this.playerService.set_playback_volume(this.activeDevice.volume_percent);
-    console.log(`mute clicked: ${this.activeDevice.volume_percent}`);
+    // console.log(`mute clicked: ${this.activeDevice.volume_percent}`);
   }
 
   playback_clicked(event: MouseEvent): void {
@@ -152,7 +168,7 @@ export class PlayerFooterComponent implements OnInit {
       this.playbackTimerWidthPx = event.offsetX;
       this.playbackState.progress_ms = new_position_ms;
       this.playerService.seek_to_position(new_position_ms);
-      console.log(`playback clicked: ${new_position_ms}`);
+      // console.log(`playback clicked: ${new_position_ms}`);
     }
   }
 
@@ -162,6 +178,7 @@ export class PlayerFooterComponent implements OnInit {
       const width = element.getBoundingClientRect().width;
       const pixel_width = width * (this.playbackState.progress_ms / this.playbackState.item.duration_ms);
       this.playbackTimerWidthPx = pixel_width;
+      // console.log(`${this.playbackTimerWidthPx} / ${width}`);
     }
   }
 
@@ -171,7 +188,7 @@ export class PlayerFooterComponent implements OnInit {
       let width = element.getBoundingClientRect().width;
       this.activeDevice.volume_percent = Math.round(event.offsetX * 100 / width);
       this.playerService.set_playback_volume(this.activeDevice.volume_percent);
-      console.log(`volume clicked: ${this.activeDevice.volume_percent}`);
+      // console.log(`volume clicked: ${this.activeDevice.volume_percent}`);
     }
   }
 
@@ -202,6 +219,18 @@ export class PlayerFooterComponent implements OnInit {
       artists = artists + artist.name + ', ';
     }
     return artists.slice(0, artists.length - 2);
+  }
+
+  get_device_icons(device_type: string): string[] {
+    if (device_type == 'Computer') {
+      return [this.iconProvider.computer];
+    } else if (device_type == 'Smartphone') {
+      return [this.iconProvider.phoneOutside, this.iconProvider.phoneInside];
+    } else if (device_type == 'TV') {
+      return [this.iconProvider.tv];
+    } else {
+      return [this.iconProvider.defaultSpeakerOutside, this.iconProvider.defaultSpeakerInside];
+    }
   }
 }
 

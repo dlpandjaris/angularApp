@@ -1,16 +1,20 @@
 button {
-  margin-left: 1%;
-  margin-top: 1%;
-  font-size: 2.3rem;
-  
-  background: transparent;
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  transition: all .3s ease;
-}
+  border: none;
+  border-radius: 5px;
+  font-family: 'Source Code Pro', monospace;
+  padding: 1.1rem;
+  margin: 1% 1% 0 0;
+  // letter-spacing: -.15rem;
+  box-shadow: .3rem .3rem 0 0 darken(white, 50);
+  font-size: 2rem;
 
-button:hover {
-  background-color: white;
-  border: 1px solid white;
-  color: black;
+  &:hover {
+    font-weight: 700;
+  }
+
+  &:active {
+    box-shadow: none;
+    font-weight: 400;
+    transform: translate(2px, 2px);
+  }
 }

@@ -59,17 +59,9 @@ footer {
 }
 
 .song-info {
-  // color: #fff;
-  // grid-area: title;
-  // justify-self: start;
-  // width: 100%;
-
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  // -webkit-column-gap: 8px;
-  // -moz-column-gap: 8px;
-  // column-gap: 8px;
   display: grid;
   grid-template: "title title" "badges subtitle"/auto 1fr;
   margin: 0 8px;
@@ -89,16 +81,9 @@ footer {
 }
 
 .play-button {
-  background-color: #ffffff;
-  color: #000000;
-  width: 32px;
-  height: 32px;
+  color: #000000;;
   border-radius: 50%;
   font-size: 16px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .playback-bar {
@@ -119,27 +104,43 @@ footer {
   margin: 0 8px;
 }
 
-svg {
+.playback-svg {
   width: 16px;
   aspect-ratio: 1;
   fill: hsla(0, 0%, 100%, 0.7);
 }
 
-svg:hover {
+.playback-svg:hover {
   fill: white;
   transition: 0.2s;
 }
 
-button {
+.device-picker-svg {
+  width: 32px;
+  height: 32px;
+  fill: white;
+  margin-inline-end: 10px;
+}
+
+.device-picker-svg path {
+  transform: scale(1.34);
+}
+
+.player-button {
   border: none;
   background-color: transparent;
   width: 32px;
   height: 32px;
-  margin: 0 8px;
+  margin: 0 4px;
+  padding: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+div.right-controls button {
+  margin: 0;
 }
 
 img {
@@ -169,6 +170,7 @@ img {
   color: #fff;
   grid-area: title;
   justify-self: start;
+  font-weight: 600;
 }
 
 .artist-name {
@@ -182,7 +184,8 @@ img {
 
 .left-controls,
 .right-controls {
-  min-width: 20%;
+  min-width: 180px;
+  width: 30%;
 }
 
 .right-controls {
@@ -281,4 +284,127 @@ p {
   cursor: pointer;
   background-color: #ffffff;
   border-radius: 2px;
+  max-width: 100%;
+}
+
+
+
+.popover-body {
+  position: relative;
+  width: 320px;
+  color: white;
+}
+
+.popover {
+  --bs-popover-bg: #282828;
+  --bs-popover-max-width: 320px;
+  --bs-popover-border-color: none;
+  --bs-popover-arrow-width: 1.6rem;
+  --bs-popover-arrow-height: 0.8rem;
+  --bs-popover-body-padding-x: 0;
+  --bs-popover-body-padding-y: 0;
+  border-radius: 8px;
+
+}
+
+.bs-popover-top > .popover-arrow {
+  bottom: -8px;
+}
+
+.device-picker {
+  padding: 32px 32px 1px;
+  position: relative;
+  width: 320px;
+}
+
+.device-picker-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.play-animation {
+  margin-inline-end: 10px;
+  width: 32px;
+  height: 32px;
+}
+
+#current-device {
+  margin-inline-end: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.current-device-text {
+  overflow: hidden;
+  padding: 0 12px;
+  white-space: nowrap;
+  margin: 0 -6px;
+}
+
+.current-device-text h3, h4 {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.current-device-text p {
+  margin-block: 0;
+  color: rgb(29, 185, 84);
+  font-family: sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+
+.current-device-display {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.device-picker-body {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.device-list {
+  max-height: calc(66.67vh - 166px);
+  margin: 0 -32px;
+  padding: 12px 16px 16px;
+}
+
+.device-picker-body ul {
+  list-style: none;
+}
+
+.device-picker-body button {
+  background-color: #282828;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  position: absolute;
+  padding: 0 16px;
+  text-align: start;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 64px;
+}
+
+.device-picker-body button:hover {
+  background-color: #3E3E3E;
+}
+
+.device-text p {
+  padding: 12px 6px;
+  font-family: sans-serif;
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: white;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
 }
