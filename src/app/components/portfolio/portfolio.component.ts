@@ -47,7 +47,7 @@ export class PortfolioComponent implements OnInit {
   projects: Project[] = [
     {
       title: 'Spotify Analysis',
-      url: "/projects/spotify/profile",
+      url: "/projects/spotify/auth",
       image: '../../../assets/Spotify_logo_without_text.svg.png',
       color: 'black',
       description: 'Inspired by Spotify Wrapped, this tool is aimed at visualizing your listening trends year-round.' 
@@ -111,7 +111,6 @@ export class PortfolioComponent implements OnInit {
 
   constructActions(command: string) {
     this.edit = false;
-    console.log(command);
     command.split('').forEach(char => {
       this.typewriter.actions.push(
         { type: "keyboard", cursor: 0, text: char, delay: 100 }

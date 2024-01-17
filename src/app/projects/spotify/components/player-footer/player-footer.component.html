@@ -1,5 +1,3 @@
-<script src="https://sdk.scdn.co/spotify-player.js"></script>
-
 <footer class="sticky-bottom">
   <div class="__container">
     <div class="left-controls">
@@ -92,11 +90,12 @@
                 <img class="play-animation" src="https://open.spotifycdn.com/cdn/images/device-picker-equaliser-animation.946e7243.webp">
               </div>
               <ng-template #currentDeviceIconBlock>
-                <div *ngFor="let d of get_device_icons(this.activeDevice.type)">
-                  <svg class="device-picker-svg" style="fill: rgb(29, 185, 84)">
-                    <path [attr.d]="d"></path>
-                  </svg>
-                </div>
+                <svg class="device-picker-svg" style="fill: rgb(29, 185, 84)" *ngIf="activeDevice.name != 'Web Playback SDK'">
+                  <path *ngFor="let d of get_device_icons(this.activeDevice.type, 'big')" [attr.d]="d"></path>
+                </svg>
+                <svg class="device-picker-svg" *ngIf="activeDevice.name == 'Web Playback SDK'">
+                  <path *ngFor="let d of get_device_icons(this.activeDevice.type, 'big')" [attr.d]="d"></path>
+                </svg>
               </ng-template>
               <div id="current-device">
                 <div class="current-device-text">
@@ -114,35 +113,57 @@
               </div>
             </div>
             <div class="device-picker-body">
-              <div class="current-device-text">
+              <div class="current-device-text" style="padding: 0 6px">
                 <h4>Select another device</h4>
               </div>
               <ul class="device-list">
                 <li *ngFor="let device of devices">
                   <div *ngIf="device.id != activeDevice.id">
-                    <button (click)="set_playback_device(device)">
-                      <div *ngFor="let d of get_device_icons(device.type)">
-                        <svg class="device-picker-svg">
-                          <path [attr.d]="d"></path>
-                        </svg>
-                      </div>
+                    <button class="device-button" (click)="set_playback_device(device)">
+                      <svg class="device-picker-svg">
+                        <path *ngFor="let d of get_device_icons(device.type, 'big')" [attr.d]="d"></path>
+                      </svg>
                       <div class="device-text">
                         <p>{{device.name}}</p>
                       </div>
                     </button>
                   </div>
                 </li>
+                <li>
+                  <a class="external-url" href="https://support.spotify.com/us/article/spotify-connect/" target="_blank">
+                    <div class="device-help-link">
+                      <p>Don't see your device?</p>
+                    </div>
+                    <svg class="playback-svg external-url-margin">
+                      <path [attr.d]="iconProvider.externalLinkStart"></path>
+                      <path [attr.d]="iconProvider.externalLinkEnd"></path>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="external-url" href="https://connect.spotify.com/howto?utm_campaign=connect&utm_medium=web&utm_source=desktop" target="_blank">
+                    <div class="device-help-link">
+                      <p>What can I connect to?</p>
+                    </div>
+                    <svg class="playback-svg external-url-margin">
+                      <path [attr.d]="iconProvider.externalLinkStart"></path>
+                      <path [attr.d]="iconProvider.externalLinkEnd"></path>
+                    </svg>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
         </ng-template>
 
-        <button class="player-button" [ngbPopover]="devicePickerContent" (click)="get_available_devices()">
-          <svg class="playback-svg">
-            <path [attr.d]="iconProvider.defaultSpeakerOutside"></path>
-            <path [attr.d]="iconProvider.defaultSpeakerInside"></path>
-          </svg>
-        </button>
+        <div style="position: relative">
+          <div class="device-carrot" *ngIf="activeDevice.name != 'Web Playback SDK'"></div>
+          <button class="player-button" [ngbPopover]="devicePickerContent" (click)="get_available_devices()">
+            <svg class="playback-svg" [style.fill]="activeDevice.name == 'Web Playback SDK' ? 'hsla(0, 0%, 100%, 0.7)': 'rgb(29, 185, 84)'">
+              <path *ngFor="let d of get_device_icons(this.activeDevice.type, 'small')" [attr.d]="d"></path>
+            </svg>
+          </button>
+        </div>
 
         <button class="player-button" (click)="toggle_mute()">
           <svg class="playback-svg" *ngIf="activeDevice.volume_percent <= 0">
@@ -174,6 +195,15 @@
         </div>
         <button class="player-button" [ngbPopover]="devicePickerContent"></button>
       </div>
+    </div>
+  </div>
+  <div class="device-banner" *ngIf="activeDevice && (activeDevice.name != 'Web Playback SDK')">
+    <svg class="playback-svg" *ngIf="true" style="fill: black;">
+      <path [attr.d]="iconProvider.deviceNameDecoratorStart"></path>
+      <path [attr.d]="iconProvider.deviceNameDecoratorEnd"></path>
+    </svg>
+    <div class="current-device-text">
+      <p style="color: black; font-size: 1.1rem;">Listening on {{activeDevice.name}}</p>
     </div>
   </div>
 </footer>

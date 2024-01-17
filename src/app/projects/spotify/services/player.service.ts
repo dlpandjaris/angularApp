@@ -39,9 +39,10 @@ export class PlayerService {
     });
   }
   
-  play(device_id?: string): void {
+  play(device_id?: string, uris: string[] = []): void {
     this.http.put(`${this.baseUrl}/player/play`, {}, {
-      headers: { Authorization: `Bearer ${this.accessToken}` }
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { uris: uris }
     }).subscribe();
   }
 

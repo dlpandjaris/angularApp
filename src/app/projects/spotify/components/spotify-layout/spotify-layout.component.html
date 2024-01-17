@@ -1,0 +1,24 @@
+<!-- <p>spotify-layout works!</p> -->
+
+<div class="main">
+  <app-navbar></app-navbar>
+  <section class="_container">
+    <header class="_header">
+      <div style="flex-grow: 1;"></div>
+      <div class="header-links">
+        <a href="https://open.spotify.com/download" target="_blank">
+          <svg class="playback-svg">
+            <path [attr.d]="iconProvider.downloadStart"></path>
+            <path [attr.d]="iconProvider.downloadEnd"></path>
+          </svg>
+          <p>Install App</p>
+        </a>
+        <a>
+          <img [src]="user_profile.images[0].url" draggable="false"/>
+        </a>
+      </div>
+    </header>
+    <router-outlet></router-outlet>
+  </section>
+  <app-player-footer></app-player-footer>
+</div>

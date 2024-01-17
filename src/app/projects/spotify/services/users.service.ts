@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { TopTrackList } from '../models/top-track-list';
 import { TopArtistList } from '../models/top-artist-list';
 import { Observable } from 'rxjs';
+import { UserProfile } from '../models/user-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,12 @@ export class UsersService {
   accessToken = localStorage.getItem("accessToken");
 
   constructor(private http: HttpClient) { }
+
+  getCurrentUsersProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.baseUrl}`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` }
+    })
+  }
 
   getTopTracks(time_range: string): Observable<TopTrackList> {
     return this.http.get<TopTrackList>(`${this.baseUrl}/top/tracks`, {

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  domain: "http://localhost:4200"
+  domain: "http://localhost:4200",
+  spotify_client_id: "0ed7ab195c894741a89cdbd2f8a7f573"
 };
 
 /*

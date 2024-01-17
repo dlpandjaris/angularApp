@@ -4,6 +4,9 @@ import { Artist } from '../../models/artist';
 import { UsersService } from '../../services/users.service';
 import { TopTrackList } from '../../models/top-track-list';
 import { TopArtistList } from '../../models/top-artist-list';
+import { IconProvider } from '../../models/icon-provider';
+import { UserProfile } from '../../models/user-profile';
+import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-top',
@@ -12,28 +15,32 @@ import { TopArtistList } from '../../models/top-artist-list';
 })
 export class TopComponent implements OnInit {
 
+  iconProvider = IconProvider;
+  playIcon: string = IconProvider.bigPlay;
+  is_playing: boolean = false;
+
   term: string = "medium_term";
   top_type: string = "tracks";
   top_tracks: Track[] = [];
   top_artists: Artist[] = [];
+  user_profile!: UserProfile;
 
   accessToken = localStorage.getItem("accessToken");
 
   constructor(
-    private usersService: UsersService) { }
+    private usersService: UsersService,
+    private playerService: PlayerService) { }
 
   async ngOnInit(): Promise<void> {
     await this.fetchTopTracks()
     await this.fetchTopArtists()
+    await this.usersService.getCurrentUsersProfile().subscribe((prof: UserProfile) => {
+      this.user_profile = prof;
+    })
   }
 
   async fetchTopItems() {
-    if(this.top_type == 'tracks') {
-      this.fetchTopTracks();
-    } else {
-      this.fetchTopArtists();
-    }
-    console.log(`fetched top ${this.top_type}`)
+    this.top_type == 'tracks' ? this.fetchTopTracks(): this.fetchTopArtists();
   }
 
   async fetchTopTracks() {
@@ -53,14 +60,17 @@ export class TopComponent implements OnInit {
   setTopType(top_type: string) {
     this.top_type = top_type;
     this.fetchTopItems();
-    console.log(`switched top_type to ${this.top_type}`)
   }
 
 
   setTerm(term: string) {
     this.term = term;
     this.fetchTopItems()
-    console.log(`switched term to ${this.term}`)
   }
 
+  async toggle_play(): Promise<void> {
+    this.is_playing ? this.playerService.pause() : this.playerService.play();
+    this.is_playing ? this.playIcon = IconProvider.bigPlay: this.playIcon = IconProvider.bigPause;
+    this.is_playing = !this.is_playing;
+  }
 }

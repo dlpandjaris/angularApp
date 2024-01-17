@@ -1,72 +1,89 @@
-<app-navbar></app-navbar>
-
-<!-- <div class="container"> -->
-
-  <section>
-    <div class="row">
-      <div class="col col-auto">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div *ngIf="this.top_type == 'tracks'">
-              <table>
-                <tr *ngFor="let track of this.top_tracks; let i = index">
-                  <td>
-                    <p>{{i+1}}</p>
-                    <!-- <i class="fa-solid fa-play"></i> -->
-                  </td>
-                  <td>
-                    <img src="{{track.album.images[2].url}}" alt="avatar" class="d-inline"/>
-                  </td>
-                  <td>
-                    <p>{{track.name}}</p>
-                  </td>
-                  <td>
-                    <p>{{track.album.name}}</p>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div *ngIf="this.top_type == 'artists'">
-              <table>
-                <tr *ngFor="let artist of this.top_artists; let i = index">
-                  <td><p>{{i+1}}</p></td>
-                  <td>
-                    <img src="{{artist.images[2].url}}" alt="avatar" class="d-inline"/>
-                  </td>
-                  <td>
-                    <p>{{artist.name}}</p>
-                  </td>
-                  <td>
-                    <p>{{artist.genres}}</p>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
+<!-- <div class="row">
+  <div class="col col-auto">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div *ngIf="this.top_type == 'tracks'">
+          <table>
+            <tr *ngFor="let track of this.top_tracks; let i = index">
+              <td>
+                <p>{{i+1}}</p>
+              </td>
+              <td>
+                <img src="{{track.album.images[2].url}}" alt="avatar" class="d-inline"/>
+              </td>
+              <td>
+                <p>{{track.name}}</p>
+              </td>
+              <td>
+                <p>{{track.album.name}}</p>
+              </td>
+            </tr>
+          </table>
         </div>
-      </div>
-      
-      <div class="col col-auto">
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="btn-group-lg" role="group" aria-label="Top Type">
-              <button [ngClass]="this.top_type == 'tracks' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTopType('tracks')">Tracks</button>
-              <button [ngClass]="this.top_type == 'artists' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTopType('artists')">Artists</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="btn-group-lg" role="group" aria-label="Term">
-              <button [ngClass]="this.term == 'short_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTerm('short_term')">Short</button>
-              <button [ngClass]="this.term == 'medium_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTerm('medium_term')">Medium</button>
-              <button [ngClass]="this.term == 'long_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button"  (click)="this.setTerm('long_term')">Long</button>
-            </div>
-          </div>
+        <div *ngIf="this.top_type == 'artists'">
+          <table>
+            <tr *ngFor="let artist of this.top_artists; let i = index">
+              <td><p>{{i+1}}</p></td>
+              <td>
+                <img src="{{artist.images[2].url}}" alt="avatar" class="d-inline"/>
+              </td>
+              <td>
+                <p>{{artist.name}}</p>
+              </td>
+              <td>
+                <p>{{artist.genres}}</p>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
-  </section>
-  <app-player-footer></app-player-footer>
-<!-- </div> -->
+  </div> 
+  
+  <div class="col col-auto">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="btn-group-lg" role="group" aria-label="Top Type">
+          <button [ngClass]="this.top_type == 'tracks' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTopType('tracks')">Tracks</button>
+          <button [ngClass]="this.top_type == 'artists' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTopType('artists')">Artists</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="btn-group-lg" role="group" aria-label="Term">
+          <button [ngClass]="this.term == 'short_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTerm('short_term')">Short</button>
+          <button [ngClass]="this.term == 'medium_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTerm('medium_term')">Medium</button>
+          <button [ngClass]="this.term == 'long_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button"  (click)="this.setTerm('long_term')">Long</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="main-header">
+  <img [src]="user_profile.images[0].url" draggable="false"/>
+  <div class="main-header-info">
+    <span id="type">type</span>
+    <span id="title">title</span>
+    <span id="info">
+      <a>
+        <img [src]="user_profile.images[0].url" draggable="false"/>
+      </a>
+      <span id="user">user</span>
+      <span id="song_count">## songs,</span>
+      <span id="duration">about # hr ## min</span>
+    </span>
+  </div>
+</div>
+<div class="background-gradient"></div>
+<div class="play-bar">
+  <button class="play-btn" (click)="toggle_play()">
+    <div class="play-svg">
+      <svg>
+        <path [attr.d]="playIcon"></path>
+      </svg>
+    </div>
+  </button>
+</div>

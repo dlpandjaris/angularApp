@@ -1,7 +1,8 @@
 footer {
-  // height: 72px;
   background-color: #000000;
-  padding: 8px;
+  
+  display: flex;
+  flex-direction: column;
 }
 
 .__container {
@@ -22,6 +23,19 @@ footer {
   -ms-flex-direction: row;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.device-banner {
+  background-color: rgb(29, 185, 84);
+  color: black;
+  height: 24px;
+  padding-inline-end: 73.5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .song {
@@ -163,6 +177,7 @@ img {
   padding-inline: 6px 12px;
   white-space: nowrap;
   width: fit-content;
+  max-width: 100%;
 }
 
 .song-name {
@@ -379,26 +394,45 @@ p {
   list-style: none;
 }
 
-.device-picker-body button {
+.device-button {
+  padding: 0 16px;
+  height: 64px;
+
+}
+
+.external-url {
+  text-decoration: none;
+}
+
+.device-button,
+.external-url {
+  cursor: pointer;
   background-color: #282828;
   border: none;
   border-radius: 4px;
   width: 100%;
   position: absolute;
-  padding: 0 16px;
   text-align: start;
+  overflow: hidden;
 
   display: flex;
   align-items: center;
   position: relative;
-  height: 64px;
 }
 
-.device-picker-body button:hover {
+.device-button:hover, 
+.external-url:hover {
   background-color: #3E3E3E;
 }
 
-.device-text p {
+.device-text,
+.device-help-link {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.device-text,
+.device-help-link p {
   padding: 12px 6px;
   font-family: sans-serif;
   font-weight: 400;
@@ -407,4 +441,24 @@ p {
   overflow: hidden;
   white-space: nowrap;
   display: block;
+}
+
+.device-help-link p {
+  padding: 12px 16px;
+  margin-inline-end: 16px;
+}
+
+.external-url-margin {
+  margin-inline-start: auto;
+  margin-inline-end: 16px;
+}
+
+.device-carrot {
+  border-bottom: 10px solid rgb(29, 185, 84);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  bottom: -20px;
+  max-width: 20px;
+  position: absolute;
+  right: calc(50% - 10px);
 }
