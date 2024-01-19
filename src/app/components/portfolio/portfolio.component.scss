@@ -28,3 +28,19 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+::-webkit-scrollbar {
+  width: 1.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  // background: hsl(51, 31%, 42% / 1);
+  background: hsl(0, 0%, 30%);
+  border: .25rem solid hsl(0, 0%, 0%);
+  border-radius: 100vw;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 30% / .5);
+}
