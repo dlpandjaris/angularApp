@@ -24,7 +24,7 @@ export class TrackService {
     })
   }
 
-  get_tracks(ids: string[]): Observable<Track> {
+  get_tracks(ids: string): Observable<Track> {
     return this.http.get<Track>(`${this.baseUrl}/tracks`, {
       headers: { Authorization: `Bearer ${this.baseUrl}` },
       params: { ids: ids }
@@ -53,14 +53,14 @@ export class TrackService {
     }).subscribe();
   }
 
-  check_users_saved_tracks(ids: string[]): Observable<boolean[]> {
+  check_users_saved_tracks(ids: string): Observable<boolean[]> {
     return this.http.get<boolean[]>(`${this.baseUrl}/me/tracks/contains`, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { ids: ids }
     })
   }
 
-  get_tracks_audio_features(ids: string[]): Observable<AudioFeatures[]> {
+  get_tracks_audio_features(ids: string): Observable<AudioFeatures[]> {
     return this.http.get<AudioFeatures[]>(`/audio-features`, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { ids: ids }

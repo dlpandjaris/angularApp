@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { PlaybackState } from '../models/playback-state';
 import { Device } from '../models/device';
 
@@ -10,10 +10,35 @@ import { Device } from '../models/device';
 export class PlayerService {
 
   private baseUrl: string = "https://api.spotify.com/v1/me";
-  accessToken = localStorage.getItem("accessToken");
-  
+  private accessToken = localStorage.getItem("accessToken");
+
+  private playbackState$ = new Subject<PlaybackState>();
+
   constructor(private http: HttpClient) { }
+
+  get_playback_state_subject(): Observable<PlaybackState> {
+    return this.playbackState$;
+  }
+
+  refresh_playback_state(): void {
+    console.log('refreshing playback state');
+    this.get_playback_state()
+      .subscribe((playbackState: PlaybackState) => {
+        this.playbackState$.next(playbackState);
+      });
+  }
   
+  // get_playback_state(): void {
+  //   this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
+  //     headers: { Authorization: `Bearer ${this.accessToken}` }
+  //   }).subscribe((playbackState: PlaybackState) => {
+  //     this.playbackStateSubject.next(playbackState);
+  //   },
+  //   (error) => {
+  //     console.error('Failed to fetch player state:', error);
+  //   });
+  // }
+
   get_playback_state(): Observable<PlaybackState> {
     return this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
@@ -43,7 +68,12 @@ export class PlayerService {
     this.http.put(`${this.baseUrl}/player/play`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { uris: uris }
-    }).subscribe();
+    // }).pipe(tap(() => {
+    //   this.get_playback_state();
+    // })).subscribe();
+    }).subscribe(() => {
+      this.refresh_playback_state();
+    });
   }
 
   pause(device_id?: string): void {

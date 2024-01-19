@@ -30,12 +30,16 @@ export class TokenInterceptor implements HttpInterceptor {
     // }
     return next.handle(request).pipe(
       catchError((err:any)=>{
-        if(err instanceof HttpErrorResponse) {
-          // if(err.status === 401) {
-          //   this.toastService.show('Failure', 'Token expired, please login again');
-          //   this.router.navigateByUrl('portfolio');
-          // }
-          this.toastService.show('Failure', `${err.status.toString()}: ${err.message}`);
+        if (err instanceof HttpErrorResponse) {
+          // this.toastService.show('Failure', `${err.status.toString()}: ${err.message} ${err.url}`);
+          if (err.status === 401) {
+            this.toastService.show('Failure', 'Token expired, please login again');
+            if (err.url == 'https://api.spotify.com/v1/me') {
+              // this.router.navigateByUrl('projects/spotify/auth');
+            } else {
+              this.router.navigateByUrl('portfolio');
+            }
+          }
         }
         return throwError(()=> new Error('Some other error occured'))
       })

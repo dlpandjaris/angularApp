@@ -3,7 +3,7 @@
     <div class="left-controls">
       <div class="song" *ngIf="this.playbackState != null">
         <div class="song-picture">
-          <img src="{{this.playbackState.item.album.images[2].url}}"/>
+          <img class="album-cover" src="{{this.playbackState.item.album.images[2].url}}"/>
         </div>
         <div class="song-info">
           <div class="song-name">
@@ -203,7 +203,7 @@
       <path [attr.d]="iconProvider.deviceNameDecoratorEnd"></path>
     </svg>
     <div class="current-device-text">
-      <p style="color: black; font-size: 1.1rem;">Listening on {{activeDevice.name}}</p>
+      <p style="color: black; font-size: 0.875rem;">Listening on {{activeDevice.name}}</p>
     </div>
   </div>
 </footer>

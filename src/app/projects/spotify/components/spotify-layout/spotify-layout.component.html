@@ -13,7 +13,7 @@
           </svg>
           <p>Install App</p>
         </a>
-        <a>
+        <a *ngIf="user_profile">
           <img [src]="user_profile.images[0].url" draggable="false"/>
         </a>
       </div>

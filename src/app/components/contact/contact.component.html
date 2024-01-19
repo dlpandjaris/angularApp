@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="wrapper">
+    <div class="banner-image" [ngStyle]="{'background-color': color}">
+      <div class="logo" [ngStyle]="{'background-image': 'url(' + image + ')'}"></div>
+    </div>
+    <h1>{{name}}</h1>
+    <p [innerHTML]="description"></p>
+  </div>
+  <div class="button-wrapper"> 
+    <a href="{{github}}" target="_blank" class="px-2">
+      <img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="">
+    </a>
+    <a href="{{url}}" target="_blank">
+      <button class="btn outline">
+        LinkedIn
+      </button>
+    </a>
+  </div>
+</div> 

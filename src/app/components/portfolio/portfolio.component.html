@@ -1,59 +1,6 @@
 <div class="background">
-  <nav>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- <img class="images" style="float: left;" src="assets/database.png" href="#" width="40px" height="40px"/> -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="nav-link" (click)="this.setPage('home')">Home</a>
-    <a class="nav-link" (click)="this.setPage('projects')">Projects</a>
-    <a class="nav-link" (click)="this.setPage('resume')">Resume</a>
-    <a class="nav-link" (click)="this.setPage('contact me')">Contact Me</a>
-  </nav>
-
+  <app-navbar></app-navbar>
   <body>
-    <div *ngIf="this.page == 'home'">
-      <div class="terminal" (click)="this.clickedTerminal()">
-        <div style="padding: 2rem">
-          <li id="history" *ngFor="let entry of this.history;">
-            <p class="commandDirectory">&#x279C;  &#x223C;</p>{{entry[0]}}<br>
-            <div [innerHTML]="entry[1]"></div>
-            <app-terminal-content [command] = "entry[0]"></app-terminal-content><br>
-          </li>
-          <div id="typewriter">
-            <p class="commandDirectory">&#x279C;  &#x223C;</p>
-            <form [formGroup]="commandForm" *ngIf="this.edit" (ngSubmit)="this.runCommand()" style="display:inline-block;">
-              <div class="input-field" type="text">
-                <input class="formField" formControlName="command" type="text" [(ngModel)]="this.typewriter.text"/> 
-              </div>            
-            </form>
-            <span *ngIf="!this.edit">{{typewriter.text}}</span>
-            <span id="typewriter-cursor" *ngIf="!this.edit"
-              [class.blinking]="typewriter.cursors[0].isBlinking"
-            ></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="projects" *ngIf="this.page == 'projects'">
-      <app-project-card
-        *ngFor="let project of projects"
-        [project] = "project">
-      </app-project-card>
-    </div>
-
-    <div *ngIf="this.page == 'resume'">
-      <iframe loading="lazy"
-        src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFGB5whQIQ&#x2F;view?embed" 
-        allowfullscreen="allowfullscreen" 
-        allow="fullscreen">
-      </iframe>
-    </div>
-
-    <div *ngIf="this.page == 'contact me'">
-      <p>Don't</p>
-    </div>
-    
+    <router-outlet></router-outlet>
   </body>
 </div>

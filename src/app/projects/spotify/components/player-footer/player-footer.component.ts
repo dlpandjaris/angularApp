@@ -77,7 +77,7 @@ export class PlayerFooterComponent implements OnInit {
   }
   
   check_favorite() {
-    this.trackService.check_users_saved_tracks([this.playbackState.item.id])
+    this.trackService.check_users_saved_tracks(this.playbackState.item.id)
     .subscribe((result: boolean[])=>{
       this.isFavorite = result[0];
       this.isFavorite ? this.favoriteIconColor = this.green: this.favoriteIconColor = this.gray;
@@ -89,10 +89,10 @@ export class PlayerFooterComponent implements OnInit {
     this.playerService.get_currently_playing_track()
     .subscribe((result: PlaybackState)=>{
       this.playbackState = result;
-      this.playbackState.is_playing ? this.playIcon = IconProvider.pause: this.playIcon = IconProvider.play;
-      this.playbackState.is_playing ? this.start_timer(): 0;
-      this.playbackState.shuffle_state ? this.shuffleIconColor = this.green: this.shuffleIconColor = this.gray;
-      this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.green: this.repeatIconColor = this.gray;
+      result.is_playing ? this.playIcon = IconProvider.pause: this.playIcon = IconProvider.play;
+      result.is_playing ? this.start_timer(): 0;
+      result.shuffle_state ? this.shuffleIconColor = this.green: this.shuffleIconColor = this.gray;
+      result.repeat_state == 'context' ? this.repeatIconColor = this.green: this.repeatIconColor = this.gray;
       this.check_favorite();
       this.set_playback_width();
     });

@@ -5,10 +5,10 @@ import { TopComponent } from '../top/top.component';
 import { SpotifyLayoutComponent } from '../spotify-layout/spotify-layout.component';
 
 const routes: Routes = [
-  // { path: 'auth', component:SpotifyComponent},
+  { path: 'auth', component:SpotifyComponent},
   {
     path: '', component: SpotifyLayoutComponent, children: [
-      {path:'auth', component:SpotifyComponent},
+      // {path:'auth', component:SpotifyComponent},
       {path:'top', component:TopComponent}
     ]
   }

@@ -111,7 +111,7 @@ footer {
 
 .playback-time {
   min-width: 40px;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 400;
   font-family: var(--font-family,CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif));
   color: #a7a7a7;
@@ -157,7 +157,7 @@ div.right-controls button {
   margin: 0;
 }
 
-img {
+.album-cover {
   -o-object-fit: cover;
   object-fit: cover;
   -o-object-position: center center;
@@ -181,7 +181,7 @@ img {
 }
 
 .song-name {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: #fff;
   grid-area: title;
   justify-self: start;
@@ -189,12 +189,8 @@ img {
 }
 
 .artist-name {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #b3b3b3;
-  
-  grid-area: subtitle;
-  grid-column-start: badges;
-  min-width: 0;
 }
 
 .left-controls,
@@ -314,8 +310,6 @@ p {
   --bs-popover-bg: #282828;
   --bs-popover-max-width: 320px;
   --bs-popover-border-color: none;
-  --bs-popover-arrow-width: 1.6rem;
-  --bs-popover-arrow-height: 0.8rem;
   --bs-popover-body-padding-x: 0;
   --bs-popover-body-padding-y: 0;
   border-radius: 8px;
@@ -360,7 +354,7 @@ p {
 
 .current-device-text h3, h4 {
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -369,7 +363,7 @@ p {
   color: rgb(29, 185, 84);
   font-family: sans-serif;
   font-weight: 400;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .current-device-display {
@@ -436,7 +430,7 @@ p {
   padding: 12px 6px;
   font-family: sans-serif;
   font-weight: 400;
-  font-size: 1.3rem;
+  font-size: 1rem;
   color: white;
   overflow: hidden;
   white-space: nowrap;

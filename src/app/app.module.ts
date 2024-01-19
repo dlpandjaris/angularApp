@@ -21,10 +21,15 @@ import { TerminalContentComponent } from './components/terminal-content/terminal
 import { ProjectCardComponent } from './components/project-card/project-card.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
-import { NavbarComponent } from './projects/spotify/components/navbar/navbar.component';
-import { TopComponent } from './projects/spotify/components/top/top.component';
-import { PlayerFooterComponent } from './projects/spotify/components/player-footer/player-footer.component';
+// import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
+// import { NavbarComponent } from './projects/spotify/components/navbar/navbar.component';
+// import { TopComponent } from './projects/spotify/components/top/top.component';
+// import { PlayerFooterComponent } from './projects/spotify/components/player-footer/player-footer.component';
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { TerminalComponent } from './components/terminal/terminal.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { ResumeComponent } from './components/resume/resume.component';
+import { ProjectsComponent } from './components/projects/projects.component';
 
 @NgModule({
   declarations: [
@@ -43,9 +48,20 @@ import { PlayerFooterComponent } from './projects/spotify/components/player-foot
     ProjectCardComponent,
     // SpotifyComponent,
     // TopComponent,
-    // NavbarComponent,
     // PlayerFooterComponent
+    NavbarComponent,
+    TerminalComponent,
+    PortfolioComponent,
+    ContactComponent,
+    ResumeComponent,
+    ProjectsComponent,
   ],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+  }],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -55,13 +71,8 @@ import { PlayerFooterComponent } from './projects/spotify/components/player-foot
     HttpClientModule,
     FormsModule,
     FontAwesomeModule,
-    DragDropModule
-  ],
-  providers: [{
-    provide:HTTP_INTERCEPTORS,
-    useClass:TokenInterceptor,
-    multi:true
-  }],
-  bootstrap: [AppComponent]
+    DragDropModule,
+    // ProjectCardComponent,
+  ]
 })
 export class AppModule { }

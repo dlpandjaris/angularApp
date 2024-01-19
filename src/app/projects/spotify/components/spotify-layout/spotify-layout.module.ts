@@ -12,6 +12,7 @@ import { PlayerFooterComponent } from '../player-footer/player-footer.component'
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TokenInterceptor } from 'src/app/interceptors/token.interceptor';
 import { CommonModule } from '@angular/common';
+import { PlayerService } from '../../services/player.service';
 
 @NgModule({
   declarations: [
@@ -32,11 +33,13 @@ import { CommonModule } from '@angular/common';
     DragDropModule,
     CommonModule
   ],
-  providers: [{
-    provide:HTTP_INTERCEPTORS,
-    useClass:TokenInterceptor,
-    multi:true
-  }],
+  providers: [
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:TokenInterceptor,
+      multi:true
+    },
+    PlayerService],
   bootstrap: [SpotifyLayoutComponent]
 })
 export class SpotifyLayoutModule { }

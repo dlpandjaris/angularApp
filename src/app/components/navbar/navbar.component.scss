@@ -1,0 +1,22 @@
+nav {
+  // background-color: #2f363c;
+  font-family: sans-serif, monaco;
+  border-width: 5px;
+  // line-height: 6vh;
+  height: 6vh;
+  width: 100vw;
+}
+
+a.nav-link:hover {
+  cursor: pointer;
+  color: #b3b3b3;
+}
+
+a {
+  font-family: "Montserrat", monospace;
+  font-size: 2rem;
+  color: black;
+  margin-left: 4rem;
+  float: left;
+  padding-top: 2rem;
+}
