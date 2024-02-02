@@ -62,9 +62,9 @@
   </div>
 </div> -->
 
-<div style="background-color: rgb(83, 83, 83);">
+<div [style.background-color]="background_color">
   <div class="main-header">
-    <img *ngIf="user_profile" [src]="user_profile.images[0].url" draggable="false"/>
+    <img id="coverImage" *ngIf="user_profile" [src]="user_profile.images[1].url" draggable="false"/>
     <div class="main-header-info">
       <span id="type">Feature</span>
       <span id="title">Your Top Songs</span>
@@ -72,79 +72,105 @@
         <a *ngIf="user_profile">
           <img [src]="user_profile.images[0].url" draggable="false"/>
         </a>
-        <span id="user">user</span>
-        <span id="song_count">## songs,</span>
-        <span id="duration">about # hr ## min</span>
+        <span id="user" *ngIf="user_profile">{{user_profile.display_name}}</span>
+        <span id="song_count">{{top_tracks.length}} songs,</span>
+        <span id="duration">about {{get_total_duration()}}</span>
       </span>
     </div>
   </div>
 </div>
 <div style="isolation:isolate;">
-  <div class="background-gradient"></div>
+  <div class="background-gradient" [style.background-color]="background_color"></div>
   <div class="play-bar">
     <button class="play-btn" (click)="toggle_play()">
       <div class="play-svg">
         <svg *ngIf="playbackState$ | async as playbackState">
-          <path *ngIf="!playbackState.is_playing" [attr.d]="iconProvider.bigPlay"></path>
+          <path *ngIf="!playbackState.item.id" [attr.d]="iconProvider.bigPlay"></path>
           <path *ngIf="playbackState.is_playing" [attr.d]="iconProvider.bigPause"></path>
         </svg>
       </div>
     </button>
+    <div class="card">
+      <div class="card-body">
+        <div class="btn-group-lg" role="group" aria-label="Term">
+          <button [ngClass]="this.term == 'short_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTerm('short_term')">Short</button>
+          <button [ngClass]="this.term == 'medium_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button" (click)="this.setTerm('medium_term')">Medium</button>
+          <button [ngClass]="this.term == 'long_term' ? 'btn btn-selected' : 'btn btn-unselected'" type="button"  (click)="this.setTerm('long_term')">Long</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="top-list">
     <div class="top-list-header">
       <div class="header-text" style="font-size: 16px; justify-self: end;">#</div>
-      <div class="header-text">Title</div>
-      <div class="header-text">Album</div>
-      <div class="header-text">Release Date</div>
-      <div class="header-text" style="justify-content: flex-end;">
+      <div class="header-text" (click)="toggle_sort('title')">Title</div>
+      <div class="header-text" (click)="toggle_sort('album')">Album</div>
+      <div class="header-text" (click)="toggle_sort('release')">Release Date</div>
+      <div class="header-text" (click)="toggle_sort('duration')" style="justify-content: flex-end;">
         <svg class="play-svg">
           <path [attr.d]="iconProvider.clockStart"></path>
           <path [attr.d]="iconProvider.clockEnd"></path>
         </svg>
       </div>
     </div>
-    <div class="_row" *ngFor="let track of this.top_tracks; let i = index">
+    <div class="_row" *ngFor="let track of sort_tracks();">
       <div class="column" style="justify-content: center;">
-        <span>{{i+1}}</span>
-        <button (click)="toggle_play_track(track)" class="play-svg">
-          <svg class="play" *ngIf="playbackState$ | async as playbackState">
-            <path *ngIf="!playbackState.is_playing" [attr.d]="iconProvider.play"></path>
-            <path *ngIf="playbackState.is_playing" [attr.d]="iconProvider.pause"></path>
-          </svg>
-        </button>
+        <div class="item-index" *ngIf="playbackState$ | async as playbackState" >
+          <span *ngIf="playbackState.item.uri != track.track.uri">{{track.rank+1}}</span>
+          <span *ngIf="playbackState.item.uri == track.track.uri && !playbackState.is_playing" style="color: rgb(29, 185, 84);">{{track.rank+1}}</span>
+          <button 
+            (click)="toggle_play_track(track.track)" 
+            class="play-svg">
+            <svg class="play" *ngIf="playbackState.item.uri != track.track.uri">
+              <path [attr.d]="iconProvider.play"></path>
+            </svg>
+            <svg class="play" *ngIf="playbackState.item.uri == track.track.uri">
+              <path *ngIf="playbackState.is_playing" [attr.d]="iconProvider.pause"></path>
+              <path *ngIf="!playbackState.is_playing" [attr.d]="iconProvider.play"></path>
+            </svg>
+            <img 
+              *ngIf="playbackState.item.uri == track.track.uri && playbackState.is_playing"
+              src="https://open.spotifycdn.com/cdn/images/device-picker-equaliser-animation.946e7243.webp">
+          </button>
+        </div>
       </div>
       <div class="column">
-        <img [src]="track.album.images[2].url">
+        <img [src]="track.track.album.images[2].url">
         <div class="song-info">
-          <div class="song-name">
-            <p>{{track.name}}</p>
+          <div class="song-name" *ngIf="playbackState$ | async as playbackState">
+            <a href="https://open.spotify.com/track/{{track.track.id}}" target="_blank" 
+              [style.color]="track.track.uri == playbackState.item.uri ? 'rgb(29, 185, 84)': 'white'"
+              >{{track.track.name}}</a>
           </div>
           <div class="artist-name">
-            <span *ngIf="track.explicit" class="explicit-icon">E</span>
-            <p>{{get_artist_list(track)}}</p>
+            <span *ngIf="track.track.explicit" class="explicit-icon">E</span>
+            <div class="artist-link" *ngFor="let artist of track.track.artists">
+              <a href="https://open.spotify.com/artist/{{artist.id}}" target="_blank"
+                >{{artist.name}}</a>
+            </div>
           </div>
         </div>
       </div>
       <div class="column">
-        <p>{{track.album.name}}</p>
+        <a href="https://open.spotify.com/album/{{track.track.album.id}}" target="_blank"
+          >{{track.track.album.name}}</a>
       </div>
       <div class="column">
-        <p>{{format_date(track.album.release_date)}}</p>
+        <p>{{format_date(track.track.album.release_date)}}</p>
       </div>
       <div class="column" style="justify-content: flex-end;">
-        <button (click)="toggle_favorite(i)" class="play-svg" style="margin-right: 24px;">
-          <svg *ngIf="this.isFavorite[i]" class="heart" style="fill: rgb(29, 185, 84);">
-            <path [attr.d]="this.isFavorite[i] ? this.iconProvider.favorited: this.iconProvider.unfavorited"></path>
+        <button (click)="toggle_favorite(track.rank)" class="play-svg" style="margin-right: 24px;">
+          <svg *ngIf="this.isFavorite[track.rank]" class="heart" style="fill: rgb(29, 185, 84);">
+            <path [attr.d]="this.isFavorite[track.rank] ? this.iconProvider.favorited: this.iconProvider.unfavorited"></path>
           </svg>
-          <svg *ngIf="!this.isFavorite[i]" class="heart">
-            <path [attr.d]="this.isFavorite[i] ? this.iconProvider.favorited: this.iconProvider.unfavorited"></path>
+          <svg *ngIf="!this.isFavorite[track.rank]" class="heart">
+            <path [attr.d]="this.isFavorite[track.rank] ? this.iconProvider.favorited: this.iconProvider.unfavorited"></path>
           </svg>
         </button>
-        <p style="margin-right: 12px;">{{ms_to_min_sec(track.duration_ms)}}</p>
-        <button class="play-svg">
+        <p style="margin-right: 12px;">{{ms_to_min_sec(track.track.duration_ms)}}</p>
+        <button class="play-svg" (click)="add_to_queue(track.track)">
           <svg class="elipses">
-            <path [attr.d]="iconProvider.kabob"></path>
+            <path [attr.d]="iconProvider.queue"></path>
           </svg>
         </button>
       </div>

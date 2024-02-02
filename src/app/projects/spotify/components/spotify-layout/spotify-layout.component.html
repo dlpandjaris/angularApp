@@ -11,8 +11,8 @@
           </svg>
           <p>Install App</p>
         </a>
-        <a *ngIf="user_profile">
-          <img [src]="user_profile.images[0].url" draggable="false"/>
+        <a *ngIf="userProfile$ | async as userProfile">
+          <img *ngIf="userProfile.images[0]" [src]="userProfile.images[0].url" draggable="false"/>
         </a>
       </div>
     </header>

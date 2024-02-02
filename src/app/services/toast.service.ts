@@ -19,7 +19,9 @@ export class ToastService {
     if(status=='Success'){
       this.toasts.push({ status:'bg-success text-light', body });
     }else if(status=='Failure'){
-      this.toasts.push({ status:'bg-danger text-light', body })
+      this.toasts.push({ status:'bg-danger text-light', body });
+    }else if(status=='spotify'){
+      this.toasts.push({ status:'spotify', body });
     }
   }
 

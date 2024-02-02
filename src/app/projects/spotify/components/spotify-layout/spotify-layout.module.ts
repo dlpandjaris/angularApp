@@ -13,6 +13,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TokenInterceptor } from 'src/app/interceptors/token.interceptor';
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../../services/player.service';
+import { UserProfileEffects } from '../../state/effects/user-profile.effects';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import * as fromUserProfile from '../../state/reducers/user-profile.reducer';
+import * as fromPlayer from '../../state/reducers/player.reducer';
+import { PlayerEffects } from '../../state/effects/player.effects';
+import { SpotifyAppFeatureKey, reducers } from '../../state';
 
 @NgModule({
   declarations: [
@@ -31,7 +38,13 @@ import { PlayerService } from '../../services/player.service';
     HttpClientModule,
     FormsModule,
     DragDropModule,
-    CommonModule
+    CommonModule,
+    EffectsModule.forFeature([
+      UserProfileEffects,
+      PlayerEffects
+    ]),
+    StoreModule.forFeature(SpotifyAppFeatureKey, reducers)
+    // StoreModule.forFeature(fromPlayer.playerFeatureKey, fromPlayer.reducer),
   ],
   providers: [
     {

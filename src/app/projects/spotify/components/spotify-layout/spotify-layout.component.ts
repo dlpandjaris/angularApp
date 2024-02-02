@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import { IconProvider } from '../../models/icon-provider';
 import { UserProfile } from '../../models/user-profile';
-import { UsersService } from '../../services/users.service';
+
+import { SpotifyAppState } from '../../state';
+import { selectUserProfile } from '../../state/selectors/user-profile.selectors';
+import { getUserProfile } from '../../state/actions/user-profile.actions';
 
 @Component({
   selector: 'app-spotify-layout',
@@ -11,19 +17,14 @@ import { UsersService } from '../../services/users.service';
 export class SpotifyLayoutComponent {
 
   iconProvider = IconProvider;
-  
-  user_profile!: UserProfile;
+  userProfile$!: Observable<UserProfile>;
 
   constructor(
-    private usersService: UsersService) {}
+    private store: Store<SpotifyAppState>
+  ) {}
 
-  ngOnInit() {
-    this.getUserProfile();
-  }
-
-  getUserProfile(): void {
-    this.usersService.getCurrentUsersProfile().subscribe((prof: UserProfile) => {
-      this.user_profile = prof;
-    })
+  ngOnInit(): void {
+    this.store.dispatch(getUserProfile());
+    this.userProfile$ = this.store.select(selectUserProfile);
   }
 }

@@ -1,21 +1,24 @@
 <footer class="sticky-bottom">
-  <div class="__container">
+  <div class="__container" *ngIf="playbackState$ | async as playbackState">
     <div class="left-controls">
-      <div class="song" *ngIf="this.playbackState != null">
-        <div class="song-picture">
-          <img class="album-cover" src="{{this.playbackState.item.album.images[2].url}}"/>
+      <div class="song">
+        <div class="song-picture" *ngIf="playbackState.item.album.images[2]">
+          <img class="album-cover" src="{{playbackState.item.album.images[2].url}}"/>
         </div>
         <div class="song-info">
           <div class="song-name">
-            <p>{{this.playbackState.item.name}}</p>
+            <p>{{playbackState.item.name}}</p>
           </div>
           <div class="artist-name">
-            <p>{{get_artist_list()}}</p>
+            <p>{{get_artist_list(playbackState.item)}}</p>
           </div>
         </div>
-        <button class="player-button" (click)="toggle_favorite()" *ngIf="this.playbackState.currently_playing_type == 'track'">
-          <svg class="playback-svg" [style.fill]="favoriteIconColor">
-            <path [attr.d]="favoriteIcon"></path>
+        <button class="player-button" (click)="toggle_favorite(playbackState.item)">
+          <svg *ngIf="isFavorite" class="playback-svg" style="fill: rgb(29, 185, 84);">
+            <path [attr.d]="iconProvider.favorited"></path>
+          </svg>
+          <svg *ngIf="!isFavorite" class="playback-svg" style="fill: hsla(0,0%,100%,.7)">
+            <path [attr.d]="iconProvider.unfavorited"></path>
           </svg>
         </button>
       </div>
@@ -36,7 +39,7 @@
         </button>
         <button class="play-button player-button" style="background-color: white; margin: 0 12px;" (click)="toggle_play()">
           <svg class="playback-svg" style="fill: black; width: 16px;">
-            <path [attr.d]="playIcon"></path>
+            <path [attr.d]="playbackState.is_playing ? iconProvider.pause: iconProvider.play"></path>
           </svg>
         </button>
         <button class="player-button" (click)="skip_to_next()">
@@ -50,7 +53,7 @@
           </svg>
         </button>
       </div>
-      <div class="playback-bar" *ngIf="this.playbackState">
+      <div class="playback-bar">
         <div class="playback-time" style="text-align: right;">{{ms_to_min_sec(playbackState.progress_ms)}}</div>
           <div class="playback-slider" id="playback-slider" (click)="playback_clicked($event)">
             <div class="playback-progress" id="playback-progress">
@@ -62,9 +65,9 @@
               <div id="playback-progress-handle"></div>
             </div>
           </div>
-        <div class="playback-time" style="text-align: left;">{{ms_to_min_sec(this.playbackState.item.duration_ms)}}</div>
+        <div class="playback-time" style="text-align: left;">{{ms_to_min_sec(playbackState.item.duration_ms)}}</div>
       </div>
-      <div class="playback-bar" *ngIf="!this.playbackState">
+      <div class="playback-bar" *ngIf="!playbackState">
         <div class="playback-time" style="text-align: right;">-:--</div>
           <div class="playback-slider" id="playback-slider">
             <div class="playback-progress" id="playback-progress">
@@ -91,10 +94,10 @@
               </div>
               <ng-template #currentDeviceIconBlock>
                 <svg class="device-picker-svg" style="fill: rgb(29, 185, 84)" *ngIf="activeDevice.name != 'Web Playback SDK'">
-                  <path *ngFor="let d of get_device_icons(this.activeDevice.type, 'big')" [attr.d]="d"></path>
+                  <path *ngFor="let d of get_device_icons(activeDevice.type, 'big')" [attr.d]="d"></path>
                 </svg>
                 <svg class="device-picker-svg" *ngIf="activeDevice.name == 'Web Playback SDK'">
-                  <path *ngFor="let d of get_device_icons(this.activeDevice.type, 'big')" [attr.d]="d"></path>
+                  <path *ngFor="let d of get_device_icons(activeDevice.type, 'big')" [attr.d]="d"></path>
                 </svg>
               </ng-template>
               <div id="current-device">
@@ -160,7 +163,7 @@
           <div class="device-carrot" *ngIf="activeDevice.name != 'Web Playback SDK'"></div>
           <button class="player-button" [ngbPopover]="devicePickerContent" (click)="get_available_devices()">
             <svg class="playback-svg" [style.fill]="activeDevice.name == 'Web Playback SDK' ? 'hsla(0, 0%, 100%, 0.7)': 'rgb(29, 185, 84)'">
-              <path *ngFor="let d of get_device_icons(this.activeDevice.type, 'small')" [attr.d]="d"></path>
+              <path *ngFor="let d of get_device_icons(activeDevice.type, 'small')" [attr.d]="d"></path>
             </svg>
           </button>
         </div>

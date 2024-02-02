@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
-// import { CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Observable, Subscription, timer } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 
@@ -10,9 +9,12 @@ import { PlaybackState } from '../../models/playback-state';
 import { Device } from '../../models/device';
 import { IconProvider } from '../../models/icon-provider';
 import { WINDOW } from 'src/app/services/window';
+import { Track } from '../../models/track';
+import * as fromPlayerActions from '../../state/actions/player.actions';
+import { Store, select } from '@ngrx/store';
+import { SpotifyAppState } from '../../state';
+import { selectPlayer } from '../../state/selectors/player.selectors';
 
-
-declare let spotifyPlayer: any;
 
 @Component({
   selector: 'app-player-footer',
@@ -36,7 +38,8 @@ export class PlayerFooterComponent implements OnInit {
   shuffleIconColor: string = this.gray;
   repeatIconColor: string = this.gray;
 
-  playbackState!: PlaybackState;
+  // playbackState!: PlaybackState;
+  playbackState$!: Observable<PlaybackState>; // = this.playerService.get_playback_state_subject();
   devices: Device[] = [];
   activeDevice!: Device;
 
@@ -50,12 +53,22 @@ export class PlayerFooterComponent implements OnInit {
     private playerService: PlayerService,
     private trackService: TrackService,
     @Inject(WINDOW) private window: Window,
-    @Inject(DOCUMENT) private document: Document
-    ) { }
+    // @Inject(DOCUMENT) private document: Document,
+    private store: Store<SpotifyAppState>
+    ) { 
+      // this.playbackState$ = this.playerService.get_playback_state_subject();
+    }
 
   async ngOnInit(): Promise<void> {
+    this.playbackState$ = this.store.select(selectPlayer);
+    this.store.dispatch(fromPlayerActions.getPlayerFooter());
+
     this.connect_to_player();
-    await this.get_playback_state();
+    // await this.get_playback_state();
+    this.playerService.refresh_playback_state();
+    this.playbackState$.subscribe((playbackState: PlaybackState) => {
+      this.check_favorite(playbackState.item)
+    })
     await this.get_available_devices();
   }
   
@@ -76,33 +89,42 @@ export class PlayerFooterComponent implements OnInit {
     })
   }
   
-  check_favorite() {
-    this.trackService.check_users_saved_tracks(this.playbackState.item.id)
-    .subscribe((result: boolean[])=>{
+  check_favorite(track: Track) {
+    this.trackService.check_users_saved_tracks(track.id)
+    .subscribe((result: boolean[]) => {
       this.isFavorite = result[0];
-      this.isFavorite ? this.favoriteIconColor = this.green: this.favoriteIconColor = this.gray;
-      this.isFavorite ? this.favoriteIcon = IconProvider.favorited: this.favoriteIcon = IconProvider.unfavorited;
     })
+
+    // this.trackService.check_users_saved_tracks(this.playbackState.item.id)
+    // .subscribe((result: boolean[])=>{
+    //   this.isFavorite = result[0];
+    //   this.isFavorite ? this.favoriteIconColor = this.green: this.favoriteIconColor = this.gray;
+    //   this.isFavorite ? this.favoriteIcon = IconProvider.favorited: this.favoriteIcon = IconProvider.unfavorited;
+    // })
   }
   
-  async get_playback_state() {
-    this.playerService.get_currently_playing_track()
-    .subscribe((result: PlaybackState)=>{
-      this.playbackState = result;
-      result.is_playing ? this.playIcon = IconProvider.pause: this.playIcon = IconProvider.play;
-      result.is_playing ? this.start_timer(): 0;
-      result.shuffle_state ? this.shuffleIconColor = this.green: this.shuffleIconColor = this.gray;
-      result.repeat_state == 'context' ? this.repeatIconColor = this.green: this.repeatIconColor = this.gray;
-      this.check_favorite();
-      this.set_playback_width();
-    });
-  }
+  // async get_playback_state() {
+  //   this.playerService.get_currently_playing_track()
+  //   .subscribe((result: PlaybackState)=>{
+  //     this.playbackState = result;
+  //     result.is_playing ? this.playIcon = IconProvider.pause: this.playIcon = IconProvider.play;
+  //     result.is_playing ? this.start_timer(): 0;
+  //     result.shuffle_state ? this.shuffleIconColor = this.green: this.shuffleIconColor = this.gray;
+  //     result.repeat_state == 'context' ? this.repeatIconColor = this.green: this.repeatIconColor = this.gray;
+  //     this.check_favorite();
+  //     this.set_playback_width();
+  //   });
+  // }
   
-  async toggle_play(): Promise<void> {
-    this.playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
-    this.playbackState.is_playing ? this.stop_timer() : this.start_timer();
-    this.playbackState.is_playing ? this.playIcon = IconProvider.play: this.playIcon = IconProvider.pause;
-    this.playbackState.is_playing = !this.playbackState.is_playing;
+  toggle_play(): void {
+    this.playbackState$.subscribe((playbackState: PlaybackState) => {
+      playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
+      playbackState.is_playing ? this.stop_timer() : this.start_timer();
+    })
+    // this.playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
+    // this.playbackState.is_playing ? this.stop_timer() : this.start_timer();
+    // this.playbackState.is_playing ? this.playIcon = IconProvider.play: this.playIcon = IconProvider.pause;
+    // this.playbackState.is_playing = !this.playbackState.is_playing;
   }
 
   connect_to_player(): void {
@@ -138,7 +160,8 @@ export class PlayerFooterComponent implements OnInit {
         console.log('Device ID has gone offline');
       });
       player.addListener('player_state_changed', () => {
-        this.get_playback_state();
+        // this.get_playback_state();
+        this.playerService.refresh_playback_state();
         console.log('player state changed');
       })
 
@@ -150,36 +173,56 @@ export class PlayerFooterComponent implements OnInit {
   
   skip_to_next(): void {
     this.playerService.skip_to_next();
-    this.get_playback_state();
+    // this.get_playback_state();
   }
 
   skip_to_previous(): void {
     this.playerService.skip_to_previous();
-    this.get_playback_state();
+    // this.get_playback_state();
   }
 
   toggle_shuffle(): void {
-    this.playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
-    this.playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
-    this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
+    this.playbackState$.subscribe((playbackState: PlaybackState) => {
+      playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
+      playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
+
+    })
+    // this.playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
+    // this.playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
+    // this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
   }
 
   toggle_repeat(): void {
-    this.playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
-    this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.gray: this.repeatIconColor = this.green;
-    this.playbackState.repeat_state == 'context' ? this.playbackState.repeat_state = 'off': this.playbackState.repeat_state = 'context';
+    this.playbackState$.subscribe((playbackState: PlaybackState) => {
+      playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
+    })
+    // this.playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
+    // this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.gray: this.repeatIconColor = this.green;
+    // this.playbackState.repeat_state == 'context' ? this.playbackState.repeat_state = 'off': this.playbackState.repeat_state = 'context';
   }
 
-  toggle_favorite(): void {
-    this.isFavorite ? this.trackService.remove_users_saved_tracks([this.playbackState.item.id]): this.trackService.save_tracks_for_current_user([this.playbackState.item.id]);
-    this.isFavorite ? this.favoriteIconColor = this.gray: this.favoriteIconColor = this.green;
-    this.isFavorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
+  toggle_favorite(track: Track): void {
+    this.isFavorite ? this.trackService.remove_users_saved_tracks([track.id]): this.trackService.save_tracks_for_current_user([track.id]);
     this.isFavorite = !this.isFavorite;
+
+    // this.playbackState$.subscribe((playbackState: PlaybackState) => {
+    //   this.isFavorite ? this.trackService.remove_users_saved_tracks([playbackState.item.id]): this.trackService.save_tracks_for_current_user([playbackState.item.id]);
+    //   this.isFavorite = !this.isFavorite;
+    // })
+
+    // this.isFavorite ? this.trackService.remove_users_saved_tracks([this.playbackState.item.id]): this.trackService.save_tracks_for_current_user([this.playbackState.item.id]);
+    // this.isFavorite ? this.favoriteIconColor = this.gray: this.favoriteIconColor = this.green;
+    // this.isFavorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
+    // this.isFavorite = !this.isFavorite;
   }
 
   set_playback_device(device: Device): void {
     this.activeDevice = device;
-    this.playerService.transfer_playback([device.id], this.playbackState.is_playing);
+    this.playbackState$.subscribe((playbackState: PlaybackState) => {
+      this.playerService.transfer_playback([device.id], playbackState.is_playing);
+    })
+    // this.playerService.transfer_playback([device.id], this.playbackState.is_playing);
+    // this.activeDevice = device;
   }
 
   toggle_mute(): void {
@@ -195,21 +238,24 @@ export class PlayerFooterComponent implements OnInit {
   playback_clicked(event: MouseEvent): void {
     const element = document.getElementById('playback-slider');
     if (element) {
-      const width = element.getBoundingClientRect().width;
-      const new_position_ms = Math.round(this.playbackState.item.duration_ms * (event.offsetX / width));
-      this.playbackTimerWidthPx = event.offsetX;
-      this.playbackState.progress_ms = new_position_ms;
-      this.playerService.seek_to_position(new_position_ms);
+      this.playbackState$.subscribe((playbackState: PlaybackState) => {
+        const width = element.getBoundingClientRect().width;
+        const new_position_ms = Math.round(playbackState.item.duration_ms * (event.offsetX / width));
+        this.playbackTimerWidthPx = event.offsetX;
+        playbackState.progress_ms = new_position_ms;
+        this.playerService.seek_to_position(new_position_ms);
+      })
     }
   }
 
   set_playback_width(): void {
     const element = document.getElementById('playback-slider');
     if (element) {
-      const width = element.getBoundingClientRect().width;
-      const pixel_width = width * (this.playbackState.progress_ms / this.playbackState.item.duration_ms);
-      this.playbackTimerWidthPx = pixel_width;
-      // console.log(`${pixel_width} / ${width}`)
+      this.playbackState$.subscribe((playbackState: PlaybackState) => {
+        const width = element.getBoundingClientRect().width;
+        const pixel_width = width * (playbackState.progress_ms / playbackState.item.duration_ms);
+        this.playbackTimerWidthPx = pixel_width;
+      })
     }
   }
 
@@ -230,12 +276,16 @@ export class PlayerFooterComponent implements OnInit {
 
   start_timer(): void {
     this.timerSubscription = this.timer.subscribe(() => {
-      if (this.playbackState.progress_ms >= this.playbackState.item.duration_ms - 1000) {
-        this.stop_timer();
-        this.get_playback_state();
-      }
-      this.playbackState.progress_ms = this.playbackState.progress_ms + 1000;
-      this.set_playback_width();
+      this.playbackState$.subscribe((playbackState: PlaybackState) => {
+
+        if (playbackState.progress_ms >= playbackState.item.duration_ms - 1000) {
+          this.stop_timer();
+          // this.get_playback_state();
+          this.playerService.refresh_playback_state();
+        }
+        playbackState.progress_ms = playbackState.progress_ms + 1000;
+        this.set_playback_width();
+      })
     })
   }
 
@@ -243,9 +293,9 @@ export class PlayerFooterComponent implements OnInit {
     this.timerSubscription.unsubscribe();
   }
 
-  get_artist_list(): string {
+  get_artist_list(track: Track): string {
     let artists = '';
-    for (let artist of this.playbackState.item.artists) {
+    for (let artist of track.artists) {
       artists = artists + artist.name + ', ';
     }
     return artists.slice(0, artists.length - 2);

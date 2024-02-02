@@ -30,7 +30,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": ["node_modules/jquery/dist/jquery.min.js"]
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -105,6 +107,9 @@
     }
   },
   "cli": {
-    "analytics": "406b90c1-f8b9-447c-9a46-c65486048826"
+    "analytics": "406b90c1-f8b9-447c-9a46-c65486048826",
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
   }
 }

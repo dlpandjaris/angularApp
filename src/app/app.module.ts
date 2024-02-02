@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,15 +21,14 @@ import { TerminalContentComponent } from './components/terminal-content/terminal
 import { ProjectCardComponent } from './components/project-card/project-card.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-// import { SpotifyComponent } from './projects/spotify/components/spotify/spotify.component';
-// import { NavbarComponent } from './projects/spotify/components/navbar/navbar.component';
-// import { TopComponent } from './projects/spotify/components/top/top.component';
-// import { PlayerFooterComponent } from './projects/spotify/components/player-footer/player-footer.component';
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { TerminalComponent } from './components/terminal/terminal.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { ResumeComponent } from './components/resume/resume.component';
 import { ProjectsComponent } from './components/projects/projects.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -46,9 +45,6 @@ import { ProjectsComponent } from './components/projects/projects.component';
     TerminalButtonComponent,
     TerminalContentComponent,
     ProjectCardComponent,
-    // SpotifyComponent,
-    // TopComponent,
-    // PlayerFooterComponent
     NavbarComponent,
     TerminalComponent,
     PortfolioComponent,
@@ -72,7 +68,10 @@ import { ProjectsComponent } from './components/projects/projects.component';
     FormsModule,
     FontAwesomeModule,
     DragDropModule,
-    // ProjectCardComponent,
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([
+    ]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ]
 })
 export class AppModule { }
