@@ -36,11 +36,6 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(fromUserProfileActions.getUserProfile, (state) => {
-    return {
-      ...state
-    }
-  }),
   on(fromUserProfileActions.getUserProfileSuccess, (state, action) => {
     return {
       ...state,

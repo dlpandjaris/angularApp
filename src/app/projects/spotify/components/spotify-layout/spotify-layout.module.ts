@@ -19,7 +19,7 @@ import { StoreModule } from '@ngrx/store';
 import * as fromUserProfile from '../../state/reducers/user-profile.reducer';
 import * as fromPlayer from '../../state/reducers/player.reducer';
 import { PlayerEffects } from '../../state/effects/player.effects';
-import { SpotifyAppFeatureKey, reducers } from '../../state';
+// import { SpotifyAppFeatureKey, reducers } from '../../state';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,6 @@ import { SpotifyAppFeatureKey, reducers } from '../../state';
     SpotifyComponent,
     NavbarComponent,
     TopComponent,
-    NavbarComponent,
     PlayerFooterComponent
   ],
   imports: [
@@ -43,8 +42,9 @@ import { SpotifyAppFeatureKey, reducers } from '../../state';
       UserProfileEffects,
       PlayerEffects
     ]),
-    StoreModule.forFeature(SpotifyAppFeatureKey, reducers)
-    // StoreModule.forFeature(fromPlayer.playerFeatureKey, fromPlayer.reducer),
+    // StoreModule.forFeature(SpotifyAppFeatureKey, reducers),
+    StoreModule.forFeature(fromUserProfile.userProfileFeatureKey, fromUserProfile.reducer),
+    StoreModule.forFeature(fromPlayer.playerFeatureKey, fromPlayer.reducer),
   ],
   providers: [
     {

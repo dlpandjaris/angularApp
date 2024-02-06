@@ -116,11 +116,8 @@ export class PlayerFooterComponent implements OnInit {
   //   });
   // }
   
-  toggle_play(): void {
-    this.playbackState$.subscribe((playbackState: PlaybackState) => {
-      playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
-      playbackState.is_playing ? this.stop_timer() : this.start_timer();
-    })
+  toggle_play(is_playing: boolean): void {
+    this.store.dispatch(fromPlayerActions.togglePlayFooter({ is_playing }));
     // this.playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
     // this.playbackState.is_playing ? this.stop_timer() : this.start_timer();
     // this.playbackState.is_playing ? this.playIcon = IconProvider.play: this.playIcon = IconProvider.pause;
@@ -172,24 +169,17 @@ export class PlayerFooterComponent implements OnInit {
   }
   
   skip_to_next(): void {
-    this.playerService.skip_to_next();
-    // this.get_playback_state();
+    // this.playerService.skip_to_next();
+    this.store.dispatch(fromPlayerActions.skipNextFooter());
   }
 
   skip_to_previous(): void {
-    this.playerService.skip_to_previous();
-    // this.get_playback_state();
+    // this.playerService.skip_to_previous();
+    this.store.dispatch(fromPlayerActions.skipPreviousFooter());
   }
 
-  toggle_shuffle(): void {
-    this.playbackState$.subscribe((playbackState: PlaybackState) => {
-      playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
-      playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
-
-    })
-    // this.playbackState.shuffle_state ? this.playerService.shuffle(false): this.playerService.shuffle(true);
-    // this.playbackState.shuffle_state ? this.shuffleIconColor = this.gray: this.shuffleIconColor = this.green;
-    // this.playbackState.shuffle_state = !this.playbackState.shuffle_state;
+  toggle_shuffle(shuffle_state: boolean): void {
+    this.store.dispatch(fromPlayerActions.toggleShuffleFooter({ shuffle_state }));
   }
 
   toggle_repeat(): void {

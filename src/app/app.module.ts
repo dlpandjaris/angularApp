@@ -71,7 +71,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([
     ]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    StoreDevtoolsModule.instrument({ 
+      maxAge: 25, 
+      logOnly: !isDevMode(), 
+      trace: isDevMode(),
+      traceLimit: 25
+    }),
   ]
 })
 export class AppModule { }

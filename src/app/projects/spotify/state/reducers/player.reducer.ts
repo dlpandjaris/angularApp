@@ -140,6 +140,37 @@ export const reducer = createReducer(
       error: action.error
     }
   }),
+  on(PlayerActions.toggleShuffleSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        shuffle_state: !action.shuffle
+      }
+    }
+  }),
+  on(PlayerActions.skipPreviousFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(PlayerActions.skipNextFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(PlayerActions.togglePlaySuccess, (state, action) => {
+    console.log(action)
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        is_playing: action.is_playing
+      }
+    }
+  })
 );
 
 export const playerFeature = createFeature({

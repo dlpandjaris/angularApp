@@ -26,8 +26,8 @@
 
     <div class="center-piece">
       <div class="player-controls">
-        <button class="player-button" (click)="toggle_shuffle()">
-          <svg class="playback-svg" [style.fill]="shuffleIconColor">
+        <button class="player-button" (click)="toggle_shuffle(playbackState.shuffle_state)">
+          <svg class="playback-svg" [style.fill]="playbackState.shuffle_state ? this.green: this.gray">
             <path [attr.d]="iconProvider.shuffleStart"></path>
             <path [attr.d]="iconProvider.shuffleEnd"></path>
           </svg>
@@ -37,7 +37,7 @@
             <path [attr.d]="iconProvider.previous"></path>
           </svg>
         </button>
-        <button class="play-button player-button" style="background-color: white; margin: 0 12px;" (click)="toggle_play()">
+        <button class="play-button player-button" style="background-color: white; margin: 0 12px;" (click)="toggle_play(playbackState.is_playing)">
           <svg class="playback-svg" style="fill: black; width: 16px;">
             <path [attr.d]="playbackState.is_playing ? iconProvider.pause: iconProvider.play"></path>
           </svg>

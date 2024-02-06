@@ -165,36 +165,28 @@ export class PlayerService {
     });
   }
   
-  play(device_id?: string, uris: string[] = []): void {
-    this.http.put(`${this.baseUrl}/player/play`, {}, {
+  play(device_id?: string, uris: string[] = []): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/play`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { uris: uris }
-    }).subscribe(() => {
-      this.refresh_playback_state();
-    });
+    })
   }
 
-  pause(device_id?: string): void {
-    this.http.put(`${this.baseUrl}/player/pause`, {}, {
+  pause(device_id?: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/pause`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
-    }).subscribe(() => {
-      this.refresh_playback_state();
-    });
+    })
   }
   
-  skip_to_next(): void {
-    this.http.post(`${this.baseUrl}/player/next`, {}, {
+  skip_to_next(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/player/next`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
-    }).subscribe(() => {
-      this.refresh_playback_state();
     });
   }
 
-  skip_to_previous(): void {
-    this.http.post(`${this.baseUrl}/player/previous`, {}, {
+  skip_to_previous(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/player/previous`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
-    }).subscribe(() => {
-      this.refresh_playback_state();
     });
   }
 
@@ -221,11 +213,18 @@ export class PlayerService {
     }).subscribe();
   }
 
-  shuffle(state: boolean, device_id?: string): void {
-    this.http.put(`${this.baseUrl}/player/shuffle`, {}, {
+  // shuffle(state: boolean, device_id?: string): void {
+  //   this.http.put(`${this.baseUrl}/player/shuffle`, {}, {
+  //     headers: { Authorization: `Bearer ${this.accessToken}` },
+  //     params: { state: state, }
+  //   }).subscribe();
+  // }
+
+  shuffle(state: boolean, device_id?: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/shuffle`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { state: state, }
-    }).subscribe();
+    })
   }
 
   get_recently_played_tracks(): Observable<Track[]> {

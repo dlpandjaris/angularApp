@@ -56,6 +56,7 @@ export class TopComponent implements OnInit {
     await this.usersService.getCurrentUsersProfile()
     .subscribe((prof: UserProfile) => {
       this.user_profile = prof;
+      this.set_background_color();
     })
 
     this.playerService.refresh_playback_state();
@@ -157,9 +158,6 @@ export class TopComponent implements OnInit {
       this.sort_count = 0;
       this.fetchTopTracks();
     }
-
-
-    this.set_background_color();
   }
 
   toggle_play_track(track: Track): void {
@@ -228,7 +226,7 @@ export class TopComponent implements OnInit {
   set_background_color() {
     const coverImage = document.getElementById('coverImage') as HTMLImageElement;
     coverImage.setAttribute('crossOrigin', '');
-
+    
     const canvas = document.createElement('canvas');
     canvas.width = coverImage.clientWidth;
     canvas.height = coverImage.clientHeight;

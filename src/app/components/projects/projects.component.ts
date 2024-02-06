@@ -12,7 +12,7 @@ export class ProjectsComponent {
 
   projects: Project[] = [
     {
-      title: 'Spotify Analysis',
+      title: 'Spotify Analytics',
       url: "/projects/spotify/auth",
       image: '../../../assets/Spotify_logo_without_text.svg.png',
       color: 'black',
