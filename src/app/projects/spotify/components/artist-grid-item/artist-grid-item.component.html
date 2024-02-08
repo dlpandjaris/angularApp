@@ -1,0 +1,57 @@
+<div class="_row" (dblclick)="toggle_play_artist(artist);">
+  <div class="column" *ngIf="playbackState$ | async as playbackState" style="justify-content: center;">
+    <div class="item-index" *ngIf="playbackState.item.artists[0]">
+      <span *ngIf="playbackState.item.artists[0].id != artist.id">{{rank+1}}</span>
+      <span *ngIf="playbackState.item.artists[0].id == artist.id && !playbackState.is_playing" style="color: rgb(29, 185, 84);">{{rank+1}}</span>
+      <button 
+        (click)="toggle_play_artist(artist)" 
+        class="play-svg">
+        <svg class="play" *ngIf="playbackState.item.artists[0].id != artist.id">
+          <path [attr.d]="iconProvider.play"></path>
+        </svg>
+        <svg class="play" *ngIf="playbackState.item.artists[0].id == artist.id">
+          <path *ngIf="playbackState.is_playing" [attr.d]="iconProvider.pause"></path>
+          <path *ngIf="!playbackState.is_playing" [attr.d]="iconProvider.play"></path>
+        </svg>
+        <img 
+          *ngIf="playbackState.item.artists[0].id == artist.id && playbackState.is_playing"
+          src="https://open.spotifycdn.com/cdn/images/device-picker-equaliser-animation.946e7243.webp">
+      </button>
+    </div>
+  </div>
+  <div class="column" *ngIf="!(playbackState$ | async)" style="justify-content: center;">
+    <div class="item-index">
+      <span>{{rank+1}}</span>
+    </div>
+  </div>
+  <div class="column">
+    <img [src]="artist.images[2].url">
+    <div class="song-info" *ngIf="playbackState$ | async as playbackState">
+      <div class="song-name" *ngIf="playbackState.item.artists[0]">
+        <a href="https://open.spotify.com/artist/{{artist.id}}" target="_blank" 
+          [style.color]="playbackState.item.artists[0].id == artist.id ? 'rgb(29, 185, 84)': 'white'"
+          >{{artist.name}}</a>
+      </div>
+    </div>
+    <div class="song-info" *ngIf="!(playbackState$ | async)">
+      <div class="song-name">
+        <a href="https://open.spotify.com/artist/{{artist.id}}" target="_blank" 
+          >{{artist.name}}</a>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <p>{{artist.genres}}</p>
+  </div>
+  <div class="column" style="justify-content: flex-end;">
+    <button (click)="toggle_follow(rank)" class="play-svg" style="margin-right: 24px;">
+      <svg *ngIf="isFollowing" class="heart" style='fill: rgb(29, 185, 84)'>
+        <path [attr.d]="iconProvider.favorited"></path>
+      </svg>
+      <svg *ngIf="!isFollowing" class="heart">
+        <path [attr.d]="iconProvider.unfavorited"></path>
+      </svg>
+    </button>
+    <p style="margin-right: 50px;">{{artist.popularity}}</p>
+  </div>
+</div>

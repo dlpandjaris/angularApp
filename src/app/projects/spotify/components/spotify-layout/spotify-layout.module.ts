@@ -7,7 +7,7 @@ import { SpotifyLayoutComponent } from './spotify-layout.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SpotifyComponent } from '../spotify/spotify.component';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { TopComponent } from '../top/top.component';
+import { TopTracksComponent } from '../top-tracks/top-tracks.component';
 import { PlayerFooterComponent } from '../player-footer/player-footer.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TokenInterceptor } from 'src/app/interceptors/token.interceptor';
@@ -19,6 +19,12 @@ import { StoreModule } from '@ngrx/store';
 import * as fromUserProfile from '../../state/reducers/user-profile.reducer';
 import * as fromPlayer from '../../state/reducers/player.reducer';
 import { PlayerEffects } from '../../state/effects/player.effects';
+import { PlaylistHeaderComponent } from '../playlist-header/playlist-header.component';
+import { TrackGridItemComponent } from '../track-grid-item/track-grid-item.component';
+import { TopArtistsComponent } from '../top-artists/top-artists.component';
+import { ArtistGridItemComponent } from '../artist-grid-item/artist-grid-item.component';
+import { PlaylistListComponent } from '../playlist-list/playlist-list.component';
+import { PlaylistComponent } from '../playlist/playlist.component';
 // import { SpotifyAppFeatureKey, reducers } from '../../state';
 
 @NgModule({
@@ -26,8 +32,14 @@ import { PlayerEffects } from '../../state/effects/player.effects';
     SpotifyLayoutComponent,
     SpotifyComponent,
     NavbarComponent,
-    TopComponent,
-    PlayerFooterComponent
+    TopTracksComponent,
+    TopArtistsComponent,
+    PlayerFooterComponent,
+    PlaylistHeaderComponent,
+    TrackGridItemComponent,
+    ArtistGridItemComponent,
+    PlaylistListComponent,
+    PlaylistComponent
   ],
   imports: [
     SpotifyLayoutRoutingModule,

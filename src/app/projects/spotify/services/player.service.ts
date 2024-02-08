@@ -146,11 +146,11 @@ export class PlayerService {
     });
   }
   
-  transfer_playback(device_ids: string[], play: boolean = false): void {
-    this.http.put(`${this.baseUrl}/player`, 
+  transfer_playback(device_ids: string[], play: boolean = false): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player`, 
       { "device_ids": device_ids, "play": play }, 
       { headers: { Authorization: `Bearer ${this.accessToken}` } }
-    ).subscribe();
+    )
   }
   
   get_available_devices(): Observable<Device[]> {
@@ -165,10 +165,22 @@ export class PlayerService {
     });
   }
   
-  play(device_id?: string, uris: string[] = []): Observable<any> {
-    return this.http.put(`${this.baseUrl}/player/play`, {}, {
+  play(device_id: string, uris: string[] = [], position_ms: number = 0): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/play`, {
+      uris: uris,
+      position_ms: position_ms,
+    }, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
-      params: { uris: uris }
+      params: { device_id: device_id }
+    })
+  }
+
+  play_artist(device_id: string, context_uri: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/play`, {
+      context_uri: context_uri
+    }, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { device_id: device_id }
     })
   }
 
@@ -190,35 +202,26 @@ export class PlayerService {
     });
   }
 
-  seek_to_position(position_ms: number): void {
-    this.http.put(`${this.baseUrl}/player/seek`, {}, {
+  seek_to_position(position_ms: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/seek`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { position_ms: position_ms }
-    }).subscribe(() => {
-      this.refresh_playback_state();
-    });
+    })
   }
 
-  repeat(state: string, device_id?: string): void {
-    this.http.put(`${this.baseUrl}/player/repeat`, {}, {
+  repeat(state: string, device_id?: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/repeat`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { state: state, }
-    }).subscribe();
+    })
   }
 
-  set_playback_volume(volume_percent: number): void {
-    this.http.put(`${this.baseUrl}/player/volume`, {}, {
+  set_playback_volume(volume_percent: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/volume`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { volume_percent: volume_percent }
-    }).subscribe();
+    })
   }
-
-  // shuffle(state: boolean, device_id?: string): void {
-  //   this.http.put(`${this.baseUrl}/player/shuffle`, {}, {
-  //     headers: { Authorization: `Bearer ${this.accessToken}` },
-  //     params: { state: state, }
-  //   }).subscribe();
-  // }
 
   shuffle(state: boolean, device_id?: string): Observable<any> {
     return this.http.put(`${this.baseUrl}/player/shuffle`, {}, {

@@ -1,0 +1,38 @@
+<div class="playlist-list">
+  <div *ngFor="let playlist of playlists">
+    <div class="card" (dblclick)="navigate_to_playlist(playlist)">
+      <img class="cover-image" [src]="playlist.images[0].url">
+
+      <ng-container *ngIf="(context$ | async) as context">
+        <ng-container *ngIf="(isPlaying$ | async) as isPlaying">
+          <button class="play-button"
+            (click)="play_playlist(playlist, true, context)">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path [attr.d]="playlist.uri == context.uri ? iconProvider.bigPause: iconProvider.bigPlay"></path>
+            </svg>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="!(isPlaying$ | async) as isPlaying">
+          <button class="play-button"
+            (click)="play_playlist(playlist, false, context)">
+            <svg class="play-icon" viewBox="0 0 24 24">
+              <path [attr.d]="iconProvider.bigPlay"></path>
+            </svg>
+          </button>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="!(context$ | async) as context">
+        <button class="play-button"
+          (click)="play_playlist(playlist, false)">
+          <svg class="play-icon" viewBox="0 0 24 24">
+            <path [attr.d]="iconProvider.bigPlay"></path>
+          </svg>
+        </button>
+      </ng-container>
+
+      <a routerLink="{{playlist.id}}" class="title">{{playlist.name}}</a>
+      <span class="author">By {{playlist.owner.display_name}}</span>
+    </div>
+  </div>
+</div>

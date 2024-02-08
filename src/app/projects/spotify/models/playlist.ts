@@ -1,5 +1,5 @@
 import { Image } from "./image";
-import { Track } from "./track";
+import { PlaylistTrack } from "./playlist-track";
 
 export interface Playlist {
   collaborative: string;
@@ -31,7 +31,15 @@ export interface Playlist {
   }
   public: boolean;
   snapshot_id: string;
-  tracks: Track[];
+  tracks: {
+    href: string;
+    limit: number;
+    next?: string;
+    offset: number;
+    previous?: string;
+    total: number;
+    items: PlaylistTrack[];
+  };
   type: string;
   uri: string;
 }

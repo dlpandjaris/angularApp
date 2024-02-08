@@ -6,13 +6,14 @@ import { Playlist } from '../models/playlist';
 import { PlaylistDetails } from '../models/playlist-details';
 import { Track } from '../models/track';
 import { PlaylistUpdate } from '../models/playlist-update';
+import { PlaylistPage } from '../models/playlist-page';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlaylistService {
 
-  private baseUrl: string = "https://api.spotify.com/v1/";
+  private baseUrl: string = "https://api.spotify.com/v1";
   accessToken = localStorage.getItem("accessToken");
 
   constructor(private http: HttpClient) { }
@@ -67,15 +68,18 @@ export class PlaylistService {
     }).subscribe();
   }
 
-  get_current_users_playlist(limit: number, offset: number): Observable<Playlist[]> {
-    return this.http.get<Playlist[]>(`${this.baseUrl}/me/playlists`, {
+  get_current_users_playlist(limit: number, offset: number): Observable<PlaylistPage> {
+    return this.http.get<PlaylistPage>(`${this.baseUrl}/me/playlists`, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { limit: limit, offset: offset }
     })
   }
 
-  get_users_playlists() {
-
+  get_users_playlists(user_id: string, limit: number, offset: number): Observable<PlaylistPage> {
+    return this.http.get<PlaylistPage>(`${this.baseUrl}/users/${user_id}/playlists`, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { user_id: user_id, limit: limit, offset: offset }
+    })
   }
 
   create_playlist() {

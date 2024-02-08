@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" style="color:white;" href="/portfolio">
-      <img src="../../../../../assets/Spotify_logo_without_text.svg.png" width="30" height="30" class="d-inline align-center" alt="">
+    <a class="navbar-brand" style="color:white;" routerLink="/projects/spotify">
+      <img src="../../../../../assets/Spotify_logo_without_text.svg.png" width="50" height="50" class="d-inline align-center" alt="">
       moosic thing
       <!-- <img src="../../../../../assets/spotify-icons-logos/logos/02_CMYK/02_PNG/Spotify_Logo_CMYK_Green.png"> -->
     </a>
@@ -10,11 +10,14 @@
     </button> -->
     <div [ngbCollapse]="this.navbar_collapsed" class="navbar-collapse">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="/projects/spotify">Home<span class="sr-only">(current)</span></a>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/projects/spotify/top/tracks">Top Tracks</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/projects/spotify/top">Top Tracks/Artists</a>
+          <a class="nav-link" routerLink="/projects/spotify/top/artists">Top Artists</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/projects/spotify/playlists">Playlists</a>
         </li>
       </ul>
     </div>

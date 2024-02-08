@@ -13,7 +13,7 @@ import { Track } from '../../models/track';
 import * as fromPlayerActions from '../../state/actions/player.actions';
 import { Store, select } from '@ngrx/store';
 import { SpotifyAppState } from '../../state';
-import { selectPlayer } from '../../state/selectors/player.selectors';
+import { selectPlayer, selectTrack } from '../../state/selectors/player.selectors';
 
 
 @Component({
@@ -38,10 +38,9 @@ export class PlayerFooterComponent implements OnInit {
   shuffleIconColor: string = this.gray;
   repeatIconColor: string = this.gray;
 
-  // playbackState!: PlaybackState;
-  playbackState$!: Observable<PlaybackState>; // = this.playerService.get_playback_state_subject();
+  playbackState$!: Observable<PlaybackState>;
+  track$!: Observable<Track>;
   devices: Device[] = [];
-  activeDevice!: Device;
 
   timer: Observable<number> = timer(500, 1000);
   timerSubscription!: Subscription; 
@@ -55,19 +54,22 @@ export class PlayerFooterComponent implements OnInit {
     @Inject(WINDOW) private window: Window,
     // @Inject(DOCUMENT) private document: Document,
     private store: Store<SpotifyAppState>
-    ) { 
-      // this.playbackState$ = this.playerService.get_playback_state_subject();
-    }
+  ) { }
 
   async ngOnInit(): Promise<void> {
     this.playbackState$ = this.store.select(selectPlayer);
     this.store.dispatch(fromPlayerActions.getPlayerFooter());
 
-    this.connect_to_player();
-    // await this.get_playback_state();
-    this.playerService.refresh_playback_state();
+    this.track$ = this.store.select(selectTrack);
+
+    this.track$.subscribe((track: Track) => {
+      this.check_favorite(track);
+    })
+
+    // this.connect_to_player();
     this.playbackState$.subscribe((playbackState: PlaybackState) => {
-      this.check_favorite(playbackState.item)
+      this.set_playback_width();
+      playbackState.is_playing ? this.start_timer(): 0;
     })
     await this.get_available_devices();
   }
@@ -80,12 +82,8 @@ export class PlayerFooterComponent implements OnInit {
       for (let i = 0; i < Object.entries(devices).length; i++) {
         let device = devices[`${i}` as keyof Device] as unknown as Device;
         device_list.push(device);
-        if (device.is_active) {
-          this.activeDevice = device;
-        }
       }
       this.devices = device_list;
-      // console.log(this.devices);
     })
   }
   
@@ -94,34 +92,11 @@ export class PlayerFooterComponent implements OnInit {
     .subscribe((result: boolean[]) => {
       this.isFavorite = result[0];
     })
-
-    // this.trackService.check_users_saved_tracks(this.playbackState.item.id)
-    // .subscribe((result: boolean[])=>{
-    //   this.isFavorite = result[0];
-    //   this.isFavorite ? this.favoriteIconColor = this.green: this.favoriteIconColor = this.gray;
-    //   this.isFavorite ? this.favoriteIcon = IconProvider.favorited: this.favoriteIcon = IconProvider.unfavorited;
-    // })
   }
   
-  // async get_playback_state() {
-  //   this.playerService.get_currently_playing_track()
-  //   .subscribe((result: PlaybackState)=>{
-  //     this.playbackState = result;
-  //     result.is_playing ? this.playIcon = IconProvider.pause: this.playIcon = IconProvider.play;
-  //     result.is_playing ? this.start_timer(): 0;
-  //     result.shuffle_state ? this.shuffleIconColor = this.green: this.shuffleIconColor = this.gray;
-  //     result.repeat_state == 'context' ? this.repeatIconColor = this.green: this.repeatIconColor = this.gray;
-  //     this.check_favorite();
-  //     this.set_playback_width();
-  //   });
-  // }
-  
-  toggle_play(is_playing: boolean): void {
-    this.store.dispatch(fromPlayerActions.togglePlayFooter({ is_playing }));
-    // this.playbackState.is_playing ? this.playerService.pause() : this.playerService.play();
-    // this.playbackState.is_playing ? this.stop_timer() : this.start_timer();
-    // this.playbackState.is_playing ? this.playIcon = IconProvider.play: this.playIcon = IconProvider.pause;
-    // this.playbackState.is_playing = !this.playbackState.is_playing;
+  toggle_play(playbackState: PlaybackState): void {
+    playbackState.is_playing ? this.stop_timer(): this.start_timer();
+    this.store.dispatch(fromPlayerActions.togglePlayFooter());
   }
 
   connect_to_player(): void {
@@ -135,19 +110,9 @@ export class PlayerFooterComponent implements OnInit {
         volume: 0.5
       });
 
-      if (!this.activeDevice) {
+      // if (!this.activeDevice) {
         console.log(`player ${player}`);
-        this.activeDevice = { // player;
-          id: player.id,
-          is_active: player.is_active,
-          is_private_session: false,
-          is_restricted: false,
-          name: 'Web Playback SDK',
-          type: player.type,
-          volume_percent: player.volume_percent,
-          supports_volume: player.supports_volume
-        }
-      }
+      // }
 
       player.addListener('ready', () => {
         console.log('Ready with Device ID');
@@ -157,24 +122,18 @@ export class PlayerFooterComponent implements OnInit {
         console.log('Device ID has gone offline');
       });
       player.addListener('player_state_changed', () => {
-        // this.get_playback_state();
-        this.playerService.refresh_playback_state();
         console.log('player state changed');
       })
 
       player.connect();
-
-      console.log(`active device: ${this.activeDevice}`);
     }
   }
   
   skip_to_next(): void {
-    // this.playerService.skip_to_next();
     this.store.dispatch(fromPlayerActions.skipNextFooter());
   }
 
   skip_to_previous(): void {
-    // this.playerService.skip_to_previous();
     this.store.dispatch(fromPlayerActions.skipPreviousFooter());
   }
 
@@ -182,59 +141,35 @@ export class PlayerFooterComponent implements OnInit {
     this.store.dispatch(fromPlayerActions.toggleShuffleFooter({ shuffle_state }));
   }
 
-  toggle_repeat(): void {
-    this.playbackState$.subscribe((playbackState: PlaybackState) => {
-      playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
-    })
-    // this.playbackState.repeat_state == 'context' ? this.playerService.repeat('off'): this.playerService.repeat('context');
-    // this.playbackState.repeat_state == 'context' ? this.repeatIconColor = this.gray: this.repeatIconColor = this.green;
-    // this.playbackState.repeat_state == 'context' ? this.playbackState.repeat_state = 'off': this.playbackState.repeat_state = 'context';
+  toggle_repeat(repeat_state: string): void {
+    this.store.dispatch(fromPlayerActions.toggleRepeatFooter({repeat_state}));
   }
 
   toggle_favorite(track: Track): void {
     this.isFavorite ? this.trackService.remove_users_saved_tracks([track.id]): this.trackService.save_tracks_for_current_user([track.id]);
     this.isFavorite = !this.isFavorite;
-
-    // this.playbackState$.subscribe((playbackState: PlaybackState) => {
-    //   this.isFavorite ? this.trackService.remove_users_saved_tracks([playbackState.item.id]): this.trackService.save_tracks_for_current_user([playbackState.item.id]);
-    //   this.isFavorite = !this.isFavorite;
-    // })
-
-    // this.isFavorite ? this.trackService.remove_users_saved_tracks([this.playbackState.item.id]): this.trackService.save_tracks_for_current_user([this.playbackState.item.id]);
-    // this.isFavorite ? this.favoriteIconColor = this.gray: this.favoriteIconColor = this.green;
-    // this.isFavorite ? this.favoriteIcon = 'fa-regular': this.favoriteIcon = 'fa-solid';
-    // this.isFavorite = !this.isFavorite;
   }
 
   set_playback_device(device: Device): void {
-    this.activeDevice = device;
-    this.playbackState$.subscribe((playbackState: PlaybackState) => {
-      this.playerService.transfer_playback([device.id], playbackState.is_playing);
-    })
-    // this.playerService.transfer_playback([device.id], this.playbackState.is_playing);
-    // this.activeDevice = device;
+    this.store.dispatch(fromPlayerActions.setActiveDeviceFooter({device}));
   }
 
-  toggle_mute(): void {
-    if (this.activeDevice.volume_percent > 0) {
-      this.lastVolumePercent = this.activeDevice.volume_percent;
-      this.activeDevice.volume_percent = 0;
+  toggle_mute(volume_percent: number): void {
+    if (volume_percent > 0) {
+      this.lastVolumePercent = volume_percent;
+      this.store.dispatch(fromPlayerActions.setPlaybackVolumeFooter({volume_percent: 0}));
     } else {
-      this.activeDevice.volume_percent = this.lastVolumePercent;
+      this.store.dispatch(fromPlayerActions.setPlaybackVolumeFooter({volume_percent: this.lastVolumePercent}));
     }
-    this.playerService.set_playback_volume(this.activeDevice.volume_percent);
   }
 
-  playback_clicked(event: MouseEvent): void {
+  playback_clicked(playbackState: PlaybackState, event: MouseEvent): void {
     const element = document.getElementById('playback-slider');
     if (element) {
-      this.playbackState$.subscribe((playbackState: PlaybackState) => {
-        const width = element.getBoundingClientRect().width;
-        const new_position_ms = Math.round(playbackState.item.duration_ms * (event.offsetX / width));
-        this.playbackTimerWidthPx = event.offsetX;
-        playbackState.progress_ms = new_position_ms;
-        this.playerService.seek_to_position(new_position_ms);
-      })
+      const width = element.getBoundingClientRect().width;
+      const new_position_ms = Math.round(playbackState.item.duration_ms * (event.offsetX / width));
+      this.playbackTimerWidthPx = event.offsetX;
+      this.store.dispatch(fromPlayerActions.setProgressMSFooter({ progress_ms: new_position_ms }));
     }
   }
 
@@ -253,8 +188,8 @@ export class PlayerFooterComponent implements OnInit {
     const element = document.getElementById('sound-slider');
     if (element) {
       let width = element.getBoundingClientRect().width;
-      this.activeDevice.volume_percent = Math.round(event.offsetX * 100 / width);
-      this.playerService.set_playback_volume(this.activeDevice.volume_percent);
+      const new_volume_percent: number = Math.round(event.offsetX * 100 / width);
+      this.store.dispatch(fromPlayerActions.setPlaybackVolumeFooter({volume_percent: new_volume_percent}));
     }
   }
 
@@ -265,30 +200,17 @@ export class PlayerFooterComponent implements OnInit {
   }
 
   start_timer(): void {
-    this.timerSubscription = this.timer.subscribe(() => {
-      this.playbackState$.subscribe((playbackState: PlaybackState) => {
-
-        if (playbackState.progress_ms >= playbackState.item.duration_ms - 1000) {
-          this.stop_timer();
-          // this.get_playback_state();
-          this.playerService.refresh_playback_state();
-        }
-        playbackState.progress_ms = playbackState.progress_ms + 1000;
+    if (!this.timerSubscription || this.timerSubscription.closed) {
+      this.timerSubscription = this.timer.subscribe(() => {
+        this.store.dispatch(fromPlayerActions.incrementProgressMSFooter());
         this.set_playback_width();
       })
-    })
+    }
   }
 
   stop_timer(): void {
     this.timerSubscription.unsubscribe();
-  }
-
-  get_artist_list(track: Track): string {
-    let artists = '';
-    for (let artist of track.artists) {
-      artists = artists + artist.name + ', ';
-    }
-    return artists.slice(0, artists.length - 2);
+    // this.timerSubscription == null;
   }
 
   get_device_icons(device_type: string, size?: string): string[] {

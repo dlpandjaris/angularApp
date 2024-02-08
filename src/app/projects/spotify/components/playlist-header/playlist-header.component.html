@@ -1,0 +1,15 @@
+<div class="main-header">
+  <img id="coverImage" [src]="coverImageUrl" draggable="false"/>
+  <div class="main-header-info">
+    <span id="type">{{type}}</span>
+    <span id="title">{{title}}</span>
+    <span id="info">
+      <a *ngIf="author.images[0].url">
+        <img [src]="author.images[0].url" draggable="false"/>
+      </a>
+      <span id="user">{{author.display_name}}</span>
+      <span id="count">{{countLabel}}</span>
+      <span id="duration">{{durationLabel}}</span>
+    </span>
+  </div>
+</div>

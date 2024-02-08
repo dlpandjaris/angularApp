@@ -10,7 +10,7 @@ const nullPlaybackState = {
     is_active: false,
     is_private_session: false,
     is_restricted: false,
-    name: '',
+    name: 'Web Playback SDK',
     type: '',
     volume_percent: 0,
     supports_volume: false
@@ -140,6 +140,7 @@ export const reducer = createReducer(
       error: action.error
     }
   }),
+
   on(PlayerActions.toggleShuffleSuccess, (state, action) => {
     return {
       ...state,
@@ -149,6 +150,13 @@ export const reducer = createReducer(
       }
     }
   }),
+  on(PlayerActions.toggleShuffleFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
   on(PlayerActions.skipPreviousFailure, (state, action) => {
     return {
       ...state,
@@ -161,8 +169,8 @@ export const reducer = createReducer(
       error: action.error
     }
   }),
+
   on(PlayerActions.togglePlaySuccess, (state, action) => {
-    console.log(action)
     return {
       ...state,
       playbackState: {
@@ -170,7 +178,125 @@ export const reducer = createReducer(
         is_playing: action.is_playing
       }
     }
-  })
+  }),
+  on(PlayerActions.togglePlayFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.toggleRepeatSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        repeat_state: action.repeat_state
+      }
+    }
+  }),
+  on(PlayerActions.toggleRepeatFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.incrementProgressMSSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        progress_ms: state.playbackState.progress_ms + 1000
+      }
+    }
+  }),
+  on(PlayerActions.incrementProgressMSFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.setProgressMSSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        progress_ms: action.progress_ms
+      }
+    }
+  }),
+  on(PlayerActions.setProgressMSFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.setActiveDeviceSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        device: action.device
+      }
+    }
+  }),
+  on(PlayerActions.setActiveDeviceFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.setPlaybackVolumeSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        device: {
+          ...state.playbackState.device,
+          volume_percent: action.volume_percent
+        }
+      }
+    }
+  }),
+  on(PlayerActions.setPlaybackVolumeFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.playTrackSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        item: action.track
+      }
+    }
+  }),
+  on(PlayerActions.playTrackFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+  on(PlayerActions.playPlaylistSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        context: {
+          ...state.playbackState.context,
+          uri: action.uri
+        }
+      }
+    }
+  }),
+
 );
 
 export const playerFeature = createFeature({

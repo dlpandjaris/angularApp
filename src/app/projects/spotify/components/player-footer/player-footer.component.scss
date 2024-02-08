@@ -167,8 +167,10 @@ div.right-controls button {
   border-radius: 4px;
 }
 
-.song-name,
-.artist-name {
+.song-name a,
+.artist-name a {
+  text-decoration: none;
+  color: white;
   font-weight: 400;
   font-family: var(--font-family,CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif));
   overflow: hidden;  
@@ -180,17 +182,43 @@ div.right-controls button {
   max-width: 100%;
 }
 
+.song-name a:hover,
+.artist-link a:hover {
+  text-decoration: underline;
+  color: white;
+}
+
 .song-name {
-  font-size: 0.875rem;
-  color: #fff;
   grid-area: title;
   justify-self: start;
+}
+
+.song-name a {
+  font-size: 0.875rem;
+  color: #fff;
   font-weight: 600;
 }
 
 .artist-name {
   font-size: 0.75rem;
   color: #b3b3b3;
+  display: flex;
+}
+
+.artist-link {
+  display: flex;
+  align-items: baseline;
+}
+
+.artist-link a {
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: #b3b3b3;
+  font-weight: 400;
+}
+.artist-link:not(:last-child)::after {
+  content: ",";
+  margin-right: 4px;
 }
 
 .left-controls,

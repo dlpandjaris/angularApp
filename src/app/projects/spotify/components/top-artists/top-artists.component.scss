@@ -1,0 +1,144 @@
+.background-gradient {
+  background-image: linear-gradient(rgba(0,0,0,.6) 0,#121212 100%);
+  margin-bottom: -232px;
+  height: 232px;
+  z-index: -1;
+}
+
+.play-bar {
+  padding: 24px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  > * {
+    align-self: center;
+  }
+
+  .play-btn {
+    width: 56px;
+    height: 56px;
+    border: none;
+    padding: 0;
+    border-radius: 50%;
+    background-color: rgb(29, 185, 84);
+
+    :hover {
+      transform: scale(1.04);
+    }
+
+    .play-svg {
+      max-height: 100%;
+      display: flex;
+    }
+
+    svg {
+      fill: black;
+      position: relative;
+      left: 16px;
+      top: 16px;
+    }
+  }
+
+  .card {
+    --bs-card-border-width: 0px;
+    --bs-btn-font-family: sans-serif;
+    --bs-card-border-radius: 4px;
+    --bs-card-bg: transparent;
+    margin-left: 3rem;
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  .btn {
+    --bs-btn-font-family: sans-serif;
+    --bs-btn-color: #b3b3b3;
+    --bs-btn-border-radius: 4px;
+    margin: 0 0.5rem;
+    transition: 0s;
+    position: relative;
+
+    .term-tooltip {
+      visibility: hidden;
+      background-color: black;
+      border-radius: 4px;
+      padding: 8px;
+      font-size: 1rem;
+
+      position: absolute;
+      z-index: 1;
+      bottom: 120%;
+      left: 50%;
+      margin-left: -50%;
+    }
+
+    .term-tooltip::after {
+      content: " ";
+      position: absolute;
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -8px;
+      border-width: 8px;
+      border-style: solid;
+      border-color: black transparent transparent transparent;
+    }
+  }
+
+  .btn:hover {
+    color: white;
+    border: 1px solid #b3b3b3;
+
+    .term-tooltip {
+      visibility: visible;
+    }
+  }
+
+  .btn-selected {
+    --bs-btn-bg: rgb(29, 185, 84);
+    --bs-btn-color: black;
+  }
+}
+
+.top-list {
+  padding: 0 32px;
+  color: #b3b3b3;
+
+  .top-list-header {
+    height: 36px;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
+    margin: 0 -16px 11.5px;
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+
+    display: grid;
+    grid-template-columns:
+      [index] 16px
+      [first] minmax(120px, 3fr)
+      [var1] minmax(120px, 4fr)
+      [last] minmax(120px, 1fr);
+    grid-gap: 16px;
+
+    .header-text {
+      display: flex;
+      align-items: center;
+      font-family: sans-serif;
+      font-size: 0.875rem;
+      font-weight: 400;
+    }
+
+    #last-col.header-text {
+      justify-content: flex-end;
+      margin-right: 32px;
+    }
+
+    .header-text:hover {
+      color: white;
+      cursor: pointer;
+    }
+  }
+}

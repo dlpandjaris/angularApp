@@ -27,7 +27,15 @@ export const initialState: State = {
     },
     href: '',
     id: '',
-    images: [],
+    images: [{
+      url: '',
+      height: 0,
+      width: 0
+    },{
+      url: '',
+      height: 0,
+      width: 0
+    }],
     product: '',
     type: '',
     uri: ''

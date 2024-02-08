@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Playlist } from '../models/playlist';
-import { PlaylistDetails } from '../models/playlist-details';
 import { Track } from '../models/track';
-import { PlaylistUpdate } from '../models/playlist-update';
 import { AudioFeatures } from '../models/audio-features';
 
 @Injectable({

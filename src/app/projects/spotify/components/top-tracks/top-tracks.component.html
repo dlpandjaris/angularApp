@@ -1,0 +1,60 @@
+<div [style.background-color]="background_color">
+  <app-playlist-header *ngIf="userProfile$ | async as userProfile"
+    [coverImageUrl]="userProfile.images[1]!.url"
+    type="Feature"
+    title="Your Top Songs"
+    [author]="userProfile"
+    [countLabel]="top_tracks.length.toString() + ' songs,'"
+    [durationLabel]="'about ' + get_total_duration()"></app-playlist-header>
+</div>
+
+<div style="isolation:isolate;">
+  <div class="background-gradient" [style.background-color]="background_color"></div>
+  <div class="play-bar">
+    <button class="play-btn" (click)="toggle_play_all()">
+      <div class="play-svg">
+        <svg *ngIf="playbackState$ | async as playbackState">
+          <path *ngIf="!playlistPlaying || !playbackState.is_playing" [attr.d]="iconProvider.bigPlay"></path>
+          <path *ngIf="playlistPlaying && playbackState.is_playing" [attr.d]="iconProvider.bigPause"></path>
+        </svg>
+      </div>
+    </button>
+    <div class="card">
+      <div class="card-body">
+        <div class="btn-group-lg" role="group" aria-label="Term">
+          <button [ngClass]="this.term == 'short_term' ? 'btn btn-selected' : 'btn btn-unselected'" 
+            type="button" (click)="this.setTerm('short_term')"
+            >Short<span class="term-tooltip">Last 4 Weeks</span></button>
+          <button [ngClass]="this.term == 'medium_term' ? 'btn btn-selected' : 'btn btn-unselected'" 
+            type="button" (click)="this.setTerm('medium_term')"
+            >Medium<span class="term-tooltip">Last 6 Months</span></button>
+          <button [ngClass]="this.term == 'long_term' ? 'btn btn-selected' : 'btn btn-unselected'" 
+            type="button"  (click)="this.setTerm('long_term')"
+            >Long<span class="term-tooltip">Last Several Years</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="top-list">
+    <div class="top-list-header">
+      <div class="header-text" style="font-size: 16px; justify-self: end;">#</div>
+      <div class="header-text" (click)="toggle_sort('title')">Title</div>
+      <div class="header-text" (click)="toggle_sort('album')">Album</div>
+      <div class="header-text" (click)="toggle_sort('release')">Release Date</div>
+      <div class="header-text" (click)="toggle_sort('duration')" style="justify-content: flex-end;">
+        <svg class="play-svg">
+          <path [attr.d]="iconProvider.clockStart"></path>
+          <path [attr.d]="iconProvider.clockEnd"></path>
+        </svg>
+      </div>
+    </div>
+    <app-track-grid-item
+      *ngFor="let track of sort_tracks();"
+      [track]="track.track"
+      [rank]="track.rank"
+      [isFavorite]="isFavorite[track.rank]">
+    </app-track-grid-item>
+  </div>
+</div>

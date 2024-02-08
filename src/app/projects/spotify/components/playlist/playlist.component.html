@@ -1,0 +1,65 @@
+<div [style.background-color]="background_color">
+  <app-playlist-header *ngIf="playlist$ | async as playlist"
+    [coverImageUrl]="playlist.images[1].url"
+    [type]="playlist.type"
+    [title]="playlist.name"
+    [author]="{'country':'','display_name':playlist.owner.display_name,'email':'','explicit_content':{'filter_enabled':false,'filter_locked':false},'external_urls':{'spotify':playlist.external_urls.spotify},'followers':{'href':playlist.followers.href,'total':playlist.followers.total},'href':playlist.href,'id':playlist.id,'images':[{'url':'','height':0,'width':0}],'product':'','type':playlist.type,'uri': playlist.uri}"
+    [countLabel]="playlist.tracks.items.length.toString() + ' songs,'"
+    [durationLabel]="'about ' + get_total_duration(playlist.tracks.items)">
+  </app-playlist-header>
+</div>
+
+<div *ngIf="playlist$ | async as playlist" style="isolation:isolate;">
+  <div class="background-gradient" [style.background-color]="background_color"></div>
+  <div class="play-bar">
+
+    <ng-container *ngIf="(context$ | async) as context">
+      <ng-container *ngIf="(isPlaying$ | async) as isPlaying">
+        <button class="play-button"
+          (click)="toggle_play(playlist, true, context)">
+          <svg class="play-icon" viewBox="0 0 24 24">
+            <path [attr.d]="playlist.uri == context.uri ? iconProvider.bigPause: iconProvider.bigPlay"></path>
+          </svg>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="!(isPlaying$ | async) as isPlaying">
+        <button class="play-button"
+          (click)="toggle_play(playlist, false, context)">
+          <svg class="play-icon" viewBox="0 0 24 24">
+            <path [attr.d]="iconProvider.bigPlay"></path>
+          </svg>
+        </button>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!(context$ | async) as context">
+      <button class="play-button"
+        (click)="toggle_play(playlist, false)">
+        <svg class="play-icon" viewBox="0 0 24 24">
+          <path [attr.d]="iconProvider.bigPlay"></path>
+        </svg>
+      </button>
+    </ng-container>
+  </div>
+
+  <div class="top-list">
+    <div class="top-list-header">
+      <div class="header-text" style="font-size: 16px; justify-self: end;">#</div>
+      <div class="header-text" (click)="toggle_sort('title')">Title</div>
+      <div class="header-text" (click)="toggle_sort('album')">Album</div>
+      <div class="header-text" (click)="toggle_sort('release')">Release Date</div>
+      <div class="header-text" (click)="toggle_sort('duration')" style="justify-content: flex-end;">
+        <svg class="play-svg">
+          <path [attr.d]="iconProvider.clockStart"></path>
+          <path [attr.d]="iconProvider.clockEnd"></path>
+        </svg>
+      </div>
+    </div>
+    <!-- <app-track-grid-item
+      *ngFor="let item of sort_tracks(playlist.tracks.items);"
+      [track]="item.track"
+      [rank]="item.rank"
+      [isFavorite]="isFavorite[item.rank]">
+    </app-track-grid-item> -->
+  </div>
+</div>

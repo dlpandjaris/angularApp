@@ -70,7 +70,8 @@ export class SpotifyComponent implements OnInit {
                          +" user-read-playback-state user-modify-playback-state"
                          +" playlist-read-private playlist-modify-public"
                          +" playlist-modify-private playlist-read-collaborative"
-                         +" user-library-read user-library-modify streaming");
+                         +" user-library-read user-library-modify streaming"
+                         +" user-follow-read user-follow-modify");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 

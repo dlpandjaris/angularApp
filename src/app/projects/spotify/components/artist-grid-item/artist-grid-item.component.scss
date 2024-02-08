@@ -1,0 +1,138 @@
+._row {
+  height: 56px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 16px;
+  margin: 0 -16px;
+  font-family: sans-serif;
+
+  display: grid;
+  grid-template-columns:
+    [index] 16px
+    [first] minmax(120px, 3fr)
+    [var1] minmax(120px, 4fr)
+    [last] minmax(120px, 1fr);
+  grid-gap: 16px;
+
+  .column {
+    display: flex;
+    align-items: center;
+
+    .song-name > a {
+      font-size: 1rem;
+      text-decoration: none;
+      font-weight: 400;
+    }
+    .artist-link a, a {
+      font-size: 0.875rem;
+      text-decoration: none;
+      color: #b3b3b3;
+      font-weight: 400;
+    }
+    .artist-link:not(:last-child)::after {
+      content: ", ";
+      margin-right: 4px;
+    }
+
+    .song-name a:hover,
+    .artist-link a:hover,
+    > a:hover {
+      text-decoration: underline;
+    }
+
+    > p {
+      font-size: 0.875rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .play-svg {
+      height: 16px;
+      width: 16px;
+      display: flex;
+      fill: transparent;
+      background-color: transparent;
+      border: none;
+      padding: 0;
+      z-index: 1;
+    }
+
+    .item-index {
+      color: var(--text-subdued,#b3b3b3);
+      display: inline-block;
+      align-items: right;
+      height: 16px;
+      min-height: 16px;
+      min-width: 16px;
+      position: relative;
+      width: var(--tracklist-index-column-width,16px);
+
+      > span {
+        top: -4px;
+        right: 0.1em;
+      }
+
+      img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+    
+    .item-index > * {
+      position: absolute;
+    }
+
+    > span {
+      font-size: 1rem;
+    }
+
+    > img {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      margin-right: 12px;
+    }
+  }
+
+  .explicit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: hsla(0, 0%, 100%, 0.6);
+    color: #121212;
+    padding: 3px 5px;
+    border-radius: 2px;
+    font-size: 9px;
+    margin-right: 8px;
+  }
+}
+
+._row:hover {
+  background-color: hsla(0, 0%, 100%, 0.1);
+  .column .play-svg .elipses,
+  .column .play-svg .heart {
+    fill: #b3b3b3;
+  }
+  
+  .column .play-svg .play {
+    fill: white;
+  }
+
+  .item-index > span {
+    color: transparent;
+  }
+
+  .item-index button img {
+    display: none;
+  }
+
+  .column a, p {
+    color: white;
+  }
+
+  .column .artist-link a {
+    color: white;
+  }
+}

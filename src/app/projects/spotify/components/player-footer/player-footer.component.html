@@ -1,5 +1,5 @@
-<footer class="sticky-bottom">
-  <div class="__container" *ngIf="playbackState$ | async as playbackState">
+<footer class="sticky-bottom" *ngIf="playbackState$ | async as playbackState">
+  <div class="__container">
     <div class="left-controls">
       <div class="song">
         <div class="song-picture" *ngIf="playbackState.item.album.images[2]">
@@ -7,10 +7,13 @@
         </div>
         <div class="song-info">
           <div class="song-name">
-            <p>{{playbackState.item.name}}</p>
+            <a href="https://open.spotify.com/track/{{playbackState.item.id}}" target="_blank">{{playbackState.item.name}}</a>
           </div>
           <div class="artist-name">
-            <p>{{get_artist_list(playbackState.item)}}</p>
+            <div class="artist-link" *ngFor="let artist of playbackState.item.artists">
+              <a href="https://open.spotify.com/artist/{{artist.id}}" target="_blank"
+                >{{artist.name}}</a>
+            </div>
           </div>
         </div>
         <button class="player-button" (click)="toggle_favorite(playbackState.item)">
@@ -37,7 +40,7 @@
             <path [attr.d]="iconProvider.previous"></path>
           </svg>
         </button>
-        <button class="play-button player-button" style="background-color: white; margin: 0 12px;" (click)="toggle_play(playbackState.is_playing)">
+        <button class="play-button player-button" style="background-color: white; margin: 0 12px;" (click)="toggle_play(playbackState)">
           <svg class="playback-svg" style="fill: black; width: 16px;">
             <path [attr.d]="playbackState.is_playing ? iconProvider.pause: iconProvider.play"></path>
           </svg>
@@ -47,15 +50,17 @@
             <path [attr.d]="iconProvider.next"></path>
           </svg>
         </button>
-        <button class="player-button" (click)="toggle_repeat()">
-          <svg class="playback-svg" [style.fill]="repeatIconColor">
-            <path [attr.d]="iconProvider.repeat"></path>
+        <button class="player-button" (click)="toggle_repeat(playbackState.repeat_state)">
+          <svg class="playback-svg" [style.fill]="playbackState.repeat_state != 'off' ? this.green: this.gray">
+            <path *ngIf="playbackState.repeat_state != 'track'" [attr.d]="iconProvider.repeatContext"></path>
+            <path *ngIf="playbackState.repeat_state == 'track'" [attr.d]="iconProvider.repeatTrackStart"></path>
+            <path *ngIf="playbackState.repeat_state == 'track'" [attr.d]="iconProvider.repeatTrackEnd"></path>
           </svg>
         </button>
       </div>
       <div class="playback-bar">
         <div class="playback-time" style="text-align: right;">{{ms_to_min_sec(playbackState.progress_ms)}}</div>
-          <div class="playback-slider" id="playback-slider" (click)="playback_clicked($event)">
+          <div class="playback-slider" id="playback-slider" (click)="playback_clicked(playbackState, $event)">
             <div class="playback-progress" id="playback-progress">
               <div class="bar" [style.width.px]="playbackTimerWidthPx"></div>
               <div 
@@ -85,7 +90,7 @@
     
     <div class="right-controls">
 
-      <div class="sound-bar" *ngIf="activeDevice">
+      <div class="sound-bar">
         <ng-template #devicePickerContent>
           <div class="device-picker">
             <div class="device-picker-header">
@@ -93,11 +98,11 @@
                 <img class="play-animation" src="https://open.spotifycdn.com/cdn/images/device-picker-equaliser-animation.946e7243.webp">
               </div>
               <ng-template #currentDeviceIconBlock>
-                <svg class="device-picker-svg" style="fill: rgb(29, 185, 84)" *ngIf="activeDevice.name != 'Web Playback SDK'">
-                  <path *ngFor="let d of get_device_icons(activeDevice.type, 'big')" [attr.d]="d"></path>
+                <svg class="device-picker-svg" style="fill: rgb(29, 185, 84)" *ngIf="playbackState.device.name != 'Web Playback SDK'">
+                  <path *ngFor="let d of get_device_icons(playbackState.device.type, 'big')" [attr.d]="d"></path>
                 </svg>
-                <svg class="device-picker-svg" *ngIf="activeDevice.name == 'Web Playback SDK'">
-                  <path *ngFor="let d of get_device_icons(activeDevice.type, 'big')" [attr.d]="d"></path>
+                <svg class="device-picker-svg" *ngIf="playbackState.device.name == 'Web Playback SDK'">
+                  <path *ngFor="let d of get_device_icons(playbackState.device.type, 'big')" [attr.d]="d"></path>
                 </svg>
               </ng-template>
               <div id="current-device">
@@ -110,7 +115,7 @@
                     <path [attr.d]="iconProvider.deviceNameDecoratorEnd"></path>
                   </svg>
                   <div class="current-device-text">
-                    <p>{{activeDevice.name}}</p>
+                    <p>{{playbackState.device.name}}</p>
                   </div>
                 </div>
               </div>
@@ -121,7 +126,7 @@
               </div>
               <ul class="device-list">
                 <li *ngFor="let device of devices">
-                  <div *ngIf="device.id != activeDevice.id">
+                  <div *ngIf="device.id != playbackState.device.id">
                     <button class="device-button" (click)="set_playback_device(device)">
                       <svg class="device-picker-svg">
                         <path *ngFor="let d of get_device_icons(device.type, 'big')" [attr.d]="d"></path>
@@ -160,33 +165,33 @@
         </ng-template>
 
         <div style="position: relative">
-          <div class="device-carrot" *ngIf="activeDevice.name != 'Web Playback SDK'"></div>
+          <div class="device-carrot" *ngIf="playbackState.device.name != 'Web Playback SDK'"></div>
           <button class="player-button" [ngbPopover]="devicePickerContent" (click)="get_available_devices()">
-            <svg class="playback-svg" [style.fill]="activeDevice.name == 'Web Playback SDK' ? 'hsla(0, 0%, 100%, 0.7)': 'rgb(29, 185, 84)'">
-              <path *ngFor="let d of get_device_icons(activeDevice.type, 'small')" [attr.d]="d"></path>
+            <svg class="playback-svg" [style.fill]="playbackState.device.name == 'Web Playback SDK' ? 'hsla(0, 0%, 100%, 0.7)': 'rgb(29, 185, 84)'">
+              <path *ngFor="let d of get_device_icons(playbackState.device.type, 'small')" [attr.d]="d"></path>
             </svg>
           </button>
         </div>
 
-        <button class="player-button" (click)="toggle_mute()">
-          <svg class="playback-svg" *ngIf="activeDevice.volume_percent <= 0">
+        <button class="player-button" (click)="toggle_mute(playbackState.device.volume_percent)">
+          <svg class="playback-svg" *ngIf="playbackState.device.volume_percent <= 0">
             <path [attr.d]="iconProvider.volumeMuteStart"></path>
             <path [attr.d]="iconProvider.volumeMuteEnd"></path>
           </svg>
-          <svg class="playback-svg" *ngIf="activeDevice.volume_percent > 0 && activeDevice.volume_percent < 33">
+          <svg class="playback-svg" *ngIf="playbackState.device.volume_percent > 0 && playbackState.device.volume_percent < 33">
             <path [attr.d]="iconProvider.volumeLow"></path>
           </svg>
-          <svg class="playback-svg" *ngIf="activeDevice.volume_percent > 33 && activeDevice.volume_percent < 66">
+          <svg class="playback-svg" *ngIf="playbackState.device.volume_percent > 33 && playbackState.device.volume_percent < 66">
             <path [attr.d]="iconProvider.volumeMedium"></path>
           </svg>
-          <svg class="playback-svg" *ngIf="activeDevice.volume_percent > 66">
+          <svg class="playback-svg" *ngIf="playbackState.device.volume_percent > 66">
             <path [attr.d]="iconProvider.volumeLow"></path>
             <path [attr.d]="iconProvider.volumeHigh"></path>
           </svg>
         </button>
         <div class="sound-slider" id="sound-slider" (click)="volume_clicked($event)">
           <div class="audio-progress" id="audio-progress">
-            <div class="bar" [style.width.%]="activeDevice.volume_percent"></div>
+            <div class="bar" [style.width.%]="playbackState.device.volume_percent"></div>
             <div 
               cdkDrag 
               cdkDragBoundary=".audio-progress">
@@ -200,13 +205,13 @@
       </div>
     </div>
   </div>
-  <div class="device-banner" *ngIf="activeDevice && (activeDevice.name != 'Web Playback SDK')">
+  <div class="device-banner" *ngIf="playbackState.device && (playbackState.device.name != 'Web Playback SDK')">
     <svg class="playback-svg" *ngIf="true" style="fill: black;">
       <path [attr.d]="iconProvider.deviceNameDecoratorStart"></path>
       <path [attr.d]="iconProvider.deviceNameDecoratorEnd"></path>
     </svg>
     <div class="current-device-text">
-      <p style="color: black; font-size: 0.875rem;">Listening on {{activeDevice.name}}</p>
+      <p style="color: black; font-size: 0.875rem;">Listening on {{playbackState.device.name}}</p>
     </div>
   </div>
 </footer>
