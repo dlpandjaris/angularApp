@@ -43,17 +43,12 @@ export class PlaylistListComponent {
       })
   }
 
-  play_playlist(playlist: Playlist, isPlaying: boolean, context?: Context) {
-    console.log(isPlaying)
-    if (isPlaying) {
-      this.store.dispatch(fromPlayerActions.togglePlayFooter());
-    } else {
-      this.store.dispatch(fromPlayerActions.playPlaylist({playlist}));
-    }
+  play_playlist(playlist: Playlist) {
+    this.store.dispatch(fromPlayerActions.playPlaylist({playlist}));
   }
 
   navigate_to_playlist(playlist: Playlist): void {
     this.router.navigateByUrl(`projects/spotify/playlists/${playlist.id}`);
-    console.log(this.router.config);
+    // console.log(this.router.config);
   }
 }

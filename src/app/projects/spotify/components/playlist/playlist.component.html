@@ -1,6 +1,6 @@
 <div [style.background-color]="background_color">
   <app-playlist-header *ngIf="playlist$ | async as playlist"
-    [coverImageUrl]="playlist.images[1].url"
+    [coverImageUrl]="select_cover_image(playlist.images)"
     [type]="playlist.type"
     [title]="playlist.name"
     [author]="{'country':'','display_name':playlist.owner.display_name,'email':'','explicit_content':{'filter_enabled':false,'filter_locked':false},'external_urls':{'spotify':playlist.external_urls.spotify},'followers':{'href':playlist.followers.href,'total':playlist.followers.total},'href':playlist.href,'id':playlist.id,'images':[{'url':'','height':0,'width':0}],'product':'','type':playlist.type,'uri': playlist.uri}"
@@ -16,7 +16,7 @@
     <ng-container *ngIf="(context$ | async) as context">
       <ng-container *ngIf="(isPlaying$ | async) as isPlaying">
         <button class="play-button"
-          (click)="toggle_play(playlist, true, context)">
+          (click)="toggle_play(playlist)">
           <svg class="play-icon" viewBox="0 0 24 24">
             <path [attr.d]="playlist.uri == context.uri ? iconProvider.bigPause: iconProvider.bigPlay"></path>
           </svg>
@@ -24,7 +24,7 @@
       </ng-container>
       <ng-container *ngIf="!(isPlaying$ | async) as isPlaying">
         <button class="play-button"
-          (click)="toggle_play(playlist, false, context)">
+          (click)="toggle_play(playlist)">
           <svg class="play-icon" viewBox="0 0 24 24">
             <path [attr.d]="iconProvider.bigPlay"></path>
           </svg>
@@ -34,7 +34,7 @@
 
     <ng-container *ngIf="!(context$ | async) as context">
       <button class="play-button"
-        (click)="toggle_play(playlist, false)">
+        (click)="toggle_play(playlist)">
         <svg class="play-icon" viewBox="0 0 24 24">
           <path [attr.d]="iconProvider.bigPlay"></path>
         </svg>
@@ -55,11 +55,11 @@
         </svg>
       </div>
     </div>
-    <!-- <app-track-grid-item
+    <app-track-grid-item
       *ngFor="let item of sort_tracks(playlist.tracks.items);"
       [track]="item.track"
       [rank]="item.rank"
       [isFavorite]="isFavorite[item.rank]">
-    </app-track-grid-item> -->
+    </app-track-grid-item>
   </div>
 </div>

@@ -24,3 +24,8 @@ export const selectIsPlaying = createSelector(
   selectPlayerFeature,
   (state: fromPlayer.State) => state.playbackState.is_playing
 );
+
+export const selectIsFavorite = createSelector(
+  selectPlayerFeature,
+  (state: fromPlayer.State) => state.isFavorite
+);

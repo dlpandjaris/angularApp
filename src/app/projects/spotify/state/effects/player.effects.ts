@@ -7,7 +7,8 @@ import { PlayerService } from '../../services/player.service';
 import { PlaybackState } from '../../models/playback-state';
 import { Store } from '@ngrx/store';
 import { SpotifyAppState } from '..';
-import { selectPlayer } from '../selectors/player.selectors';
+import { selectIsFavorite, selectPlayer, selectTrack } from '../selectors/player.selectors';
+import { TrackService } from '../../services/track.service';
 
 
 @Injectable()
@@ -139,30 +140,23 @@ export class PlayerEffects {
     )
   })
 
-  playArtist$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(PlayerActions.playArtistTop),
-      withLatestFrom(this.store.select(selectPlayer)),
-      concatMap(([action, playbackState]) => {
-        return this.playerService.play_artist(playbackState.device.id, action.artist.uri).pipe(
-          delay(1000),
-          map(() => PlayerActions.playPlaylistSuccess({ uri: action.artist.uri })),
-          catchError((error) => of(PlayerActions.playTrackFailure({ error })))
-        );
-      })
-    )
-  })
-
   playPlaylist$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PlayerActions.playPlaylist),
       withLatestFrom(this.store.select(selectPlayer)),
       concatMap(([action, playbackState]) => {
-        return this.playerService.play_artist(playbackState.device.id, action.playlist.uri).pipe(
-          delay(1000),
-          map(() => PlayerActions.playPlaylistSuccess({ uri: action.playlist.uri })),
-          catchError((error) => of(PlayerActions.playTrackFailure({ error })))
-        );
+        if (playbackState.is_playing) {
+          return this.playerService.pause().pipe(
+            map(() => PlayerActions.togglePlaySuccess({ is_playing: false })),
+            catchError((error) => of(PlayerActions.togglePlayFailure({ error })))
+          );
+        } else {
+          return this.playerService.play_artist_or_playlist(playbackState.device.id, action.playlist.uri).pipe(
+            delay(1000),
+            map(() => PlayerActions.playPlaylistSuccess({ uri: action.playlist.uri })),
+            catchError((error) => of(PlayerActions.playTrackFailure({ error })))
+          );
+        }
       })
     )
   })
@@ -233,10 +227,43 @@ export class PlayerEffects {
     ));
   });
 
+  checkFavoriteTrack$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PlayerActions.checkFavoriteTrackFooter),
+      withLatestFrom(this.store.select(selectTrack)),
+      concatMap(([action, track]) => {
+        return this.trackService.check_users_saved_tracks(track.id).pipe(
+          map((is_favorite: boolean[]) => PlayerActions.checkFavoriteTrackSuccess({ is_favorite: is_favorite[0] })),
+          catchError((error) => of(PlayerActions.checkFavoriteTrackFailure({ error })))
+        );
+      }
+    ));
+  });
+
+  toggleFavoriteTrack$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PlayerActions.toggleFavoriteTrackFooter),
+      withLatestFrom(this.store.select(selectIsFavorite), this.store.select(selectTrack)),
+      concatMap(([action, isFavorite, track]) => {
+        if (isFavorite) {
+          return this.trackService.remove_users_saved_tracks([track.id]).pipe(
+            map(() => PlayerActions.toggleFavoriteTrackSuccess({ is_favorite: false })),
+            catchError((error) => of(PlayerActions.toggleFavoriteTrackFailure({ error })))
+          )
+        } else {
+          return this.trackService.save_tracks_for_current_user([track.id]).pipe(
+            map(() => PlayerActions.toggleFavoriteTrackSuccess({ is_favorite: true })),
+            catchError((error) => of(PlayerActions.toggleFavoriteTrackFailure({ error })))
+          );
+        }
+      }
+    ));
+  });
 
   constructor(
     private actions$: Actions,
     private playerService: PlayerService,
-    private store: Store<SpotifyAppState>
+    private store: Store<SpotifyAppState>,
+    private trackService: TrackService,
   ) {}
 }

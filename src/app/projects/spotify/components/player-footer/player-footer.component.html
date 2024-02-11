@@ -16,13 +16,13 @@
             </div>
           </div>
         </div>
-        <button class="player-button" (click)="toggle_favorite(playbackState.item)">
-          <svg *ngIf="isFavorite" class="playback-svg" style="fill: rgb(29, 185, 84);">
-            <path [attr.d]="iconProvider.favorited"></path>
+        <button *ngIf="(isFavorite$ | async) != null" class="player-button" (click)="toggle_favorite(playbackState.item)">
+          <svg class="playback-svg" [style.fill]="(isFavorite$ | async) ? 'rgb(29, 185, 84)': 'hsla(0,0%,100%,.7)'">
+            <path [attr.d]="(isFavorite$ | async) ? iconProvider.favorited: iconProvider.unfavorited"></path>
           </svg>
-          <svg *ngIf="!isFavorite" class="playback-svg" style="fill: hsla(0,0%,100%,.7)">
+          <!-- <svg *ngIf="!isFavorite | async" class="playback-svg" style="fill: hsla(0,0%,100%,.7)">
             <path [attr.d]="iconProvider.unfavorited"></path>
-          </svg>
+          </svg> -->
         </button>
       </div>
     </div>

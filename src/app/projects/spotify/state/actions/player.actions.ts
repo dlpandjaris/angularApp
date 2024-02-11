@@ -75,7 +75,7 @@ export const playArtistTop = createAction(
   props<{ artist: Artist }>()
 )
 export const playPlaylist = createAction(
-  '[Playlist Component] Play Artist',
+  '[Playlist Component] Play Playlist',
   props<{ playlist: Playlist }>()
 )
 export const playTrackSuccess = createAction(
@@ -148,6 +148,26 @@ export const setPlaybackVolumeSuccess = createAction(
 );
 export const setPlaybackVolumeFailure = createAction(
   '[Player Effect] Set Playback Volume Failure',
+  props<{ error: any }>()
+);
+
+export const checkFavoriteTrackFooter = createAction('[Player Footer Component] Check Favorite Track');
+export const checkFavoriteTrackSuccess = createAction(
+  '[Player Effect] Check Favorite Track Success',
+  props<{ is_favorite: boolean }>()
+);
+export const checkFavoriteTrackFailure = createAction(
+  '[Player Effect] Check Favorite Track Failure',
+  props<{ error: any }>()
+);
+
+export const toggleFavoriteTrackFooter = createAction('[Player Footer Component] Toggle Favorite Track');
+export const toggleFavoriteTrackSuccess = createAction(
+  '[Player Effect] Toggle Favorite Track Success',
+  props<{ is_favorite: boolean }>()
+);
+export const toggleFavoriteTrackFailure = createAction(
+  '[Player Effect] Toggle Favorite Track Failure',
   props<{ error: any }>()
 );
 

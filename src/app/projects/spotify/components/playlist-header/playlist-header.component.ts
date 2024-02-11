@@ -9,6 +9,7 @@ import { UserProfile } from '../../models/user-profile';
 export class PlaylistHeaderComponent {
 
   @Input() coverImageUrl!: string;
+  // @Input() bigCoverImageUrl!: string;
   @Input() type: string = 'Feature';
   @Input() title: string = '';
   @Input() author!: UserProfile;
@@ -20,7 +21,10 @@ export class PlaylistHeaderComponent {
   ) { }
 
   ngOnInit(): void {
+    // console.log(this.bigCoverImageUrl);
+    // if (!this.bigCoverImageUrl || this.bigCoverImageUrl == '') {
     this.get_background_color();
+    // }
   }
 
   set_background_color(color: string) {
@@ -49,7 +53,9 @@ export class PlaylistHeaderComponent {
         const imageRGB = this.buildRGB(imageData.data);
   
         const initialPalette = this.quantization(imageRGB, 0);
-        const color = this.orderByLuminance(initialPalette)[0];
+        // const vibrantPalette = this.removeNeutralColors(initialPalette);
+        // const color = this.orderByLuminance(vibrantPalette)[0];
+        const color = this.orderByVibrance(initialPalette)[0];
         this.set_background_color(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
       }
     }
@@ -131,6 +137,17 @@ export class PlaylistHeaderComponent {
 
   calculateLuminance(p: number[]): number {
     return 0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2];
+  };
+
+  removeNeutralColors(rgbValues: number[][]): number[][] {
+    console.log(rgbValues);
+    return rgbValues.filter((rgb) => Math.max(...rgb) - Math.min(...rgb) > 50);
+  };
+
+  orderByVibrance(rgbValues: number[][]): number[][] {
+    return rgbValues.sort((p1, p2) => {
+      return (Math.max(...p2) - Math.min(...p2)) - (Math.max(...p1) - Math.min(...p1));
+    });
   };
 
   orderByLuminance(rgbValues: number[][]): number[][] {

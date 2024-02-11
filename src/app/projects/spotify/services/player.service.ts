@@ -123,22 +123,16 @@ export class PlayerService {
     }
   });
 
-
   constructor(private http: HttpClient) { }
 
-  get_playback_state_subject(): Observable<PlaybackState> {
-    return this.playbackState$;
-  }
-
-  refresh_playback_state(): void {
-    console.log('refreshing playback state');
-    // this.get_playback_state()
-    this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
-      headers: { Authorization: `Bearer ${this.accessToken}` }
-      }).subscribe((playbackState: PlaybackState) => {
-        this.playbackState$.next(playbackState);
-      });
-  }
+  // refresh_playback_state(): void {
+  //   console.log('refreshing playback state');
+  //   this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
+  //     headers: { Authorization: `Bearer ${this.accessToken}` }
+  //     }).subscribe((playbackState: PlaybackState) => {
+  //       this.playbackState$.next(playbackState);
+  //     });
+  // }
 
   get_playback_state(): Observable<PlaybackState> {
     return this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
@@ -175,7 +169,7 @@ export class PlayerService {
     })
   }
 
-  play_artist(device_id: string, context_uri: string): Observable<any> {
+  play_artist_or_playlist(device_id: string, context_uri: string): Observable<any> {
     return this.http.put(`${this.baseUrl}/player/play`, {
       context_uri: context_uri
     }, {

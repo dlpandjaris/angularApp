@@ -16,7 +16,5 @@ export interface PlaylistTrack {
     uri: string;
   },
   is_local: boolean;
-  track: {
-    TrackObject: Track;
-  }
+  track: Track;
 }

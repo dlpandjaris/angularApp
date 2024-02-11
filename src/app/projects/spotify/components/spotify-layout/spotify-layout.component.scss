@@ -4,13 +4,24 @@
 
   display: grid;
   grid-template-rows: auto 1fr auto;
+  // grid-template-columns: 1fr 1fr;
   gap: 8px;
   padding: 8px;
 }
 
+._body {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+
 ._container {
   border-radius: 8px;
   background-color: #121212;
+  width: 100%;
   // background-color: rgb(224, 88, 112);
 
   display: flex;

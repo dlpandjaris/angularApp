@@ -6,6 +6,7 @@ import { Artist } from '../../models/artist';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { delay } from 'rxjs';
 
 declare var $: any;
 
@@ -32,6 +33,7 @@ export class SpotifyComponent implements OnInit {
       this.redirectToAuthCodeFlow();
     } else {
       this.getAccessToken();
+      delay(1000);
       this.router.navigate(['projects/spotify']);
     }
   }

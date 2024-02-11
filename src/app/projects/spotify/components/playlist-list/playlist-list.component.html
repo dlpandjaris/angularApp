@@ -6,7 +6,7 @@
       <ng-container *ngIf="(context$ | async) as context">
         <ng-container *ngIf="(isPlaying$ | async) as isPlaying">
           <button class="play-button"
-            (click)="play_playlist(playlist, true, context)">
+            (click)="play_playlist(playlist)">
             <svg class="play-icon" viewBox="0 0 24 24">
               <path [attr.d]="playlist.uri == context.uri ? iconProvider.bigPause: iconProvider.bigPlay"></path>
             </svg>
@@ -14,7 +14,7 @@
         </ng-container>
         <ng-container *ngIf="!(isPlaying$ | async) as isPlaying">
           <button class="play-button"
-            (click)="play_playlist(playlist, false, context)">
+            (click)="play_playlist(playlist)">
             <svg class="play-icon" viewBox="0 0 24 24">
               <path [attr.d]="iconProvider.bigPlay"></path>
             </svg>
@@ -24,7 +24,7 @@
 
       <ng-container *ngIf="!(context$ | async) as context">
         <button class="play-button"
-          (click)="play_playlist(playlist, false)">
+          (click)="play_playlist(playlist)">
           <svg class="play-icon" viewBox="0 0 24 24">
             <path [attr.d]="iconProvider.bigPlay"></path>
           </svg>

@@ -12,6 +12,8 @@ import { Context } from '../../models/context';
 import { selectContext, selectIsPlaying } from '../../state/selectors/player.selectors';
 import { PlaylistTrack } from '../../models/playlist-track';
 import { Track } from '../../models/track';
+import { Image } from '../../models/image';
+import * as fromPlayerActions from '../../state/actions/player.actions';
 
 @Component({
   selector: 'app-playlist',
@@ -45,7 +47,6 @@ export class PlaylistComponent {
     this.playlist$ = this.route.paramMap.pipe(
       concatMap(params => {
         let playlist_id = params.get('playlist_id')
-        // console.log(playlist_id);
         if (!playlist_id) {
           return new Observable<Playlist>();
         }
@@ -64,7 +65,7 @@ export class PlaylistComponent {
       console.log('checking favorites');
       let ids: string = '';
       for (let track of playlist.tracks.items) {
-        ids = ids + track.track.TrackObject.id + ',';
+        ids = ids + track.track.id + ',';
       }
       ids = ids.slice(0, ids.length - 1);
 
@@ -82,14 +83,14 @@ export class PlaylistComponent {
     this.background_color = color;
   }
 
-  toggle_play(playlist: Playlist, isPlaying: boolean, context?: Context): void {
-
+  toggle_play(playlist: Playlist): void {
+    this.store.dispatch(fromPlayerActions.playPlaylist({ playlist }));
   }
 
   sort_tracks(tracks: PlaylistTrack[]): {rank: number, track: Track}[] {
     let init_tracks: {rank: number, track: Track}[] = []
     tracks.forEach((track, index) => {
-      init_tracks.push({rank: index, track: track.track.TrackObject});
+      init_tracks.push({rank: index, track: track.track});
     });
 
     switch (this.sort_count) {
@@ -155,12 +156,21 @@ export class PlaylistComponent {
   get_total_duration(tracks: PlaylistTrack[]): string {
     let total_ms: number = 0;
     tracks.forEach((track) => {
-      // total_ms = total_ms + track.track.TrackObject.duration_ms;
+      total_ms = total_ms + track.track.duration_ms;
     });
-    // for (let item of playlist.tracks.items) {
-    //   total_ms = total_ms + item.track.TrackObject.duration_ms;
-    // }
     const hour_min = this.ms_to_hour_min(total_ms);
     return `${hour_min[0]} hr ${hour_min[1]} min`;
+  }
+
+  select_cover_image(images: Image[]): string {
+    let url: string = images[0].url;
+    for (let image of images) {
+      if (image.width == 300 || image.height == 300) {
+        url = image.url;
+        break;
+      }
+    }
+
+    return url;
   }
 }

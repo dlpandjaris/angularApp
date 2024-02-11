@@ -58,7 +58,6 @@ export class TopTracksComponent implements OnInit {
   }
   
   checkFavorites() {
-    console.log('checking favorites');
     let ids: string = '';
     for (let track of this.top_tracks) {
       ids = ids + track.id + ',';

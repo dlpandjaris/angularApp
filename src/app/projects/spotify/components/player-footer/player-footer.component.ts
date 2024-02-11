@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
-import { Observable, Subscription, timer } from 'rxjs';
+import { Observable, Subscription, map, timer } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 
 import { PlayerService } from '../../services/player.service';
@@ -11,9 +11,9 @@ import { IconProvider } from '../../models/icon-provider';
 import { WINDOW } from 'src/app/services/window';
 import { Track } from '../../models/track';
 import * as fromPlayerActions from '../../state/actions/player.actions';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { SpotifyAppState } from '../../state';
-import { selectPlayer, selectTrack } from '../../state/selectors/player.selectors';
+import { selectIsFavorite, selectIsPlaying, selectPlayer, selectTrack } from '../../state/selectors/player.selectors';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class PlayerFooterComponent implements OnInit {
 
   playIcon: string = IconProvider.play;
   favoriteIcon: string = IconProvider.unfavorited;
-  isFavorite: boolean = false;
+  // isFavorite: boolean = false;
 
   gray: string = 'rgb(178, 178, 178)';
   green: string = 'rgb(29, 185, 84)';
@@ -39,6 +39,8 @@ export class PlayerFooterComponent implements OnInit {
   repeatIconColor: string = this.gray;
 
   playbackState$!: Observable<PlaybackState>;
+  isFavorite$!: Observable<boolean>;
+  isPlaying$!: Observable<boolean>;
   track$!: Observable<Track>;
   devices: Device[] = [];
 
@@ -57,20 +59,27 @@ export class PlayerFooterComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.playbackState$ = this.store.select(selectPlayer);
     this.store.dispatch(fromPlayerActions.getPlayerFooter());
+    this.playbackState$ = this.store.select(selectPlayer);
 
     this.track$ = this.store.select(selectTrack);
+    this.isFavorite$ = this.store.select(selectIsFavorite);
+    this.isPlaying$ = this.store.select(selectIsPlaying)
 
     this.track$.subscribe((track: Track) => {
-      this.check_favorite(track);
-    })
+      this.store.dispatch(fromPlayerActions.checkFavoriteTrackFooter());
+    });
 
-    // this.connect_to_player();
     this.playbackState$.subscribe((playbackState: PlaybackState) => {
       this.set_playback_width();
-      playbackState.is_playing ? this.start_timer(): 0;
-    })
+      playbackState.is_playing ? this.start_timer(): this.stop_timer();
+    });
+
+    this.isPlaying$.pipe(
+      map((isPlaying: boolean) => isPlaying ? this.start_timer(): this.stop_timer())
+    );
+    // this.connect_to_player();
+
     await this.get_available_devices();
   }
   
@@ -87,12 +96,12 @@ export class PlayerFooterComponent implements OnInit {
     })
   }
   
-  check_favorite(track: Track) {
-    this.trackService.check_users_saved_tracks(track.id)
-    .subscribe((result: boolean[]) => {
-      this.isFavorite = result[0];
-    })
-  }
+  // check_favorite(track: Track) {
+  //   this.trackService.check_users_saved_tracks(track.id)
+  //   .subscribe((result: boolean[]) => {
+  //     this.isFavorite = result[0];
+  //   })
+  // }
   
   toggle_play(playbackState: PlaybackState): void {
     playbackState.is_playing ? this.stop_timer(): this.start_timer();
@@ -146,8 +155,7 @@ export class PlayerFooterComponent implements OnInit {
   }
 
   toggle_favorite(track: Track): void {
-    this.isFavorite ? this.trackService.remove_users_saved_tracks([track.id]): this.trackService.save_tracks_for_current_user([track.id]);
-    this.isFavorite = !this.isFavorite;
+    this.store.dispatch(fromPlayerActions.toggleFavoriteTrackFooter());
   }
 
   set_playback_device(device: Device): void {
@@ -203,14 +211,13 @@ export class PlayerFooterComponent implements OnInit {
     if (!this.timerSubscription || this.timerSubscription.closed) {
       this.timerSubscription = this.timer.subscribe(() => {
         this.store.dispatch(fromPlayerActions.incrementProgressMSFooter());
-        this.set_playback_width();
+        // this.set_playback_width();
       })
     }
   }
 
   stop_timer(): void {
     this.timerSubscription.unsubscribe();
-    // this.timerSubscription == null;
   }
 
   get_device_icons(device_type: string, size?: string): string[] {

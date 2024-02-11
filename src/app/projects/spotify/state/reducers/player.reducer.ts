@@ -116,11 +116,13 @@ const nullPlaybackState = {
 
 export interface State {
   playbackState: PlaybackState,
+  isFavorite: boolean,
   error: any
 }
 
 export const initialState: State = {
   playbackState: nullPlaybackState,
+  isFavorite: false,
   error: null
 };
 
@@ -294,6 +296,44 @@ export const reducer = createReducer(
           uri: action.uri
         }
       }
+    }
+  }),
+  on(PlayerActions.playPlaylistSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        context: {
+          ...state.playbackState.context,
+          uri: action.uri
+        }
+      }
+    }
+  }),
+
+  on(PlayerActions.checkFavoriteTrackSuccess, (state, action) => {
+    return {
+      ...state,
+      isFavorite: action.is_favorite
+    }
+  }),
+  on(PlayerActions.checkFavoriteTrackFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
+  on(PlayerActions.toggleFavoriteTrackSuccess, (state, action) => {
+    return {
+      ...state,
+      isFavorite: action.is_favorite
+    }
+  }),
+  on(PlayerActions.toggleFavoriteTrackFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
     }
   }),
 

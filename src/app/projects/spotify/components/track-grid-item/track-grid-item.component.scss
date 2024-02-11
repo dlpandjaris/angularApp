@@ -41,6 +41,12 @@
       text-decoration: underline;
     }
 
+    .song-name,
+    .artist-link {
+      max-width: 100%;
+      text-overflow: ellipsis;
+    }
+
     > p {
       font-size: 0.875rem;
       overflow: hidden;

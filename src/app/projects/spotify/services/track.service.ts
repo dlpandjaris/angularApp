@@ -35,19 +35,19 @@ export class TrackService {
     })
   }
 
-  save_tracks_for_current_user(ids: string[]): void {
-    this.http.put(`${this.baseUrl}/me/tracks`, {
+  save_tracks_for_current_user(ids: string[]): Observable<any> {
+    return this.http.put(`${this.baseUrl}/me/tracks`, {
       ids: ids
     }, {
       headers: { Authorization: `Bearer ${this.accessToken}` }
-    }).subscribe();
+    });
   }
   
-  remove_users_saved_tracks(ids: string[]): void {
-    this.http.delete(`${this.baseUrl}/me/tracks`, {
+  remove_users_saved_tracks(ids: string[]): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/me/tracks`, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       body: { ids: ids }
-    }).subscribe();
+    })
   }
 
   check_users_saved_tracks(ids: string): Observable<boolean[]> {

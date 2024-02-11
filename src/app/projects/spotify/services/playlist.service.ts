@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 import { Playlist } from '../models/playlist';
 import { PlaylistDetails } from '../models/playlist-details';
 import { Track } from '../models/track';
 import { PlaylistUpdate } from '../models/playlist-update';
 import { PlaylistPage } from '../models/playlist-page';
+import { PlaylistTrack } from '../models/playlist-track';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,31 @@ export class PlaylistService {
   get_playlist(playlist_id: string): Observable<Playlist> {
     return this.http.get<Playlist>(`${this.baseUrl}/playlists/${playlist_id}`, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
-    })
+    }).pipe(
+      switchMap((playlist: Playlist) => {
+        if (playlist.tracks.next) {
+          return this.http.get<{items: PlaylistTrack[]}>(playlist.tracks.next, {
+            headers: { Authorization: `Bearer ${this.accessToken}` },
+          }).pipe(
+            switchMap((moreTracks: {items: PlaylistTrack[]}) => {
+              playlist.tracks = {
+                ...playlist.tracks,
+                items: [...playlist.tracks.items, ...moreTracks.items]
+              };
+              return new Observable<Playlist>(observer => {
+                observer.next(playlist);
+                observer.complete();
+              });
+            })
+          )
+        } else {
+          return new Observable<Playlist>(observer => {
+            observer.next(playlist);
+            observer.complete();
+          });
+        }
+      })
+    )
   }
 
   change_playlist_details(playlist_id: string, playlist_details: PlaylistDetails): void {
