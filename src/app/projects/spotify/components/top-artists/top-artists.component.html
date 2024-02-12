@@ -19,21 +19,7 @@
         </svg>
       </div>
     </button>
-    <div class="card">
-      <div class="card-body">
-        <div class="btn-group-lg" role="group" aria-label="Term">
-          <button [ngClass]="this.term == 'short_term' ? 'btn btn-selected' : 'btn btn-unselected'" 
-            type="button" (click)="this.setTerm('short_term')"
-            >Short<span class="term-tooltip">Last 4 Weeks</span></button>
-          <button [ngClass]="this.term == 'medium_term' ? 'btn btn-selected' : 'btn btn-unselected'" 
-            type="button" (click)="this.setTerm('medium_term')"
-            >Medium<span class="term-tooltip">Last 6 Months</span></button>
-          <button [ngClass]="this.term == 'long_term' ? 'btn btn-selected' : 'btn btn-unselected'" 
-            type="button"  (click)="this.setTerm('long_term')"
-            >Long<span class="term-tooltip">Last Several Years</span></button>
-        </div>
-      </div>
-    </div>
+    <app-top-term-button [term]="term"></app-top-term-button>
   </div>
 
 

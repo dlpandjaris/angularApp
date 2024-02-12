@@ -89,12 +89,12 @@ export class TopArtistsComponent {
     this.playlistPlaying = true;
   }
 
-  setTerm(term: string) {
-    if (term != this.term) {
-      this.term = term;
-      this.sort_count = 0;
-      this.fetchTopArtists();
-    }
+  @HostListener('setTopTerm', ['$event'])
+  set_top_term(event: any) {
+    const term = event.detail;
+    this.term = term;
+    this.sort_count = 0;
+    this.fetchTopArtists();
   }
 
   sort_artists(): {rank: number, artist: Artist}[] {

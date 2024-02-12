@@ -171,4 +171,10 @@ export const toggleFavoriteTrackFailure = createAction(
   props<{ error: any }>()
 );
 
+export const resumePlaybackSuccess = createAction('[Player Effect] Resume Playback Success');
+export const resumePlaybackFailure = createAction(
+  '[Player Effect] Resume Playback Failure',
+  props<{ error: any }>()
+);
+
 // ng generate feature player --group=true --reducers=./index.ts --module=../components/spotify-layout/spotify-layout --api=true --skip-tests=true

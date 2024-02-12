@@ -50,7 +50,5 @@ export class ArtistGridItemComponent {
     this.usersService.followArtistsOrUsers('artist', this.artist.id).subscribe(() => {
       this.elementRef.nativeElement.dispatchEvent(event);
     });
-    
-    this.elementRef.nativeElement.dispatchEvent(event);
   }
 }

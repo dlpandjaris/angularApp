@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -19,6 +19,12 @@ export class SpotifyLayoutComponent {
   iconProvider = IconProvider;
   userProfile$!: Observable<UserProfile>;
 
+  @ViewChild('leftContainer') leftContainerRef!: ElementRef;
+  @ViewChild('rightContainer') rightContainerRef!: ElementRef;
+
+  leftContainerWidth: number = 60;
+  rightContainerWidth: number = 40;
+
   constructor(
     private store: Store<SpotifyAppState>
   ) {}
@@ -26,5 +32,10 @@ export class SpotifyLayoutComponent {
   ngOnInit(): void {
     this.store.dispatch(getUserProfile());
     this.userProfile$ = this.store.select(selectUserProfile);
+  }
+
+  resize(event: MouseEvent): void {
+    console.log(event);
+    console.log(this.leftContainerRef.nativeElement.clientWidth)
   }
 }

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timer } from 'rxjs';
 import { PlaybackState } from '../models/playback-state';
 import { Device } from '../models/device';
 import { Track } from '../models/track';
+import * as fromPlayerActions from '../state/actions/player.actions';
+import { Store } from '@ngrx/store';
+import { SpotifyAppState } from '../state';
 
 @Injectable({
   providedIn: 'root'
@@ -13,126 +16,13 @@ export class PlayerService {
   private baseUrl: string = "https://api.spotify.com/v1/me";
   private accessToken = localStorage.getItem("accessToken");
 
-  private playbackState$ = new BehaviorSubject<PlaybackState>({
-    device: {
-      id: '',
-      is_active: false,
-      is_private_session: false,
-      is_restricted: false,
-      name: '',
-      type: '',
-      volume_percent: 0,
-      supports_volume: false
-    },
-    repeat_state: 'off',
-    shuffle_state: false, 
-    context: {
-      type: '',
-      href: '',
-      external_urls: {
-        spotify: ''
-      },
-      uri: ''
-    }, 
-    timestamp: 0,
-    progress_ms: 0,
-    is_playing: false,
-    item: {
-      album: {
-        album_type: '',
-        total_tracks: '',
-        available_markets: [],
-        external_urls: {
-          spotify: ''
-        },
-        href: '',
-        id: '',
-        images: [],
-        name: '',
-        release_date: '',
-        release_date_precision: '',
-        restrictions: {
-          reason: ''
-        },
-        type: '',
-        uri: '',
-        copyrights: {
-          text: '',
-          type: ''
-        },
-        external_ids: {
-          isrc: '',
-          ean: '',
-          upc: ''
-        },
-        genres: [],
-        label: '',
-        popularity: 0,
-        album_group: '',
-        artists: {
-          external_urls: {
-            spotify: ''
-          },
-          href: '',
-          id: '',
-          name: '',
-          type: '',
-          uri: ''
-        }
-      },
-      artists: [],
-      available_markets: [],
-      disc_number: 0,
-      duration_ms: 0,
-      explicit: false,
-      external_ids: {
-        isrc: '',
-        ean: '',
-        upc: ''
-      },
-      external_urls: {
-        spotify: ''
-      },
-      href: '',
-      id: '',
-      is_playable: false,
-      linked_from: undefined,
-      restrictions: {
-        reason: ''
-      },
-      name: '',
-      popularity: 0,
-      preview_url: '',
-      track_number: 0,
-      type: '',
-      uri: '',
-      is_local: false
-    },
-    currently_playing_type: 'track',
-    actions: {
-      interrupting_playback: false,
-      pausing: false,
-      resuming: false,
-      seeking: false,
-      skipping_next: false,
-      skipping_prev: false,
-      toggling_repeat_context: false,
-      toggle_shuffle: false,
-      toggling_repeat_track: false,
-      transferring_playback: false,
-    }
-  });
+  timer: Observable<number> = timer(500, 1000);
+  timerSubscription!: Subscription; 
 
-  constructor(private http: HttpClient) { }
-
-  // refresh_playback_state(): void {
-  //   console.log('refreshing playback state');
-  //   this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
-  //     headers: { Authorization: `Bearer ${this.accessToken}` }
-  //     }).subscribe((playbackState: PlaybackState) => {
-  //       this.playbackState$.next(playbackState);
-  //     });
-  // }
+  constructor(
+    private http: HttpClient,
+    private store: Store<SpotifyAppState>
+  ) { }
 
   get_playback_state(): Observable<PlaybackState> {
     return this.http.get<PlaybackState>(`${this.baseUrl}/player`, {
@@ -164,6 +54,22 @@ export class PlayerService {
       uris: uris,
       position_ms: position_ms,
     }, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { device_id: device_id }
+    })
+  }
+
+  play_multiple_tracks(device_id: string, uris: string[] = []): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/play`, {
+      uris: uris,
+    }, {
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+      params: { device_id: device_id }
+    })
+  }
+
+  resume(device_id: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/player/play`, {}, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
       params: { device_id: device_id }
     })

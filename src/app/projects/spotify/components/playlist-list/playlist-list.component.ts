@@ -49,6 +49,5 @@ export class PlaylistListComponent {
 
   navigate_to_playlist(playlist: Playlist): void {
     this.router.navigateByUrl(`projects/spotify/playlists/${playlist.id}`);
-    // console.log(this.router.config);
   }
 }

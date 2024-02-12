@@ -53,28 +53,36 @@ export class PlaylistComponent {
         return this.getPlaylist(playlist_id);
       })
     );
+    this.playlist$.subscribe(
+      (playlist: Playlist) => this.checkFavorites(playlist)
+    )
   }
 
   getPlaylist(playlist_id: string): Observable<Playlist> {
     return this.playlistService.get_playlist(playlist_id);
   }
 
-  checkFavorites() {
-    this.playlist$.subscribe((playlist: Playlist) => {
-
-      console.log('checking favorites');
+  checkFavorites(playlist: Playlist) {
+    this.isFavorite = []
+    const numChunks = Math.ceil(playlist.tracks.items.length / 50);
+    for (let i = 0; i < numChunks; i++) {
       let ids: string = '';
-      for (let track of playlist.tracks.items) {
+      for (let track of playlist.tracks.items.slice(i*50, (i+1)*50)) {
         ids = ids + track.track.id + ',';
       }
       ids = ids.slice(0, ids.length - 1);
 
       this.trackService.check_users_saved_tracks(ids)
       .subscribe((result: boolean[])=>{
-        this.isFavorite = result;
+        result.forEach((isFavorite: boolean) => this.isFavorite.push(isFavorite))
       })
-    })
+    }
+  }
 
+  @HostListener('toggleFavoriteTrack', ['$event'])
+  toggle_favorite(event: any) {
+    const rank = event.detail;
+    this.isFavorite[rank] = !this.isFavorite[rank];
   }
 
   @HostListener('setBackgroundColor', ['$event'])

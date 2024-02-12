@@ -77,21 +77,21 @@ export class TopTracksComponent implements OnInit {
     this.background_color = color;
   }
 
+  @HostListener('setTopTerm', ['$event'])
+  set_top_term(event: any) {
+    const term = event.detail;
+    this.term = term;
+    this.sort_count = 0;
+    this.fetchTopTracks();
+  }
+
   toggle_play_all(): void {
     if (this.playlistPlaying) {
       this.store.dispatch(fromPlayerActions.togglePlayFooter());
     } else {
-      this.store.dispatch(fromPlayerActions.playTracksTop({ tracks: this.top_tracks }));
-    }
-
-    this.playlistPlaying = true;
-  }
-
-  setTerm(term: string) {
-    if (term != this.term) {
-      this.term = term;
-      this.sort_count = 0;
-      this.fetchTopTracks();
+      const tracks = this.sort_tracks().map((track) => track.track);
+      this.store.dispatch(fromPlayerActions.playTracksTop({ tracks: tracks }));
+      this.playlistPlaying = true;
     }
   }
 
@@ -153,7 +153,6 @@ export class TopTracksComponent implements OnInit {
       this.sort_column = sort_column,
       this.sort_count = 1
     )
-    console.log(this.sort_column, this.sort_count);
   }
 
   ms_to_hour_min(ms: number): string[] {

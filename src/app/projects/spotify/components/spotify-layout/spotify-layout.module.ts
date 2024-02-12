@@ -25,6 +25,7 @@ import { TopArtistsComponent } from '../top-artists/top-artists.component';
 import { ArtistGridItemComponent } from '../artist-grid-item/artist-grid-item.component';
 import { PlaylistListComponent } from '../playlist-list/playlist-list.component';
 import { PlaylistComponent } from '../playlist/playlist.component';
+import { TopTermButtonComponent } from '../top-term-button/top-term-button.component';
 // import { SpotifyAppFeatureKey, reducers } from '../../state';
 
 @NgModule({
@@ -39,7 +40,8 @@ import { PlaylistComponent } from '../playlist/playlist.component';
     TrackGridItemComponent,
     ArtistGridItemComponent,
     PlaylistListComponent,
-    PlaylistComponent
+    PlaylistComponent,
+    TopTermButtonComponent
   ],
   imports: [
     SpotifyLayoutRoutingModule,

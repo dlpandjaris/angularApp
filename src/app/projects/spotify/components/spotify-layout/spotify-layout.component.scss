@@ -12,22 +12,29 @@
 ._body {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  // gap: 8px;
   overflow-x: hidden;
   overflow-y: hidden;
+  width: 100%;
 }
 
 
 ._container {
   border-radius: 8px;
   background-color: #121212;
-  width: 100%;
   // background-color: rgb(224, 88, 112);
 
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+
+.divider {
+  width: 8px;
+  height: 100%;
+  background-color: black;
+  cursor: ew-resize;
 }
 
 ._header {

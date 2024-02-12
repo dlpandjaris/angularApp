@@ -41,66 +41,6 @@
       top: 16px;
     }
   }
-
-  .card {
-    --bs-card-border-width: 0px;
-    --bs-btn-font-family: sans-serif;
-    --bs-card-border-radius: 4px;
-    --bs-card-bg: transparent;
-    margin-left: 3rem;
-  }
-
-  .card-body {
-    padding: 0;
-  }
-
-  .btn {
-    --bs-btn-font-family: sans-serif;
-    --bs-btn-color: #b3b3b3;
-    --bs-btn-border-radius: 4px;
-    margin: 0 0.5rem;
-    transition: 0s;
-    position: relative;
-
-    .term-tooltip {
-      visibility: hidden;
-      background-color: black;
-      border-radius: 4px;
-      padding: 8px;
-      font-size: 1rem;
-
-      position: absolute;
-      z-index: 1;
-      bottom: 120%;
-      left: 50%;
-      margin-left: -50%;
-    }
-
-    .term-tooltip::after {
-      content: " ";
-      position: absolute;
-      top: 100%; /* At the bottom of the tooltip */
-      left: 50%;
-      margin-left: -8px;
-      border-width: 8px;
-      border-style: solid;
-      border-color: black transparent transparent transparent;
-    }
-  }
-
-  .btn:hover {
-    color: white;
-    border: 1px solid #b3b3b3;
-
-    .term-tooltip {
-      visibility: visible;
-    }
-  }
-
-  .btn-selected {
-    --bs-btn-bg: rgb(29, 185, 84);
-    --bs-btn-color: black;
-  }
 }
 
 .top-list {

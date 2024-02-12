@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, concatMap, mergeMap, delay, tap, withLatestFrom, switchMap, exhaustMap } from 'rxjs/operators';
-import { Observable, EMPTY, of } from 'rxjs';
+import { catchError, map, concatMap, delay, withLatestFrom } from 'rxjs/operators';
+import { of } from 'rxjs';
 import * as PlayerActions from '../actions/player.actions';
 import { PlayerService } from '../../services/player.service';
 import { PlaybackState } from '../../models/playback-state';
@@ -126,30 +126,37 @@ export class PlayerEffects {
       ofType(PlayerActions.playTracksTop),
       withLatestFrom(this.store.select(selectPlayer)),
       concatMap(([action, playbackState]) => {
-        let ids: string[] = [];
+        let uris: string[] = [];
         for (let track of action.tracks) {
-          ids.push(track.id);
+          uris.push(track.uri);
         }
-
-        return this.playerService.play(playbackState.device.id, ids).pipe(
+        return this.playerService.play_multiple_tracks(playbackState.device.id, uris).pipe(
           delay(1000),
-          map(() => PlayerActions.playTrackSuccess({ track: action.tracks[0] })),
+          map(() => PlayerActions.playPlaylistSuccess({ uri: 'top-tracks',  })),
           catchError((error) => of(PlayerActions.playTrackFailure({ error })))
         );
-      })
+        }
+      )
     )
-  })
+  });
 
   playPlaylist$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PlayerActions.playPlaylist),
       withLatestFrom(this.store.select(selectPlayer)),
       concatMap(([action, playbackState]) => {
-        if (playbackState.is_playing) {
-          return this.playerService.pause().pipe(
-            map(() => PlayerActions.togglePlaySuccess({ is_playing: false })),
-            catchError((error) => of(PlayerActions.togglePlayFailure({ error })))
-          );
+        if (playbackState.context && playbackState.context.uri == action.playlist.uri) {
+          if (playbackState.is_playing) {
+            return this.playerService.pause().pipe(
+              map(() => PlayerActions.togglePlaySuccess({ is_playing: false })),
+              catchError((error) => of(PlayerActions.togglePlayFailure({ error })))
+            );
+          } else {
+            return this.playerService.resume(playbackState.device.id).pipe(
+              map(() => PlayerActions.resumePlaybackSuccess()),
+              catchError((error) => of(PlayerActions.resumePlaybackFailure({ error })))
+            );
+          }
         } else {
           return this.playerService.play_artist_or_playlist(playbackState.device.id, action.playlist.uri).pipe(
             delay(1000),
@@ -159,7 +166,7 @@ export class PlayerEffects {
         }
       })
     )
-  })
+  });
 
   toggleRepeat$ = createEffect(() => {
     return this.actions$.pipe(
@@ -246,12 +253,12 @@ export class PlayerEffects {
       withLatestFrom(this.store.select(selectIsFavorite), this.store.select(selectTrack)),
       concatMap(([action, isFavorite, track]) => {
         if (isFavorite) {
-          return this.trackService.remove_users_saved_tracks([track.id]).pipe(
+          return this.trackService.remove_users_saved_tracks([track]).pipe(
             map(() => PlayerActions.toggleFavoriteTrackSuccess({ is_favorite: false })),
             catchError((error) => of(PlayerActions.toggleFavoriteTrackFailure({ error })))
           )
         } else {
-          return this.trackService.save_tracks_for_current_user([track.id]).pipe(
+          return this.trackService.save_tracks_for_current_user([track]).pipe(
             map(() => PlayerActions.toggleFavoriteTrackSuccess({ is_favorite: true })),
             catchError((error) => of(PlayerActions.toggleFavoriteTrackFailure({ error })))
           );

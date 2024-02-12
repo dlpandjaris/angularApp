@@ -57,7 +57,8 @@ export class TrackGridItemComponent {
   }
 
   toggle_favorite(rank: number) {
-    this.isFavorite ? this.trackService.remove_users_saved_tracks([this.track.id]): this.trackService.save_tracks_for_current_user([this.track.id]);
+    this.isFavorite ? this.trackService.remove_users_saved_tracks([this.track]).subscribe():
+      this.trackService.save_tracks_for_current_user([this.track]).subscribe();
     
     const event: CustomEvent = new CustomEvent('toggleFavoriteTrack', {
       bubbles: true,

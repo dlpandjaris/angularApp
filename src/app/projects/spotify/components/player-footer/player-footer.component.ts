@@ -96,13 +96,6 @@ export class PlayerFooterComponent implements OnInit {
     })
   }
   
-  // check_favorite(track: Track) {
-  //   this.trackService.check_users_saved_tracks(track.id)
-  //   .subscribe((result: boolean[]) => {
-  //     this.isFavorite = result[0];
-  //   })
-  // }
-  
   toggle_play(playbackState: PlaybackState): void {
     playbackState.is_playing ? this.stop_timer(): this.start_timer();
     this.store.dispatch(fromPlayerActions.togglePlayFooter());

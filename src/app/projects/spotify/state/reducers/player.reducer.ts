@@ -337,6 +337,22 @@ export const reducer = createReducer(
     }
   }),
 
+  on(PlayerActions.resumePlaybackSuccess, (state, action) => {
+    return {
+      ...state,
+      playbackState: {
+        ...state.playbackState,
+        is_playing: true
+      }
+    }
+  }),
+  on(PlayerActions.resumePlaybackFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error
+    }
+  }),
+
 );
 
 export const playerFeature = createFeature({
