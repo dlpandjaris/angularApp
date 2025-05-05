@@ -172,7 +172,7 @@ export class OneTeeSheetLayoutComponent implements OnInit {
     this.filtered_tee_times = this.all_tee_times.filter(tee => {
       const position = new google.maps.LatLng(tee.lat, tee.lon);
       const isInBounds = this.mapBounds!.contains(position);
-      const meetsPlayerCount = this.search_players >= tee.players;
+      const meetsPlayerCount = this.search_players <= tee.players;
       const matchesCourse = !this.search_course || this.search_course === tee.course;
       
       // Time range filter
