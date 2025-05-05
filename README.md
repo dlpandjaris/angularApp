@@ -25,3 +25,9 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## Deploy to Production
+Run `ng build --configuration production` to build the project.
+Run `firebase login` if not already logged in.
+Run `firebase deploy` to deploy to firebase hosting.

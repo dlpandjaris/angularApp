@@ -11,13 +11,22 @@ import { ProjectCardComponent } from '../project-card/project-card.component';
 export class ProjectsComponent {
 
   projects: Project[] = [
+    
+    {
+      title: 'OneTeeSheet',
+      url: "/projects/oneTeeSheet",
+      image: '../../../assets/9042436_golf_icon.png',
+      color: 'green',
+      description: 'This project is a golf tee time aggregator, designed to help golfers find available tee times at several courses in the Kansas City Area.',
+      github: 'https://github.com/dlpandjaris/angularApp/tree/main/src/app/projects/oneTeeSheet'
+    },
     {
       title: 'Spotify Analytics',
       url: "/projects/spotify/auth",
       image: '../../../assets/Spotify_logo_without_text.svg.png',
       color: 'black',
       description: 'Inspired by Spotify Wrapped, this tool is aimed at visualizing your listening trends year-round.' 
-                  +'<br><br>Login required, but rest assured that none of your data is saved here.<br>'
+                  +'<br><br>Login required, but none of your data is saved here.<br>'
                   +'More on: <a href="https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow" target="_blank">Authorization Code with PKCE</a>',
       github: 'https://github.com/dlpandjaris/angularApp/tree/main/src/app/projects/spotify'
     },

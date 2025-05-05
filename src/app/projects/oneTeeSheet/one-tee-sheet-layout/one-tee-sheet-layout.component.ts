@@ -23,6 +23,7 @@ export class OneTeeSheetLayoutComponent implements OnInit {
   search_course = '';
   isLoading = false;
   isDarkMode = false;
+  isListView = false;
 
   // Time range filter
   timeRanges = [
@@ -208,5 +209,9 @@ export class OneTeeSheetLayoutComponent implements OnInit {
       this.zoom = this.last_zoom || 9; // Default zoom
     }
     this.filterTeeTimes();
+  }
+
+  toggleView() {
+    this.isListView = !this.isListView;
   }
 }

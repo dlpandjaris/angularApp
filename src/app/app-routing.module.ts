@@ -10,20 +10,22 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { ResumeComponent } from './components/resume/resume.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { TerminalComponent } from './components/terminal/terminal.component';
+import { OneTeeSheetLayoutComponent } from './projects/oneTeeSheet/one-tee-sheet-layout/one-tee-sheet-layout.component';
 
 const routes: Routes = [
   {path:'', component: PortfolioComponent, children: [
-  // {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'home', component: TerminalComponent},
-  {path: 'projects', component: ProjectsComponent},
-  {path: 'resume', component: ResumeComponent},
-  {path: 'contact', component: ContactComponent},
+    // {path: '', redirectTo: 'home', pathMatch: 'full'},
+    {path: 'home', component: TerminalComponent},
+    {path: 'projects', component: ProjectsComponent},
+    {path: 'resume', component: ResumeComponent},
+    {path: 'contact', component: ContactComponent},
   ]},
   {path:'projects/gift-registry', component:GiftRegistryComponent, children: [
     {path:'group-dashboard', component:GroupDashboardComponent},
     {path:'admin-dashboard', component:AdminDashboardComponent, canActivate:[AdminGuard]},
   ]},
-  {path: 'projects/spotify', loadChildren: () => SpotifyLayoutModule}
+  {path: 'projects/spotify', loadChildren: () => SpotifyLayoutModule},
+  {path: 'projects/oneTeeSheet', component: OneTeeSheetLayoutComponent}
 ];
 
 @NgModule({

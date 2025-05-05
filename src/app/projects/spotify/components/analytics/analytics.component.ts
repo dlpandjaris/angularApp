@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+declare var google:any;
 
 @Component({
   selector: 'app-analytics',
@@ -11,7 +12,27 @@ export class AnalyticsComponent {
 
   constructor() {}
 
-  ngOnInit() {}
+  // ngOnInit(): void {
+  //   google.charts.load('current', {packages: ['corechart']});
+  //   google.charts.setOnLoadCallback(this.drawChart);
+  // }
+
+  // drawChart() {
+  //   // Create the data table.
+  //   var data = new google.visualization.DataTable();
+  //   data.addColumn('string', 'Topping');
+  //   data.addColumn('number', 'Slices');
+  //   data.addRows([
+  //     ['Mushrooms', 3],
+  //     ['Onions', 1],
+  //     ['Olives', 1], 
+  //     ['Zucchini', 1],
+  //     ['Pepperoni', 2]
+  //   ]);
+
+  //   var chart = new google.visualizations.PieChart(document.getElementById("pieChart"));
+  //   chart.draw(data, null);
+  // }
 
   @HostListener('setColorPalette', ['$event'])
   setColorPalette(event: any): void {

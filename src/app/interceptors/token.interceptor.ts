@@ -40,6 +40,10 @@ export class TokenInterceptor implements HttpInterceptor {
               this.router.navigateByUrl('portfolio');
             }
           }
+
+          if (err.status == 503) {
+            this.toastService.show('Failure', 'Service unavailable, please try again later');
+          }
         }
         return throwError(()=> new Error('Some other error occured'))
       })

@@ -81,25 +81,64 @@
 
     <!-- Tee Times Section -->
     <div class="tee-times-section">
-      <h3>Available Tee Times in View</h3>
-      <div *ngIf="filtered_tee_times?.length && filtered_tee_times.length > 0; else noResults" class="tee-times-grid">
-        <div *ngFor="let tee of filtered_tee_times" class="tee-time-card">
-          <div class="card-header">
-            <h3>{{ tee.course }}</h3>
-            <span class="price-tag">${{ tee.price.toFixed(2) }}</span>
+      <div class="section-header">
+        <h3>Available Tee Times in View</h3>
+        <button class="view-toggle" (click)="toggleView()" [attr.aria-label]="isListView ? 'Switch to card view' : 'Switch to list view'">
+          <i class="fas" [class.fa-th-large]="!isListView" [class.fa-list]="isListView"></i>
+        </button>
+      </div>
+
+      <div *ngIf="filtered_tee_times?.length && filtered_tee_times.length > 0; else noResults">
+        <!-- Card View -->
+        <div *ngIf="!isListView" class="tee-times-grid">
+          <div *ngFor="let tee of filtered_tee_times" class="tee-time-card">
+            <div class="card-header">
+              <h3>{{ tee.course }}</h3>
+              <span class="price-tag">${{ tee.price.toFixed(2) }}</span>
+            </div>
+            <div class="card-body">
+              <div class="tee-info">
+                <i class="fas fa-clock"></i>
+                <p>{{ tee.tee_time | date:'shortTime' }}</p>
+              </div>
+              <div class="tee-info">
+                <i class="fas fa-users"></i>
+                <p>{{ tee.players }} Players</p>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="tee-info">
+        </div>
+
+        <!-- List View -->
+        <div *ngIf="isListView" class="tee-times-list">
+          <div class="list-header">
+            <div class="list-column">Course</div>
+            <div class="list-column">Time</div>
+            <div class="list-column">Players</div>
+            <div class="list-column">Price</div>
+            <div class="list-column">Action</div>
+          </div>
+          <div *ngFor="let tee of filtered_tee_times" class="list-item">
+            <div class="list-column">
+              <h4>{{ tee.course }}</h4>
+            </div>
+            <div class="list-column">
               <i class="fas fa-clock"></i>
-              <p>{{ tee.tee_time | date:'shortTime' }}</p>
+              {{ tee.tee_time | date:'shortTime' }}
             </div>
-            <div class="tee-info">
+            <div class="list-column">
               <i class="fas fa-users"></i>
-              <p>{{ tee.players }} Players</p>
+              {{ tee.players }} Players
             </div>
-          </div>
-          <div class="card-footer">
-            <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
+            <div class="list-column">
+              <span class="price-tag">${{ tee.price.toFixed(2) }}</span>
+            </div>
+            <div class="list-column">
+              <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
+            </div>
           </div>
         </div>
       </div>
