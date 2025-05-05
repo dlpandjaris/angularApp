@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { UserProfile } from '../../models/user-profile';
 
 @Component({
@@ -16,15 +16,19 @@ export class PlaylistHeaderComponent {
   @Input() countLabel!: string;
   @Input() durationLabel!: string;
 
+  @ViewChild('mainHeader') mainHeaderRef!: ElementRef;
+
   constructor(
     private elementRef: ElementRef
   ) { }
 
   ngOnInit(): void {
-    // console.log(this.bigCoverImageUrl);
-    // if (!this.bigCoverImageUrl || this.bigCoverImageUrl == '') {
     this.get_background_color();
-    // }
+  }
+
+  @HostListener('setHeaderTitleSize')
+  resizeHeaderText(): void {
+    console.log(this.mainHeaderRef.nativeElement.clientWidth);
   }
 
   set_background_color(color: string) {
@@ -32,6 +36,15 @@ export class PlaylistHeaderComponent {
       bubbles: true,
       detail: color
     });
+    this.elementRef.nativeElement.dispatchEvent(event);
+  }
+
+  set_color_palette(colors: number[][]) {
+    const event: CustomEvent = new CustomEvent('setColorPalette', {
+      bubbles: true,
+      detail: colors
+    });
+    console.log('setting color palette');
     this.elementRef.nativeElement.dispatchEvent(event);
   }
 
@@ -55,8 +68,9 @@ export class PlaylistHeaderComponent {
         const initialPalette = this.quantization(imageRGB, 0);
         // const vibrantPalette = this.removeNeutralColors(initialPalette);
         // const color = this.orderByLuminance(vibrantPalette)[0];
-        const color = this.orderByVibrance(initialPalette)[0];
-        this.set_background_color(`rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+        const colors = this.orderByVibrance(initialPalette);
+        this.set_background_color(`rgb(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]})`);
+        this.set_color_palette(colors);
       }
     }
   }

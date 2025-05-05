@@ -1,0 +1,140 @@
+<!-- Main Layout Structure -->
+<div class="app-container" [class.dark-theme]="isDarkMode">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <h1>OneTeeSheet</h1>
+    </div>
+    <div class="navbar-menu">
+      <a href="#" class="nav-link">Home</a>
+      <a href="#" class="nav-link">Courses</a>
+      <a href="#" class="nav-link">About</a>
+      <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+        <i class="fas" [class.fa-sun]="isDarkMode" [class.fa-moon]="!isDarkMode"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h2>Find Your Perfect Tee Time</h2>
+      <div class="search-filters">
+        <div class="filter-group">
+          <label for="date-picker">Date</label>
+          <input type="date" id="date-picker" [(ngModel)]="search_date" (change)="onDateChange()" class="date-picker">
+        </div>
+        <div class="filter-group">
+          <label for="player-select">Players</label>
+          <select id="player-select" [(ngModel)]="search_players" (change)="onPlayersChange()" class="player-select">
+            <option value="1">1 Player</option>
+            <option value="2">2 Players</option>
+            <option value="3">3 Players</option>
+            <option value="4" selected>4 Players</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="time-range">Time of Day</label>
+          <select 
+            id="time-range" 
+            [(ngModel)]="selectedTimeRange" 
+            (change)="onTimeRangeChange($event)" 
+            class="time-select">
+            <option [ngValue]="null">Any Time</option>
+            <option *ngFor="let range of timeRanges" [ngValue]="range">{{ range.label }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+      <div class="loading-spinner">
+        <div class="golf-ball"></div>
+        <div class="loading-text">Loading Tee Times...</div>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-container">
+      <google-map
+        *ngIf="markers"
+        height="400px"
+        width="100%"
+        [center]="center"
+        [zoom]="zoom"
+        [options]="mapOptions"
+        (boundsChanged)="onMapBoundsChanged()">
+        <map-marker
+          *ngFor="let marker of markers"
+          [position]="marker.position ?? { lat: 0, lng: 0 }"
+          [title]="marker.title || ''"
+          (mapClick)="onMarkerClick(marker.title || '')">
+          <!-- [label]="marker.label || ''" -->
+          <!-- [icon]="marker.icon || ''" -->
+        </map-marker>
+      </google-map>
+    </div>
+
+    <!-- Tee Times Section -->
+    <div class="tee-times-section">
+      <h3>Available Tee Times in View</h3>
+      <div *ngIf="filtered_tee_times?.length && filtered_tee_times.length > 0; else noResults" class="tee-times-grid">
+        <div *ngFor="let tee of filtered_tee_times" class="tee-time-card">
+          <div class="card-header">
+            <h3>{{ tee.course }}</h3>
+            <span class="price-tag">${{ tee.price.toFixed(2) }}</span>
+          </div>
+          <div class="card-body">
+            <div class="tee-info">
+              <i class="fas fa-clock"></i>
+              <p>{{ tee.tee_time | date:'shortTime' }}</p>
+            </div>
+            <div class="tee-info">
+              <i class="fas fa-users"></i>
+              <p>{{ tee.players }} Players</p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noResults>
+        <div class="no-results">
+          <i class="fas fa-golf-ball"></i>
+          <p>No tee times found in the current map view.</p>
+          <p>Try adjusting the map or search filters.</p>
+        </div>
+      </ng-template>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>OneTeeSheet</h4>
+        <p>Your one-stop solution for booking tee times across multiple courses.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="#">Home</a>
+        <a href="#">Courses</a>
+        <a href="#">About</a>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <p>Email: info&#64;oneteesheet.com</p>
+        <p>Phone: (555) 123-4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 OneTeeSheet. All rights reserved.</p>
+    </div>
+  </footer>
+</div>

@@ -1,7 +1,7 @@
 <div class="main">
   <app-navbar></app-navbar>
   <div class="_body">
-    <section class="_container" id="leftContainer" [style.width.%]="leftContainerWidth">
+    <section class="_container" #leftContainer [style.width.%]="leftContainerWidth">
       <header class="_header">
         <div style="flex-grow: 1;"></div>
         <div class="header-links">
@@ -19,8 +19,10 @@
       </header>
       <router-outlet></router-outlet>
     </section>
-    <div class="divider" draggable="true" (mousedown)="resize($event)"></div>
-    <section class="_container" id="rightContainer" [style.width.%]="rightContainerWidth">asdfasdfasdfasdf</section>
+    <div class="divider" (mousedown)="startResize($event)"></div>
+    <section class="_container" #rightContainer [style.width.%]="rightContainerWidth">
+      <app-analytics></app-analytics>
+    </section>
   </div>
   <app-player-footer></app-player-footer>
 </div>

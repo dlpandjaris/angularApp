@@ -1,9 +1,7 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { Observable, Subscription, map, timer } from 'rxjs';
-import { DOCUMENT } from '@angular/common';
 
 import { PlayerService } from '../../services/player.service';
-import { TrackService } from '../../services/track.service';
 
 import { PlaybackState } from '../../models/playback-state';
 import { Device } from '../../models/device';
@@ -52,7 +50,6 @@ export class PlayerFooterComponent implements OnInit {
 
   constructor(
     private playerService: PlayerService,
-    private trackService: TrackService,
     @Inject(WINDOW) private window: Window,
     // @Inject(DOCUMENT) private document: Document,
     private store: Store<SpotifyAppState>

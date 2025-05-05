@@ -198,7 +198,10 @@
               <!-- (cdkDragMoved)="volume_drag_move($event)"
               (cdkDragEnded)="volume_drag_end($event)" -->
             </div>
-            <div id="audio-progress-handle"></div>
+            <div 
+              cdkDragLockAxis="x"
+              cdkDrag
+              id="audio-progress-handle"></div>
           </div>
         </div>
         <button class="player-button" [ngbPopover]="devicePickerContent"></button>
