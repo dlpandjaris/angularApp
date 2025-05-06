@@ -60,6 +60,12 @@
 
     <!-- Map Section -->
     <div class="map-container">
+      <div class="map-controls">
+        <button class="search-area-button" (click)="loadTeeTimes()">
+          <i class="fas fa-search"></i>
+          Search This Area
+        </button>
+      </div>
       <google-map
         *ngIf="markers"
         height="400px"

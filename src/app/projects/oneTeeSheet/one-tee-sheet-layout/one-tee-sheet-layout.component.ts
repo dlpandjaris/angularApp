@@ -103,7 +103,13 @@ export class OneTeeSheetLayoutComponent implements OnInit {
 
   loadTeeTimes() {
     this.isLoading = true;
-    this.teeTimeService.getTeeTimes(this.search_date, this.search_players).subscribe({
+    const coords = {
+      min_lat: this.map?.getBounds()?.getSouthWest().lat(),
+      min_lon: this.map?.getBounds()?.getSouthWest().lng(),
+      max_lat: this.map?.getBounds()?.getNorthEast().lat(),
+      max_lon: this.map?.getBounds()?.getNorthEast().lng()
+    }
+    this.teeTimeService.getTeeTimes(this.search_date, this.search_players, coords).subscribe({
       next: (data: TeeTime[]) => {
         this.all_tee_times = data;
         this.updateMarkers();
@@ -126,11 +132,6 @@ export class OneTeeSheetLayoutComponent implements OnInit {
     this.filterTeeTimes();
   }
 
-  // onTimeRangeChange(range: { start: number; end: number } | null) {
-  //   this.selectedTimeRange = range;
-  //   this.filterTeeTimes();
-  // }
-
   onTimeRangeChange(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
   
@@ -140,11 +141,21 @@ export class OneTeeSheetLayoutComponent implements OnInit {
   }
 
   onMapBoundsChanged() {
+    const center = this.map?.getCenter();
+    const usBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(24.396308, -124.848974), // Southwest corner (California/Florida Keys)
+      new google.maps.LatLng(49.384358, -66.93457)    // Northeast corner (Maine/North Dakota)
+    );
+
     const bounds = this.map?.getBounds();
-    if (bounds) {
-      this.mapBounds = bounds;
-      this.filterTeeTimes();
+
+    if (usBounds.contains(center!)) {
+      if (bounds) {
+        this.mapBounds = bounds;
+        this.filterTeeTimes();
+      }
     }
+
     return bounds;
   }
 

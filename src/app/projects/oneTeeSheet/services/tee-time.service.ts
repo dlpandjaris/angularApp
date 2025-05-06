@@ -13,7 +13,7 @@ export class TeeTimeService {
 
   constructor(private http: HttpClient) { }
 
-  getTeeTimes(date: string, players: number): Observable<TeeTime[]> {
-    return this.http.get<TeeTime[]>(`${this.baseUrl}/tee_times?date=${date}&players=${players}`);
+  getTeeTimes(date: string, players: number, coords: object): Observable<TeeTime[]> {
+    return this.http.get<TeeTime[]>(`${this.baseUrl}/tee_times?date=${date}&players=${players}&coords=${JSON.stringify(coords)}`);
   }
 }
