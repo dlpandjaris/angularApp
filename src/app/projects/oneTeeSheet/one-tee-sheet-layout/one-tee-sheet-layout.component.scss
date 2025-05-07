@@ -5,6 +5,7 @@ $background-color: #f5f6fa;
 $text-color: #2c3e50;
 $card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
+$border-color: black;
 
 // Dark theme variables
 $dark-primary-color: #1a1a1a;
@@ -554,28 +555,98 @@ $dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   overflow: hidden;
+  background: var(--surface-color);
+  box-shadow: var(--shadow-sm);
 
   .list-header {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
     gap: 1rem;
     padding: 1rem;
     background: var(--surface-hover);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
     font-weight: 600;
     color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    .list-column {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      cursor: default;
+
+      &.sortable {
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+        border-radius: 0.25rem;
+
+        &:hover {
+          background-color: var(--surface-hover);
+        }
+
+        i {
+          font-size: 0.875rem;
+          color: var(--text-secondary);
+          transition: all 0.2s ease;
+        }
+
+        &:hover i {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  .list-body {
+    max-height: 600px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--surface-color);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
   }
 
   .list-item {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
     gap: 1rem;
     padding: 1rem;
     border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: var(--border-color);
+      opacity: 0.5;
+    }
 
     &:hover {
       background: var(--surface-hover);
+      transform: translateX(4px);
     }
 
     &:last-child {
@@ -587,14 +658,17 @@ $dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
       align-items: center;
       gap: 0.5rem;
       color: var(--text-primary);
+      padding: 0.5rem;
 
       h4 {
         margin: 0;
         font-size: 1rem;
+        font-weight: 500;
       }
 
       i {
         color: var(--primary-color);
+        font-size: 1rem;
       }
 
       .price-tag {
@@ -603,6 +677,7 @@ $dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
         font-weight: 600;
+        font-size: 0.875rem;
       }
 
       .book-button {
@@ -612,14 +687,39 @@ $dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         border-radius: 0.25rem;
         text-decoration: none;
         font-weight: 500;
+        font-size: 0.875rem;
         transition: all 0.2s ease;
+        white-space: nowrap;
 
         &:hover {
-          background: var(--primary-dark);
+          background: darken($secondary-color, 10%);
           transform: translateY(-1px);
         }
       }
     }
+  }
+}
+
+// Sorting animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
@@ -628,10 +728,33 @@ $dark-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   .tee-times-list {
     .list-header {
       background: var(--surface-dark);
+      border-bottom-color: var(--border-color);
+
+      .list-column.sortable {
+        &:hover {
+          background-color: var(--surface-hover);
+        }
+      }
     }
 
-    .list-item:hover {
-      background: var(--surface-dark);
+    .list-body {
+      &::-webkit-scrollbar-track {
+        background: var(--surface-dark);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+      }
+    }
+
+    .list-item {
+      &:hover {
+        background: var(--surface-dark);
+      }
+
+      &::after {
+        background: var(--border-color);
+      }
     }
   }
 }

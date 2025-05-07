@@ -34,6 +34,16 @@
           </select>
         </div>
         <div class="filter-group">
+          <label for="holes-select">Holes</label>
+          <select 
+            id="holes-select" 
+            [(ngModel)]="search_holes" 
+            (change)="onHolesChange()" 
+            class="time-select">
+            <option *ngFor="let option of holesOptions" [ngValue]="option.value">{{ option.label }}</option>
+          </select>
+        </div>
+        <div class="filter-group">
           <label for="time-range">Time of Day</label>
           <select 
             id="time-range" 
@@ -78,7 +88,7 @@
           *ngFor="let marker of markers"
           [position]="marker.position ?? { lat: 0, lng: 0 }"
           [title]="marker.title || ''"
-          (mapClick)="onMarkerClick(marker.title || '')">
+          (mapClick)="onMarkerClick(marker || '')">
           <!-- [label]="marker.label || ''" -->
           <!-- [icon]="marker.icon || ''" -->
         </map-marker>
@@ -111,6 +121,10 @@
                 <i class="fas fa-users"></i>
                 <p>{{ tee.players }} Players</p>
               </div>
+              <div class="tee-info">
+                <i class="fas fa-flag"></i>
+                <p>{{ tee.holes }} Holes</p>
+              </div>
             </div>
             <div class="card-footer">
               <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
@@ -121,29 +135,51 @@
         <!-- List View -->
         <div *ngIf="isListView" class="tee-times-list">
           <div class="list-header">
-            <div class="list-column">Course</div>
-            <div class="list-column">Time</div>
-            <div class="list-column">Players</div>
-            <div class="list-column">Price</div>
+            <div class="list-column sortable" (click)="toggleSort('course')">
+              Course
+              <i class="fas" [class]="getSortIcon('course')"></i>
+            </div>
+            <div class="list-column sortable" (click)="toggleSort('tee_time')">
+              Time
+              <i class="fas" [class]="getSortIcon('tee_time')"></i>
+            </div>
+            <div class="list-column sortable" (click)="toggleSort('players')">
+              Players
+              <i class="fas" [class]="getSortIcon('players')"></i>
+            </div>
+            <div class="list-column sortable" (click)="toggleSort('holes')">
+              Holes
+              <i class="fas" [class]="getSortIcon('holes')"></i>
+            </div>
+            <div class="list-column sortable" (click)="toggleSort('price')">
+              Price
+              <i class="fas" [class]="getSortIcon('price')"></i>
+            </div>
             <div class="list-column">Action</div>
           </div>
-          <div *ngFor="let tee of filtered_tee_times" class="list-item">
-            <div class="list-column">
-              <h4>{{ tee.course }}</h4>
-            </div>
-            <div class="list-column">
-              <i class="fas fa-clock"></i>
-              {{ tee.tee_time | date:'shortTime' }}
-            </div>
-            <div class="list-column">
-              <i class="fas fa-users"></i>
-              {{ tee.players }} Players
-            </div>
-            <div class="list-column">
-              <span class="price-tag">${{ tee.price.toFixed(2) }}</span>
-            </div>
-            <div class="list-column">
-              <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
+          <div class="list-body">
+            <div *ngFor="let tee of filtered_tee_times" class="list-item">
+              <div class="list-column">
+                <h4>{{ tee.course }}</h4>
+              </div>
+              <div class="list-column">
+                <i class="fas fa-clock"></i>
+                {{ tee.tee_time | date:'shortTime' }}
+              </div>
+              <div class="list-column">
+                <i class="fas fa-users"></i>
+                {{ tee.players }}
+              </div>
+              <div class="list-column">
+                <i class="fas fa-flag"></i>
+                {{ tee.holes }}
+              </div>
+              <div class="list-column">
+                <span class="price-tag">${{ tee.price.toFixed(2) }}</span>
+              </div>
+              <div class="list-column">
+                <a [href]="tee.book_url" target="_blank" class="book-button">Book Now</a>
+              </div>
             </div>
           </div>
         </div>

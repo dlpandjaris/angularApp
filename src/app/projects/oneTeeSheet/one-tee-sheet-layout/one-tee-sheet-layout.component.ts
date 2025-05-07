@@ -21,6 +21,19 @@ export class OneTeeSheetLayoutComponent implements OnInit {
   search_date = new Date().toISOString().split('T')[0];
   search_players = 4;
   search_course = '';
+  search_holes: number = 0;
+  search_marker: {
+      position: {
+        lat: number,
+        lng: number
+      },
+      title: string,
+      label: string,
+      icon: string
+      options: {
+        animation: google.maps.Animation
+      }
+    } | null = null;
   isLoading = false;
   isDarkMode = false;
   isListView = false;
@@ -34,6 +47,13 @@ export class OneTeeSheetLayoutComponent implements OnInit {
     { label: 'Evening (6PM - 8PM)', start: 18, end: 20 }
   ];
   selectedTimeRange: { start: number; end: number } | null = null;
+
+  // Holes options
+  holesOptions = [
+    { value: 0, label: 'Any' },
+    { value: 9, label: '9 Holes' },
+    { value: 18, label: '18 Holes' }
+  ];
 
   // Google Maps properties
   center: google.maps.LatLngLiteral = {
@@ -55,6 +75,16 @@ export class OneTeeSheetLayoutComponent implements OnInit {
   mapBounds: google.maps.LatLngBounds | null = null;
   last_center: { lat: number; lng: number; } | undefined;
   last_zoom: number | undefined;
+
+  // Sorting properties
+  sortConfig: { column: string; direction: 'asc' | 'desc' }[] = [];
+  sortableColumns = [
+    { key: 'course', label: 'Course' },
+    { key: 'tee_time', label: 'Time' },
+    { key: 'players', label: 'Players' },
+    { key: 'holes', label: 'Holes' },
+    { key: 'price', label: 'Price' }
+  ];
 
   constructor(
     private teeTimeService: TeeTimeService
@@ -129,7 +159,11 @@ export class OneTeeSheetLayoutComponent implements OnInit {
   }
 
   onPlayersChange() {
-    this.filterTeeTimes();
+    this.loadTeeTimes();
+  }
+
+  onHolesChange() {
+    this.loadTeeTimes();
   }
 
   onTimeRangeChange(event: Event): void {
@@ -174,17 +208,42 @@ export class OneTeeSheetLayoutComponent implements OnInit {
     }));
   }
 
+  toggleSort(column: string) {
+    const existingSort = this.sortConfig.find(sort => sort.column === column);
+    
+    if (existingSort) {
+      // If already sorting by this column, cycle through: asc -> desc -> remove
+      if (existingSort.direction === 'asc') {
+        existingSort.direction = 'desc';
+      } else {
+        this.sortConfig = this.sortConfig.filter(sort => sort.column !== column);
+      }
+    } else {
+      // Add new sort
+      this.sortConfig.push({ column, direction: 'asc' });
+    }
+
+    this.filterTeeTimes();
+  }
+
+  getSortIcon(column: string): string {
+    const sort = this.sortConfig.find(s => s.column === column);
+    if (!sort) return 'fa-sort';
+    return sort.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+  }
+
   private filterTeeTimes(): void {
     if (!this.mapBounds) {
       this.filtered_tee_times = this.all_tee_times;
       return;
     }
 
-    this.filtered_tee_times = this.all_tee_times.filter(tee => {
+    let filtered = this.all_tee_times.filter(tee => {
       const position = new google.maps.LatLng(tee.lat, tee.lon);
       const isInBounds = this.mapBounds!.contains(position);
       const meetsPlayerCount = this.search_players <= tee.players;
       const matchesCourse = !this.search_course || this.search_course === tee.course;
+      const matchesHoles = !this.search_holes || tee.holes === this.search_holes;
       
       // Time range filter
       const teeTime = new Date(tee.tee_time);
@@ -192,21 +251,54 @@ export class OneTeeSheetLayoutComponent implements OnInit {
       const matchesTimeRange = !this.selectedTimeRange || 
         (teeHour >= this.selectedTimeRange.start && teeHour < this.selectedTimeRange.end);
 
-      return isInBounds && meetsPlayerCount && matchesCourse && matchesTimeRange;
+      return isInBounds && meetsPlayerCount && matchesCourse && matchesTimeRange && matchesHoles;
     });
+
+    // Apply sorting
+    if (this.sortConfig.length > 0) {
+      filtered.sort((a, b) => {
+        for (const sort of this.sortConfig) {
+          let comparison = 0;
+          
+          switch (sort.column) {
+            case 'course':
+              comparison = a.course.localeCompare(b.course);
+              break;
+            case 'tee_time':
+              comparison = new Date(a.tee_time).getTime() - new Date(b.tee_time).getTime();
+              break;
+            case 'players':
+              comparison = a.players - b.players;
+              break;
+            case 'holes':
+              comparison = a.holes - b.holes;
+              break;
+            case 'price':
+              comparison = a.price - b.price;
+              break;
+          }
+
+          if (comparison !== 0) {
+            return sort.direction === 'asc' ? comparison : -comparison;
+          }
+        }
+        return 0;
+      });
+    }
+
+    this.filtered_tee_times = filtered;
   }
 
-  onMarkerClick(courseName: string): void {
-    console.log('Marker clicked:', courseName);
-    if (this.search_course !== courseName) {
-      this.search_course = courseName;
-      // Center the map on the selected course
-      const selectedTeeTime = this.all_tee_times.find(tee => tee.course === courseName);
-      if (selectedTeeTime) {
-        this.center = {
-          lat: selectedTeeTime.lat,
-          lng: selectedTeeTime.lon
-        };
+  onMarkerClick(marker: any) { //courseName: string): void {
+    console.log('marker clicked:', marker); 
+    if (this.search_marker !== marker || this.search_marker === null) {
+      console.log('marker new');
+      this.search_marker = marker;
+      // Center the map on the selected marker
+      const selectedMarker = this.markers.find(m => m === marker);
+      if (selectedMarker?.position) {
+        this.center = selectedMarker.position as google.maps.LatLngLiteral;
+
         if (this.map?.getCenter()) {
           this.last_center = { lat: this.map.getCenter()!.lat(), lng: this.map.getCenter()!.lng() };
         }
@@ -214,7 +306,7 @@ export class OneTeeSheetLayoutComponent implements OnInit {
         this.zoom = 20; // Zoom in when selecting a course
     }
     } else {
-      this.search_course = '';
+      this.search_marker = null;
       // Reset zoom and center when deselecting
       this.center = this.last_center || { lat: 39.1011, lng: -94.5825 }; // Kansas City
       this.zoom = this.last_zoom || 9; // Default zoom

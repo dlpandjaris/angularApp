@@ -3,6 +3,7 @@ export interface TeeTime {
   tee_time: Date;
   price: number;
   players: number;
+  holes: number;
   lat: number;
   lon: number;
   book_url: string;
