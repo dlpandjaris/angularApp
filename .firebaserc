@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "regal-muse-263204"
-  }
+  },
+  "targets": {
+    "regal-muse-263204": {
+      "hosting": {
+        "regalApp": [
+          "regal-muse-263204"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

@@ -14,7 +14,7 @@ export class ProjectsComponent {
     
     {
       title: 'OneTeeSheet',
-      url: "/projects/oneTeeSheet",
+      url: "https://oneteesheet.web.app",
       image: '../../../assets/9042436_golf_icon.png',
       color: 'green',
       description: 'This project is a golf tee time aggregator, designed to help golfers find available tee times at several courses in the Kansas City Area.',
